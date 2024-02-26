@@ -1,0 +1,27 @@
+﻿@model AndroidWebService.Models.VaiTro
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>VaiTro</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TenVaiTro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TenVaiTro)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MaVaiTro }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

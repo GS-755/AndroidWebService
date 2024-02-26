@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="40576e9cc0074c48b5230284208440ef" Name="Diagram1">
+        <EntityTypeShape EntityType="DoAnAndroidModel.CTDatPhong" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.NguoiDung" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.PhongTro" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.TaiKhoan" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.TrangThai" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.VaiTro" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.ViTri" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__CTDatPhon__TenDa__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__CTDatPhong__MaPT__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__CCCD__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaVT__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__MaVaiT__3F466844" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

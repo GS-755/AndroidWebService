@@ -1,0 +1,517 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DoAnAndroidModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CTDatPhong">
+          <Key>
+            <PropertyRef Name="MaPT" />
+            <PropertyRef Name="TenDangNhap" />
+          </Key>
+          <Property Name="NgayDat" Type="date" Nullable="false" />
+          <Property Name="GhiChu" Type="nvarchar" MaxLength="100" />
+          <Property Name="TienCoc" Type="float" Nullable="false" />
+          <Property Name="MaPT" Type="int" Nullable="false" />
+          <Property Name="TenDangNhap" Type="char" MaxLength="16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NguoiDung">
+          <Key>
+            <PropertyRef Name="CCCD" />
+          </Key>
+          <Property Name="CCCD" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="Ho" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Ten" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="NgaySinh" Type="date" Nullable="false" />
+          <Property Name="GioiTinh" Type="int" />
+          <Property Name="DiaChi" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PhongTro">
+          <Key>
+            <PropertyRef Name="MaPT" />
+          </Key>
+          <Property Name="MaPT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TieuDe" Type="nvarchar" MaxLength="75" Nullable="false" />
+          <Property Name="HinhAnh" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NgayDang" Type="date" Nullable="false" />
+          <Property Name="MoTa" Type="nvarchar" MaxLength="100" />
+          <Property Name="DienTich" Type="int" Nullable="false" />
+          <Property Name="Gia" Type="int" Nullable="false" />
+          <Property Name="TenDangNhap" Type="char" MaxLength="16" Nullable="false" />
+          <Property Name="MaVT" Type="int" Nullable="false" />
+          <Property Name="MaTT" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaiKhoan">
+          <Key>
+            <PropertyRef Name="TenDangNhap" />
+          </Key>
+          <Property Name="TenDangNhap" Type="char" MaxLength="16" Nullable="false" />
+          <Property Name="MatKhau" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="Email" Type="char" MaxLength="75" />
+          <Property Name="SoDT" Type="char" MaxLength="15" Nullable="false" />
+          <Property Name="MaVaiTro" Type="int" Nullable="false" />
+          <Property Name="CCCD" Type="char" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TrangThai">
+          <Key>
+            <PropertyRef Name="MaTT" />
+          </Key>
+          <Property Name="MaTT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenTT" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VaiTro">
+          <Key>
+            <PropertyRef Name="MaVaiTro" />
+          </Key>
+          <Property Name="MaVaiTro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenVaiTro" Type="varchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ViTri">
+          <Key>
+            <PropertyRef Name="MaVT" />
+          </Key>
+          <Property Name="MaVT" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Quan" Type="nvarchar" MaxLength="25" Nullable="false" />
+          <Property Name="KinhDo" Type="float" />
+          <Property Name="ViDo" Type="float" />
+        </EntityType>
+        <Association Name="FK__CTDatPhon__TenDa__48CFD27E">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
+          <End Role="CTDatPhong" Type="Self.CTDatPhong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="TenDangNhap" />
+            </Principal>
+            <Dependent Role="CTDatPhong">
+              <PropertyRef Name="TenDangNhap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CTDatPhong__MaPT__47DBAE45">
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
+          <End Role="CTDatPhong" Type="Self.CTDatPhong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhongTro">
+              <PropertyRef Name="MaPT" />
+            </Principal>
+            <Dependent Role="CTDatPhong">
+              <PropertyRef Name="MaPT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PhongTro__MaTT__4316F928">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="TenDangNhap" />
+            </Principal>
+            <Dependent Role="PhongTro">
+              <PropertyRef Name="TenDangNhap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PhongTro__MaTT__44FF419A">
+          <End Role="TrangThai" Type="Self.TrangThai" Multiplicity="1" />
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrangThai">
+              <PropertyRef Name="MaTT" />
+            </Principal>
+            <Dependent Role="PhongTro">
+              <PropertyRef Name="MaTT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PhongTro__MaVT__440B1D61">
+          <End Role="ViTri" Type="Self.ViTri" Multiplicity="1" />
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ViTri">
+              <PropertyRef Name="MaVT" />
+            </Principal>
+            <Dependent Role="PhongTro">
+              <PropertyRef Name="MaVT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaiKhoan__CCCD__403A8C7D">
+          <End Role="NguoiDung" Type="Self.NguoiDung" Multiplicity="1" />
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NguoiDung">
+              <PropertyRef Name="CCCD" />
+            </Principal>
+            <Dependent Role="TaiKhoan">
+              <PropertyRef Name="CCCD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaiKhoan__MaVaiT__3F466844">
+          <End Role="VaiTro" Type="Self.VaiTro" Multiplicity="1" />
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VaiTro">
+              <PropertyRef Name="MaVaiTro" />
+            </Principal>
+            <Dependent Role="TaiKhoan">
+              <PropertyRef Name="MaVaiTro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DoAnAndroidModelStoreContainer">
+          <EntitySet Name="CTDatPhong" EntityType="Self.CTDatPhong" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NguoiDung" EntityType="Self.NguoiDung" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhongTro" EntityType="Self.PhongTro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TaiKhoan" EntityType="Self.TaiKhoan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TrangThai" EntityType="Self.TrangThai" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VaiTro" EntityType="Self.VaiTro" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ViTri" EntityType="Self.ViTri" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__CTDatPhon__TenDa__48CFD27E" Association="Self.FK__CTDatPhon__TenDa__48CFD27E">
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="CTDatPhong" EntitySet="CTDatPhong" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CTDatPhong__MaPT__47DBAE45" Association="Self.FK__CTDatPhong__MaPT__47DBAE45">
+            <End Role="PhongTro" EntitySet="PhongTro" />
+            <End Role="CTDatPhong" EntitySet="CTDatPhong" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PhongTro__MaTT__4316F928" Association="Self.FK__PhongTro__MaTT__4316F928">
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="PhongTro" EntitySet="PhongTro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PhongTro__MaTT__44FF419A" Association="Self.FK__PhongTro__MaTT__44FF419A">
+            <End Role="TrangThai" EntitySet="TrangThai" />
+            <End Role="PhongTro" EntitySet="PhongTro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PhongTro__MaVT__440B1D61" Association="Self.FK__PhongTro__MaVT__440B1D61">
+            <End Role="ViTri" EntitySet="ViTri" />
+            <End Role="PhongTro" EntitySet="PhongTro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaiKhoan__CCCD__403A8C7D" Association="Self.FK__TaiKhoan__CCCD__403A8C7D">
+            <End Role="NguoiDung" EntitySet="NguoiDung" />
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaiKhoan__MaVaiT__3F466844" Association="Self.FK__TaiKhoan__MaVaiT__3F466844">
+            <End Role="VaiTro" EntitySet="VaiTro" />
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DoAnAndroidModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CTDatPhong">
+          <Key>
+            <PropertyRef Name="MaPT" />
+            <PropertyRef Name="TenDangNhap" />
+          </Key>
+          <Property Name="NgayDat" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TienCoc" Type="Double" Nullable="false" />
+          <Property Name="MaPT" Type="Int32" Nullable="false" />
+          <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__CTDatPhon__TenDa__48CFD27E" FromRole="CTDatPhong" ToRole="TaiKhoan" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__CTDatPhong__MaPT__47DBAE45" FromRole="CTDatPhong" ToRole="PhongTro" />
+        </EntityType>
+        <EntityType Name="NguoiDung">
+          <Key>
+            <PropertyRef Name="CCCD" />
+          </Key>
+          <Property Name="CCCD" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Ho" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ten" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NgaySinh" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="GioiTinh" Type="Int32" />
+          <Property Name="DiaChi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__TaiKhoan__CCCD__403A8C7D" FromRole="NguoiDung" ToRole="TaiKhoan" />
+        </EntityType>
+        <EntityType Name="PhongTro">
+          <Key>
+            <PropertyRef Name="MaPT" />
+          </Key>
+          <Property Name="MaPT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TieuDe" Type="String" MaxLength="75" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HinhAnh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NgayDang" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MoTa" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DienTich" Type="Int32" Nullable="false" />
+          <Property Name="Gia" Type="Int32" Nullable="false" />
+          <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="MaVT" Type="Int32" Nullable="false" />
+          <Property Name="MaTT" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CTDatPhong" Relationship="Self.FK__CTDatPhong__MaPT__47DBAE45" FromRole="PhongTro" ToRole="CTDatPhong" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__PhongTro__MaTT__4316F928" FromRole="PhongTro" ToRole="TaiKhoan" />
+          <NavigationProperty Name="TrangThai" Relationship="Self.FK__PhongTro__MaTT__44FF419A" FromRole="PhongTro" ToRole="TrangThai" />
+          <NavigationProperty Name="ViTri" Relationship="Self.FK__PhongTro__MaVT__440B1D61" FromRole="PhongTro" ToRole="ViTri" />
+        </EntityType>
+        <EntityType Name="TaiKhoan">
+          <Key>
+            <PropertyRef Name="TenDangNhap" />
+          </Key>
+          <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="MatKhau" Type="String" MaxLength="64" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="75" FixedLength="true" Unicode="false" />
+          <Property Name="SoDT" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="MaVaiTro" Type="Int32" Nullable="false" />
+          <Property Name="CCCD" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CTDatPhong" Relationship="Self.FK__CTDatPhon__TenDa__48CFD27E" FromRole="TaiKhoan" ToRole="CTDatPhong" />
+          <NavigationProperty Name="NguoiDung" Relationship="Self.FK__TaiKhoan__CCCD__403A8C7D" FromRole="TaiKhoan" ToRole="NguoiDung" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaTT__4316F928" FromRole="TaiKhoan" ToRole="PhongTro" />
+          <NavigationProperty Name="VaiTro" Relationship="Self.FK__TaiKhoan__MaVaiT__3F466844" FromRole="TaiKhoan" ToRole="VaiTro" />
+        </EntityType>
+        <EntityType Name="TrangThai">
+          <Key>
+            <PropertyRef Name="MaTT" />
+          </Key>
+          <Property Name="MaTT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenTT" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaTT__44FF419A" FromRole="TrangThai" ToRole="PhongTro" />
+        </EntityType>
+        <EntityType Name="VaiTro">
+          <Key>
+            <PropertyRef Name="MaVaiTro" />
+          </Key>
+          <Property Name="MaVaiTro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenVaiTro" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__TaiKhoan__MaVaiT__3F466844" FromRole="VaiTro" ToRole="TaiKhoan" />
+        </EntityType>
+        <EntityType Name="ViTri">
+          <Key>
+            <PropertyRef Name="MaVT" />
+          </Key>
+          <Property Name="MaVT" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Quan" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="KinhDo" Type="Double" />
+          <Property Name="ViDo" Type="Double" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaVT__440B1D61" FromRole="ViTri" ToRole="PhongTro" />
+        </EntityType>
+        <Association Name="FK__CTDatPhon__TenDa__48CFD27E">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
+          <End Role="CTDatPhong" Type="Self.CTDatPhong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="TenDangNhap" />
+            </Principal>
+            <Dependent Role="CTDatPhong">
+              <PropertyRef Name="TenDangNhap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CTDatPhong__MaPT__47DBAE45">
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
+          <End Role="CTDatPhong" Type="Self.CTDatPhong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhongTro">
+              <PropertyRef Name="MaPT" />
+            </Principal>
+            <Dependent Role="CTDatPhong">
+              <PropertyRef Name="MaPT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaiKhoan__CCCD__403A8C7D">
+          <End Role="NguoiDung" Type="Self.NguoiDung" Multiplicity="1" />
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NguoiDung">
+              <PropertyRef Name="CCCD" />
+            </Principal>
+            <Dependent Role="TaiKhoan">
+              <PropertyRef Name="CCCD" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PhongTro__MaTT__4316F928">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="TenDangNhap" />
+            </Principal>
+            <Dependent Role="PhongTro">
+              <PropertyRef Name="TenDangNhap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PhongTro__MaTT__44FF419A">
+          <End Role="TrangThai" Type="Self.TrangThai" Multiplicity="1" />
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TrangThai">
+              <PropertyRef Name="MaTT" />
+            </Principal>
+            <Dependent Role="PhongTro">
+              <PropertyRef Name="MaTT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PhongTro__MaVT__440B1D61">
+          <End Role="ViTri" Type="Self.ViTri" Multiplicity="1" />
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ViTri">
+              <PropertyRef Name="MaVT" />
+            </Principal>
+            <Dependent Role="PhongTro">
+              <PropertyRef Name="MaVT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__TaiKhoan__MaVaiT__3F466844">
+          <End Role="VaiTro" Type="Self.VaiTro" Multiplicity="1" />
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VaiTro">
+              <PropertyRef Name="MaVaiTro" />
+            </Principal>
+            <Dependent Role="TaiKhoan">
+              <PropertyRef Name="MaVaiTro" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DoAnAndroidEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CTDatPhong" EntityType="Self.CTDatPhong" />
+          <EntitySet Name="NguoiDung" EntityType="Self.NguoiDung" />
+          <EntitySet Name="PhongTro" EntityType="Self.PhongTro" />
+          <EntitySet Name="TaiKhoan" EntityType="Self.TaiKhoan" />
+          <EntitySet Name="TrangThai" EntityType="Self.TrangThai" />
+          <EntitySet Name="VaiTro" EntityType="Self.VaiTro" />
+          <EntitySet Name="ViTri" EntityType="Self.ViTri" />
+          <AssociationSet Name="FK__CTDatPhon__TenDa__48CFD27E" Association="Self.FK__CTDatPhon__TenDa__48CFD27E">
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="CTDatPhong" EntitySet="CTDatPhong" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CTDatPhong__MaPT__47DBAE45" Association="Self.FK__CTDatPhong__MaPT__47DBAE45">
+            <End Role="PhongTro" EntitySet="PhongTro" />
+            <End Role="CTDatPhong" EntitySet="CTDatPhong" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaiKhoan__CCCD__403A8C7D" Association="Self.FK__TaiKhoan__CCCD__403A8C7D">
+            <End Role="NguoiDung" EntitySet="NguoiDung" />
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PhongTro__MaTT__4316F928" Association="Self.FK__PhongTro__MaTT__4316F928">
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="PhongTro" EntitySet="PhongTro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PhongTro__MaTT__44FF419A" Association="Self.FK__PhongTro__MaTT__44FF419A">
+            <End Role="TrangThai" EntitySet="TrangThai" />
+            <End Role="PhongTro" EntitySet="PhongTro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PhongTro__MaVT__440B1D61" Association="Self.FK__PhongTro__MaVT__440B1D61">
+            <End Role="ViTri" EntitySet="ViTri" />
+            <End Role="PhongTro" EntitySet="PhongTro" />
+          </AssociationSet>
+          <AssociationSet Name="FK__TaiKhoan__MaVaiT__3F466844" Association="Self.FK__TaiKhoan__MaVaiT__3F466844">
+            <End Role="VaiTro" EntitySet="VaiTro" />
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DoAnAndroidModelStoreContainer" CdmEntityContainer="DoAnAndroidEntities">
+          <EntitySetMapping Name="CTDatPhong">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.CTDatPhong">
+              <MappingFragment StoreEntitySet="CTDatPhong">
+                <ScalarProperty Name="NgayDat" ColumnName="NgayDat" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="TienCoc" ColumnName="TienCoc" />
+                <ScalarProperty Name="MaPT" ColumnName="MaPT" />
+                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NguoiDung">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.NguoiDung">
+              <MappingFragment StoreEntitySet="NguoiDung">
+                <ScalarProperty Name="CCCD" ColumnName="CCCD" />
+                <ScalarProperty Name="Ho" ColumnName="Ho" />
+                <ScalarProperty Name="Ten" ColumnName="Ten" />
+                <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
+                <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
+                <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PhongTro">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.PhongTro">
+              <MappingFragment StoreEntitySet="PhongTro">
+                <ScalarProperty Name="MaPT" ColumnName="MaPT" />
+                <ScalarProperty Name="TieuDe" ColumnName="TieuDe" />
+                <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
+                <ScalarProperty Name="NgayDang" ColumnName="NgayDang" />
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+                <ScalarProperty Name="DienTich" ColumnName="DienTich" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
+                <ScalarProperty Name="MaVT" ColumnName="MaVT" />
+                <ScalarProperty Name="MaTT" ColumnName="MaTT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaiKhoan">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.TaiKhoan">
+              <MappingFragment StoreEntitySet="TaiKhoan">
+                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
+                <ScalarProperty Name="MatKhau" ColumnName="MatKhau" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="SoDT" ColumnName="SoDT" />
+                <ScalarProperty Name="MaVaiTro" ColumnName="MaVaiTro" />
+                <ScalarProperty Name="CCCD" ColumnName="CCCD" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TrangThai">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.TrangThai">
+              <MappingFragment StoreEntitySet="TrangThai">
+                <ScalarProperty Name="MaTT" ColumnName="MaTT" />
+                <ScalarProperty Name="TenTT" ColumnName="TenTT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VaiTro">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.VaiTro">
+              <MappingFragment StoreEntitySet="VaiTro">
+                <ScalarProperty Name="MaVaiTro" ColumnName="MaVaiTro" />
+                <ScalarProperty Name="TenVaiTro" ColumnName="TenVaiTro" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ViTri">
+            <EntityTypeMapping TypeName="DoAnAndroidModel.ViTri">
+              <MappingFragment StoreEntitySet="ViTri">
+                <ScalarProperty Name="MaVT" ColumnName="MaVT" />
+                <ScalarProperty Name="Quan" ColumnName="Quan" />
+                <ScalarProperty Name="KinhDo" ColumnName="KinhDo" />
+                <ScalarProperty Name="ViDo" ColumnName="ViDo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
