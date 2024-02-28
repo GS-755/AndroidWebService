@@ -98,25 +98,48 @@ CREATE TABLE PTYeuThich (
 );
 
 -- Triggers
+-- Show the list of triggers 
+SELECT * 
+FROM sys.triggers;
 -- Calculate deposit 
 CREATE OR ALTER TRIGGER tg_calcdeposit_r1 ON PhongTro 
 AFTER INSERT, UPDATE AS BEGIN 
 	DECLARE @maPT INT; 
+	DECLARE @oldAmount FLOAT;
 	SELECT @maPT = (
-		SELECT MaPT 
+		SELECT MaPT
 		FROM inserted
 	); 
+	SELECT @oldAmount = (
+		SELECT SoTien
+		FROM inserted
+	);
 	UPDATE PhongTro 
-		SET TienCoc = SoTien * 100 / 30 
+		SET TienCoc = @oldAmount * 30 / 100
 		WHERE MaPT = @maPT;
 END; 
 -- Prevent deleting Transaction informations 
 CREATE OR ALTER TRIGGER tg_deltransaction_r2 ON GiaoDich 
+FOR UPDATE, DELETE AS BEGIN 
+	Rollback Transaction; 
+	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá HOẶC chỉnh sửa giao dịch', 16, 1);
+END;
+-- Prevent deleting User informations 
+CREATE OR ALTER TRIGGER tg_deluser_r3 ON NguoiDung 
 FOR DELETE AS BEGIN 
 	Rollback Transaction; 
-	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá giao dịch', 16, 1);
+	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá dữ liệu người dùng', 16, 1);
 END;
+-- Prevent deleting User accounts 
+CREATE OR ALTER TRIGGER tg_delaccount_r4 ON TaiKhoan 
+FOR DELETE AS BEGIN 
+	Rollback Transaction; 
+	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá tài khoản người dùng', 16, 1);
+END; 
 -- Emergency case only (use with Pointer for ease)
+-- Show the list of SP(s)
+SELECT * 
+FROM sys.procedures;
 CREATE PROCEDURE sp_changeimg_phongtro_01 @MaPT INT, @HinhAnh NVARCHAR(MAX)
 AS BEGIN
 	IF EXISTS (

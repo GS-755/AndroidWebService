@@ -98,23 +98,6 @@ namespace AndroidWebService.Controllers.WebAPI
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete]
-        [ResponseType(typeof(NguoiDung))]
-        public async Task<IHttpActionResult> DeleteUser(string id)
-        {
-            NguoiDung nguoiDung = await db.NguoiDung.FindAsync(id);
-            if (nguoiDung == null)
-            {
-                return NotFound();
-            }
-
-            db.NguoiDung.Remove(nguoiDung);
-            await db.SaveChangesAsync();
-
-            return Ok(nguoiDung);
-        }
-
         protected override void Dispose(bool disposing)
         {
             if (disposing)

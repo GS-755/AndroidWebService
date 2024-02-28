@@ -24,6 +24,7 @@ namespace AndroidWebService.Models
         {
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.GiaoDich = new HashSet<GiaoDich>();
+            this.NgayDang = DateTime.Now;
         }
     
         public int MaPT { get; set; }

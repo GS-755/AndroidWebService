@@ -34,9 +34,18 @@ namespace AndroidWebService.Controllers.WebAPI
                 //Build URL for VNPAY
                 VnPayLibrary transaction = new VnPayLibrary();
                 //Thông tin đơn hàng
-                transaction.AddRequestData("vnp_BankCode", vnpBankCode.Trim());
-                transaction.AddRequestData("vnp_Amount", (giaoDich.SoTien * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
-                transaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC FULL_MA PHONG {giaoDich.MaGD}");
+                if(giaoDich.MaLoaiGD == 1)
+                {
+                    transaction.AddRequestData("vnp_BankCode", vnpBankCode.Trim());
+                    transaction.AddRequestData("vnp_Amount", (giaoDich.PhongTro.TienCoc * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
+                    transaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC 1/3_MA PHONG {giaoDich.MaGD}");
+                }
+                else
+                {
+                    transaction.AddRequestData("vnp_BankCode", vnpBankCode.Trim());
+                    transaction.AddRequestData("vnp_Amount", (giaoDich.SoTien * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
+                    transaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC FULL_MA PHONG {giaoDich.MaGD}");
+                }
                 //Các params khác liên quan 
                 transaction.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
                 transaction.AddRequestData("vnp_Command", "pay");
