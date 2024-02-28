@@ -30,7 +30,7 @@ namespace AndroidWebService.Controllers.WebAPI
         }
         // POST: api/LovedMotels
         [ResponseType(typeof(PTYeuThich))]
-        public async Task<IHttpActionResult> PostPTYeuThich(PTYeuThich pTYeuThich)
+        public async Task<IHttpActionResult> Post(PTYeuThich pTYeuThich)
         {
             if (!ModelState.IsValid)
             {
@@ -52,7 +52,7 @@ namespace AndroidWebService.Controllers.WebAPI
         }
         // DELETE: api/LovedMotels/5
         [ResponseType(typeof(PTYeuThich))]
-        public async Task<IHttpActionResult> DeletePTYeuThich(int id)
+        public async Task<IHttpActionResult> Delete(int id)
         {
             PTYeuThich pTYeuThich = await db.PTYeuThich.FindAsync(id);
             if (pTYeuThich == null)

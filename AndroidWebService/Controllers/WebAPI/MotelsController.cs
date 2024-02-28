@@ -6,19 +6,21 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
+using System.IO;
+using System.Web.Hosting;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
     public class MotelsController : ApiController
     {
-        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+        private DoAnAndroidEntities 
+            db = new DoAnAndroidEntities();
 
         // GET: api/Motels
         public IQueryable<PhongTro> Get()
         {
             return db.PhongTro;
         }
-
         // GET: api/Motels/5
         [ResponseType(typeof(PhongTro))]
         public async Task<IHttpActionResult> Get(int id)
@@ -32,16 +34,30 @@ namespace AndroidWebService.Controllers.WebAPI
             return Ok(phongTro);
         }
 
-        // PUT: api/Motels/5
+        // POST: api/Motels
         [HttpPost]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutPhongTro(int id, PhongTro phongTro)
+        [ResponseType(typeof(PhongTro))]
+        public async Task<IHttpActionResult> PostPhongTro(PhongTro phongTro)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            db.PhongTro.Add(phongTro);
+            await db.SaveChangesAsync();
 
+            return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
+        }
+
+        // PUT: api/Motels/5
+        [HttpPut]
+        [ResponseType(typeof(void))]
+        public async Task<IHttpActionResult> Put(int id, PhongTro phongTro)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             if (id != phongTro.MaPT)
             {
                 return BadRequest();
@@ -66,22 +82,6 @@ namespace AndroidWebService.Controllers.WebAPI
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Motels
-        [HttpPost]
-        [ResponseType(typeof(PhongTro))]
-        public async Task<IHttpActionResult> PostPhongTro(PhongTro phongTro)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.PhongTro.Add(phongTro);
-            await db.SaveChangesAsync();
-
-            return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
         }
 
         // DELETE: api/Motels/5

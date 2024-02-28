@@ -34,7 +34,7 @@ namespace AndroidWebService.Controllers.WebAPI
         // POST: api/Users
         [ResponseType(typeof(NguoiDung))]
         [HttpPost]
-        public async Task<IHttpActionResult> PostNguoiDung(NguoiDung nguoiDung)
+        public async Task<IHttpActionResult> AddUser(NguoiDung nguoiDung)
         {
             if (!ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace AndroidWebService.Controllers.WebAPI
         // PUT: api/Users/5
         [HttpPost]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNguoiDung(string id, NguoiDung nguoiDung)
+        public async Task<IHttpActionResult> EditUser(string id, NguoiDung nguoiDung)
         {
             if (!ModelState.IsValid)
             {
@@ -101,7 +101,7 @@ namespace AndroidWebService.Controllers.WebAPI
         // DELETE: api/Users/5
         [HttpDelete]
         [ResponseType(typeof(NguoiDung))]
-        public async Task<IHttpActionResult> DeleteNguoiDung(string id)
+        public async Task<IHttpActionResult> DeleteUser(string id)
         {
             NguoiDung nguoiDung = await db.NguoiDung.FindAsync(id);
             if (nguoiDung == null)

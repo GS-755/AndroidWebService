@@ -73,30 +73,36 @@ namespace AndroidWebService.Controllers.WebAPI
         {
             string authTmp = SHA256.Get(password);
             TaiKhoan taiKhoan = await db.
-                TaiKhoan.FindAsync(userName, authTmp);
+                TaiKhoan.FindAsync(userName);
             if (taiKhoan == null)
             {
                 return NotFound();
             }
-
-            return Ok(taiKhoan);
-        }
-
-        // POST: api/Accounts
-        [HttpPost]
-        [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Register([FromBody] TaiKhoan taiKhoan)
-        {
-            if (!ModelState.IsValid)
+            else if(taiKhoan.MatKhau == authTmp)
             {
-                return BadRequest(ModelState);
+                SaveCookie(taiKhoan.TenDangNhap.Trim());
+
+                return Ok(taiKhoan);
             }
 
-            db.TaiKhoan.Add(taiKhoan);
+            return BadRequest("Incorrect password");
+        }
 
+        // POST: api/Accounts/Register?...
+        [HttpPost]
+        [ResponseType(typeof(TaiKhoan))]
+        public async Task<IHttpActionResult> Register(TaiKhoan taiKhoan)
+        {
             try
             {
-                await db.SaveChangesAsync();
+                if(ModelState.IsValid)
+                {
+                    string authTmp = SHA256.Get(taiKhoan.MatKhau);
+                    taiKhoan.MatKhau = authTmp;
+                    db.TaiKhoan.Add(taiKhoan);
+
+                    await db.SaveChangesAsync();
+                }
             }
             catch (DbUpdateException)
             {

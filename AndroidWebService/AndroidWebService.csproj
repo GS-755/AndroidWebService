@@ -174,6 +174,7 @@
     <Compile Include="Controllers\WebAPI\LovedMotelsController.cs" />
     <Compile Include="Controllers\WebAPI\MotelsController.cs" />
     <Compile Include="Controllers\WebAPI\RolesController.cs" />
+    <Compile Include="Controllers\WebAPI\TransactionsController.cs" />
     <Compile Include="Controllers\WebAPI\VnPayController.cs" />
     <Compile Include="Controllers\WebAPI\UsersController.cs" />
     <Compile Include="Controllers\WebMVC\AccountsController.cs" />

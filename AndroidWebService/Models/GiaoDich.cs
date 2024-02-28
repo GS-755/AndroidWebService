@@ -9,13 +9,14 @@
 
 namespace AndroidWebService.Models
 {
+    using System;
     using Newtonsoft.Json;
 
     public partial class GiaoDich
     {
         public string MaGD { get; set; }
         public int MaLoaiGD { get; set; }
-        public System.DateTime NgayGD { get; set; }
+        public DateTime NgayGD { get; set; }
         public double SoTien { get; set; }
         public string TenDangNhap { get; set; }
 
