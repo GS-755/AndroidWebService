@@ -48,12 +48,13 @@ CREATE TABLE TaiKhoan (
 );
 CREATE TABLE TTPhongTro (
   MaTT INT NOT NULL PRIMARY KEY,
-  TenTT VARCHAR(25) NOT NULL,
+  TenTT NVARCHAR(25) NOT NULL,
 );
 INSERT INTO TTPhongTro VALUES
   (1, N'Đang cho thuê'), 
   (2, N'Đã đặt cọc'),
   (3, N'Đã cho thuê');
+
 CREATE TABLE PhongTro (
   MaPT INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
   TieuDe NVARCHAR(75) NOT NULL,

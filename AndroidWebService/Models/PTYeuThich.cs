@@ -6,19 +6,19 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using Newtonsoft.Json;
 
 namespace AndroidWebService.Models
 {
-    using System;
-    using System.Collections.Generic;
-    
     public partial class PTYeuThich
     {
         public string GhiChu { get; set; }
         public int MaPT { get; set; }
         public string TenDangNhap { get; set; }
-    
+
+        [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
+        [JsonIgnore]
         public virtual PhongTro PhongTro { get; set; }
     }
 }

@@ -9,6 +9,7 @@
 
 namespace AndroidWebService.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -30,12 +31,17 @@ namespace AndroidWebService.Models
         public string CCCD { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
+        [JsonIgnore]
         public virtual NguoiDung NguoiDung { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
+        [JsonIgnore]
         public virtual VaiTro VaiTro { get; set; }
     }
 }

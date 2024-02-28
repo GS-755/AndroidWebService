@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
+using AndroidWebService.Models.Utils;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
@@ -66,11 +67,13 @@ namespace AndroidWebService.Controllers.WebAPI
 
             return response;
         }
-        // GET: api/Accounts/?userName=adu666&password=adu_adu_adu
+        // GET: api/Accounts/Login?userName=adu666&password=adu_adu_adu
         [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Login([FromBody] string userName, string password)
+        public async Task<IHttpActionResult> Login(string userName, string password)
         {
-            TaiKhoan taiKhoan = await db.TaiKhoan.FindAsync(userName, password);
+            string authTmp = SHA256.Get(password);
+            TaiKhoan taiKhoan = await db.
+                TaiKhoan.FindAsync(userName, authTmp);
             if (taiKhoan == null)
             {
                 return NotFound();
@@ -79,10 +82,41 @@ namespace AndroidWebService.Controllers.WebAPI
             return Ok(taiKhoan);
         }
 
+        // POST: api/Accounts
+        [HttpPost]
+        [ResponseType(typeof(TaiKhoan))]
+        public async Task<IHttpActionResult> Register([FromBody] TaiKhoan taiKhoan)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            db.TaiKhoan.Add(taiKhoan);
+
+            try
+            {
+                await db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (TaiKhoanExists(taiKhoan.TenDangNhap))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
+        }
+
         // PUT: api/Accounts/5
         [HttpPost]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(string id, [FromBody]TaiKhoan taiKhoan)
+        public async Task<IHttpActionResult> Put(string id, [FromBody] TaiKhoan taiKhoan)
         {
             if (!ModelState.IsValid)
             {
@@ -113,37 +147,6 @@ namespace AndroidWebService.Controllers.WebAPI
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Accounts
-        [HttpPost]
-        [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Post([FromBody] TaiKhoan taiKhoan)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.TaiKhoan.Add(taiKhoan);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (TaiKhoanExists(taiKhoan.TenDangNhap))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
         }
 
         protected override void Dispose(bool disposing)

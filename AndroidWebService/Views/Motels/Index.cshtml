@@ -14,7 +14,8 @@
         <th>Quận</th>
         <th>Tiêu đề</th>
         <th>Diện tích</th>
-        <th>Giá</th>
+        <th>Số tiền</th>
+        <th>Tiền cọc (30%)</th>
         <th>Người đăng</th>
         <th>Ngày đăng</th>
         <th>Trạng thái</th>
@@ -34,7 +35,10 @@
                 @string.Format($"{item.DienTich} m")<sup>2</sup>
             </td>
             <td>
-                @string.Format($"{item.Gia:0,0} đ")
+                @string.Format($"{item.SoTien:0,0} đ")
+            </td>
+            <td>
+                @string.Format($"{item.TienCoc:0,0} đ")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TaiKhoan.TenDangNhap)
@@ -43,10 +47,10 @@
                 @Html.DisplayFor(modelItem => item.NgayDang)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TrangThai.TenTT)
+                @Html.DisplayFor(modelItem => item.TTPhongTro.TenTT)
             </td>
             <td>
-                @Html.ActionLink("Chi tiết", "Details", new { id = item.MaPT }, new { @class="btn btn-success" }) |
+                @Html.ActionLink("Chi tiết", "Details", new { id = item.MaPT }, new { @class = "btn btn-success" }) |
                 @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.MaPT }, new { @class = "btn btn-warning text-white" }) |
                 @Html.ActionLink("Xoá", "Delete", new { id = item.MaPT }, new { @class = "btn btn-danger" })
             </td>

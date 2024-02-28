@@ -9,9 +9,8 @@
 
 namespace AndroidWebService.Models
 {
-    using System;
-    using System.Collections.Generic;
-    
+    using Newtonsoft.Json;
+
     public partial class GiaoDich
     {
         public string MaGD { get; set; }
@@ -19,8 +18,10 @@ namespace AndroidWebService.Models
         public System.DateTime NgayGD { get; set; }
         public double SoTien { get; set; }
         public string TenDangNhap { get; set; }
-    
+
+        [JsonIgnore]
         public virtual LoaiGiaoDich LoaiGiaoDich { get; set; }
+        [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
     }
 }

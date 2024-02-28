@@ -10,6 +10,7 @@
 namespace AndroidWebService.Models
 {
     using System;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     
     public partial class ViTri
@@ -26,6 +27,7 @@ namespace AndroidWebService.Models
         public Nullable<double> ViDo { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
     }
 }
