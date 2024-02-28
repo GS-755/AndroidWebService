@@ -19,10 +19,13 @@ namespace AndroidWebService.Models
         public DateTime NgayGD { get; set; }
         public double SoTien { get; set; }
         public string TenDangNhap { get; set; }
+        public int MaPT { get; set; }
 
         [JsonIgnore]
         public virtual LoaiGiaoDich LoaiGiaoDich { get; set; }
         [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
+        [JsonIgnore]
+        public virtual PhongTro PhongTro { get; set; }
     }
 }

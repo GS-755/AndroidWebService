@@ -4,13 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DoAnAndroidModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DoAnAndroidModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="GiaoDich">
           <Key>
             <PropertyRef Name="MaGD" />
           </Key>
           <Property Name="MaGD" Type="char" MaxLength="8" Nullable="false" />
           <Property Name="MaLoaiGD" Type="int" Nullable="false" />
+          <Property Name="MaPT" Type="int" Nullable="false" />
           <Property Name="NgayGD" Type="date" Nullable="false" />
           <Property Name="SoTien" Type="float" Nullable="false" />
           <Property Name="TenDangNhap" Type="char" MaxLength="16" Nullable="false" />
@@ -84,7 +85,7 @@
             <PropertyRef Name="MaTT" />
           </Key>
           <Property Name="MaTT" Type="int" Nullable="false" />
-          <Property Name="TenTT" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="TenTT" Type="nvarchar" MaxLength="25" Nullable="false" />
         </EntityType>
         <EntityType Name="VaiTro">
           <Key>
@@ -102,7 +103,7 @@
           <Property Name="KinhDo" Type="float" />
           <Property Name="ViDo" Type="float" />
         </EntityType>
-        <Association Name="FK__GiaoDich__MaLoai__4F7CD00D">
+        <Association Name="FK__GiaoDich__MaLoai__4AB81AF0">
           <End Role="LoaiGiaoDich" Type="Self.LoaiGiaoDich" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -114,7 +115,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__TenDan__5070F446">
+        <Association Name="FK__GiaoDich__MaPT__49C3F6B7">
+          <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
+          <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhongTro">
+              <PropertyRef Name="MaPT" />
+            </Principal>
+            <Dependent Role="GiaoDich">
+              <PropertyRef Name="MaPT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GiaoDich__TenDan__4BAC3F29">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -126,7 +139,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PTYeuThic__TenDa__4AB81AF0">
+        <Association Name="FK__PTYeuThic__TenDa__4F7CD00D">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="PTYeuThich" Type="Self.PTYeuThich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -138,7 +151,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PTYeuThich__MaPT__49C3F6B7">
+        <Association Name="FK__PTYeuThich__MaPT__4E88ABD4">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="PTYeuThich" Type="Self.PTYeuThich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -221,19 +234,23 @@
           <EntitySet Name="TTPhongTro" EntityType="Self.TTPhongTro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VaiTro" EntityType="Self.VaiTro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ViTri" EntityType="Self.ViTri" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__GiaoDich__MaLoai__4F7CD00D" Association="Self.FK__GiaoDich__MaLoai__4F7CD00D">
+          <AssociationSet Name="FK__GiaoDich__MaLoai__4AB81AF0" Association="Self.FK__GiaoDich__MaLoai__4AB81AF0">
             <End Role="LoaiGiaoDich" EntitySet="LoaiGiaoDich" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__TenDan__5070F446" Association="Self.FK__GiaoDich__TenDan__5070F446">
+          <AssociationSet Name="FK__GiaoDich__MaPT__49C3F6B7" Association="Self.FK__GiaoDich__MaPT__49C3F6B7">
+            <End Role="PhongTro" EntitySet="PhongTro" />
+            <End Role="GiaoDich" EntitySet="GiaoDich" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GiaoDich__TenDan__4BAC3F29" Association="Self.FK__GiaoDich__TenDan__4BAC3F29">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__PTYeuThic__TenDa__4AB81AF0" Association="Self.FK__PTYeuThic__TenDa__4AB81AF0">
+          <AssociationSet Name="FK__PTYeuThic__TenDa__4F7CD00D" Association="Self.FK__PTYeuThic__TenDa__4F7CD00D">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="PTYeuThich" EntitySet="PTYeuThich" />
           </AssociationSet>
-          <AssociationSet Name="FK__PTYeuThich__MaPT__49C3F6B7" Association="Self.FK__PTYeuThich__MaPT__49C3F6B7">
+          <AssociationSet Name="FK__PTYeuThich__MaPT__4E88ABD4" Association="Self.FK__PTYeuThich__MaPT__4E88ABD4">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="PTYeuThich" EntitySet="PTYeuThich" />
           </AssociationSet>
@@ -258,8 +275,7 @@
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DoAnAndroidModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -274,6 +290,8 @@
           <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
           <NavigationProperty Name="LoaiGiaoDich" Relationship="Self.FK__GiaoDich__MaLoai__4F7CD00D" FromRole="GiaoDich" ToRole="LoaiGiaoDich" />
           <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__GiaoDich__TenDan__5070F446" FromRole="GiaoDich" ToRole="TaiKhoan" />
+          <Property Name="MaPT" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PhongTro" Relationship="DoAnAndroidModel.FK__GiaoDich__MaPT__49C3F6B7" FromRole="GiaoDich" ToRole="PhongTro" />
         </EntityType>
         <EntityType Name="LoaiGiaoDich">
           <Key>
@@ -325,6 +343,7 @@
           <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__PhongTro__MaTT__4316F928" FromRole="PhongTro" ToRole="TaiKhoan" />
           <NavigationProperty Name="TTPhongTro" Relationship="Self.FK__PhongTro__MaTT__44FF419A" FromRole="PhongTro" ToRole="TTPhongTro" />
           <NavigationProperty Name="ViTri" Relationship="Self.FK__PhongTro__MaVT__440B1D61" FromRole="PhongTro" ToRole="ViTri" />
+          <NavigationProperty Name="GiaoDich" Relationship="DoAnAndroidModel.FK__GiaoDich__MaPT__49C3F6B7" FromRole="PhongTro" ToRole="GiaoDich" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -357,7 +376,7 @@
             <PropertyRef Name="MaTT" />
           </Key>
           <Property Name="MaTT" Type="Int32" Nullable="false" />
-          <Property Name="TenTT" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TenTT" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaTT__44FF419A" FromRole="TTPhongTro" ToRole="PhongTro" />
         </EntityType>
         <EntityType Name="VaiTro">
@@ -533,7 +552,23 @@
             <End Role="VaiTro" EntitySet="VaiTro" />
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
           </AssociationSet>
+          <AssociationSet Name="FK__GiaoDich__MaPT__49C3F6B7" Association="DoAnAndroidModel.FK__GiaoDich__MaPT__49C3F6B7">
+            <End Role="PhongTro" EntitySet="PhongTro" />
+            <End Role="GiaoDich" EntitySet="GiaoDich" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK__GiaoDich__MaPT__49C3F6B7">
+          <End Type="DoAnAndroidModel.PhongTro" Role="PhongTro" Multiplicity="1" />
+          <End Type="DoAnAndroidModel.GiaoDich" Role="GiaoDich" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhongTro">
+              <PropertyRef Name="MaPT" />
+            </Principal>
+            <Dependent Role="GiaoDich">
+              <PropertyRef Name="MaPT" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -543,6 +578,7 @@
           <EntitySetMapping Name="GiaoDich">
             <EntityTypeMapping TypeName="DoAnAndroidModel.GiaoDich">
               <MappingFragment StoreEntitySet="GiaoDich">
+                <ScalarProperty Name="MaPT" ColumnName="MaPT" />
                 <ScalarProperty Name="MaGD" ColumnName="MaGD" />
                 <ScalarProperty Name="MaLoaiGD" ColumnName="MaLoaiGD" />
                 <ScalarProperty Name="NgayGD" ColumnName="NgayGD" />

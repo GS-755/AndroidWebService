@@ -9,20 +9,21 @@
 
 namespace AndroidWebService.Models
 {
-    using System;
-    using System.Web;
     using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Web;
 
     public partial class PhongTro
     {
-        public static string SERVER_IMG_PATH = "~/Resources/Pictures/";
+        public static readonly string SERVER_IMG_PATH = "~/Resources/Pictures/";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PhongTro()
         {
             this.PTYeuThich = new HashSet<PTYeuThich>();
+            this.GiaoDich = new HashSet<GiaoDich>();
         }
     
         public int MaPT { get; set; }
@@ -33,8 +34,8 @@ namespace AndroidWebService.Models
         public Nullable<double> TienCoc { get; set; }
         public string MoTa { get; set; }
         public string HinhAnh { get; set; }
-        [JsonIgnore]
         [NotMapped]
+        [JsonIgnore]
         public HttpPostedFileBase UploadImage { get; set; }
         public string TenDangNhap { get; set; }
         public int MaVT { get; set; }
@@ -49,5 +50,8 @@ namespace AndroidWebService.Models
         public virtual TTPhongTro TTPhongTro { get; set; }
         [JsonIgnore]
         public virtual ViTri ViTri { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
+        public virtual ICollection<GiaoDich> GiaoDich { get; set; }
     }
 }

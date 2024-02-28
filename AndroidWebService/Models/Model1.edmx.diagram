@@ -24,6 +24,7 @@
         <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__44FF419A" ManuallyRouted="false" />
         <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaVT__440B1D61" ManuallyRouted="false" />
         <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__MaVaiT__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaPT__49C3F6B7" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

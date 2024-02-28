@@ -10,7 +10,6 @@
 namespace AndroidWebService.Models
 {
     using Newtonsoft.Json;
-    using System;
     using System.Collections.Generic;
     
     public partial class TaiKhoan

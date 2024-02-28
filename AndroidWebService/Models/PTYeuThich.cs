@@ -6,10 +6,11 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 using Newtonsoft.Json;
 
 namespace AndroidWebService.Models
-{
+{  
     public partial class PTYeuThich
     {
         public string GhiChu { get; set; }
@@ -18,7 +19,7 @@ namespace AndroidWebService.Models
 
         [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
-        [JsonIgnore]
+        [JsonIgnore] 
         public virtual PhongTro PhongTro { get; set; }
     }
 }
