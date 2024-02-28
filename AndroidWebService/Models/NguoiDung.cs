@@ -10,7 +10,6 @@
 namespace AndroidWebService.Models
 {
     using System;
-    using Newtonsoft.Json;
     using System.Collections.Generic;
     
     public partial class NguoiDung
@@ -24,17 +23,11 @@ namespace AndroidWebService.Models
         public string CCCD { get; set; }
         public string Ho { get; set; }
         public string Ten { get; set; }
-        public DateTime NgaySinh { get; set; }
+        public System.DateTime NgaySinh { get; set; }
         public Nullable<int> GioiTinh { get; set; }
         public string DiaChi { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
         public virtual ICollection<TaiKhoan> TaiKhoan { get; set; }
-
-        public override string ToString()
-        {
-            return $"{this.Ho} {this.Ten}";
-        }
     }
 }

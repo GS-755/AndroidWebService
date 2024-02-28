@@ -17,10 +17,11 @@ namespace AndroidWebService.Controllers.WebAPI
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         [HttpGet]
-        public HttpResponseMessage GetCookie(string usrName) 
+        public HttpResponseMessage GetCookie(string userName) 
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            CookieHeaderValue cookie = Request.Headers.GetCookies(usrName.Trim()).FirstOrDefault();
+            CookieHeaderValue cookie = Request.Headers.
+                GetCookies(userName.Trim()).FirstOrDefault();
             if(cookie != null)
             {
                 response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
@@ -35,18 +36,26 @@ namespace AndroidWebService.Controllers.WebAPI
         }
         // GET [cookie-header]: api/Accounts/ra21006en
         [HttpGet]
-        public HttpResponseMessage SaveCookie(TaiKhoan users)
+        public HttpResponseMessage SaveCookie(string userName)
         {
             HttpResponseMessage response = new HttpResponseMessage();
+            TaiKhoan users = db.TaiKhoan.FirstOrDefault(
+                k => userName.Trim() == k.TenDangNhap.Trim()
+            );
             try
             {
-                if (ModelState.IsValid)
+                if(users != null)
                 {
-                    CookieHeaderValue cookie = new CookieHeaderValue("cookie-header", users.TenDangNhap.Trim());
+                    CookieHeaderValue cookie = new 
+                        CookieHeaderValue("cookie-header", users.TenDangNhap.Trim());
                     cookie.Expires = DateTimeOffset.Now.AddDays(1);
                     cookie.Domain = Request.RequestUri.Host;
                     cookie.Path = "/";
                     response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
                 }
             }
             catch (Exception ex)

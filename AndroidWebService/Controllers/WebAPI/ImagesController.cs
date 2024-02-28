@@ -16,13 +16,8 @@ namespace AndroidWebService.Controllers.WebAPI
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
-        // GET: /api/images
-        public IQueryable<PhongTro> Get()
-        {
-            return db.PhongTro;
-        }
-        // GET: /api/images/getimage/1
-        public async Task<IHttpActionResult> GetImage(int id)
+        // GET: /api/images/getmotelimage/1
+        public async Task<IHttpActionResult> GetMotelImage(int id)
         {
             try
             {

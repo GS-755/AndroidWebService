@@ -12,18 +12,18 @@ namespace AndroidWebService.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class VaiTro
+    public partial class TTPhongTro
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public VaiTro()
+        public TTPhongTro()
         {
-            this.TaiKhoan = new HashSet<TaiKhoan>();
+            this.PhongTro = new HashSet<PhongTro>();
         }
     
-        public int MaVaiTro { get; set; }
-        public string TenVaiTro { get; set; }
+        public int MaTT { get; set; }
+        public string TenTT { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TaiKhoan> TaiKhoan { get; set; }
+        public virtual ICollection<PhongTro> PhongTro { get; set; }
     }
 }

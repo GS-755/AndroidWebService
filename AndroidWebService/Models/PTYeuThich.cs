@@ -9,18 +9,16 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
+    using System;
+    using System.Collections.Generic;
     
-    public partial class CTDatPhong
+    public partial class PTYeuThich
     {
-        public System.DateTime NgayDat { get; set; }
         public string GhiChu { get; set; }
-        public double TienCoc { get; set; }
         public int MaPT { get; set; }
         public string TenDangNhap { get; set; }
-        [JsonIgnore]
+    
         public virtual TaiKhoan TaiKhoan { get; set; }
-        [JsonIgnore]
         public virtual PhongTro PhongTro { get; set; }
     }
 }

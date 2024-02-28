@@ -9,20 +9,21 @@
 
 namespace AndroidWebService.Models
 {
+    using System;
     using System.Collections.Generic;
     
-    public partial class TrangThai
+    public partial class LoaiGiaoDich
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TrangThai()
+        public LoaiGiaoDich()
         {
-            this.PhongTro = new HashSet<PhongTro>();
+            this.GiaoDich = new HashSet<GiaoDich>();
         }
     
-        public int MaTT { get; set; }
-        public string TenTT { get; set; }
+        public int MaLoaiGD { get; set; }
+        public string TenLoaiGD { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PhongTro> PhongTro { get; set; }
+        public virtual ICollection<GiaoDich> GiaoDich { get; set; }
     }
 }

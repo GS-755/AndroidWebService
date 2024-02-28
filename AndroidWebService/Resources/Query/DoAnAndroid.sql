@@ -10,40 +10,32 @@ CREATE DATABASE DoAnAndroid;
 
 USE DoAnAndroid;
 CREATE TABLE ViTri (
-  MaVT INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
+  MaVT INT NOT NULL PRIMARY KEY,
   Quan NVARCHAR(25) NOT NULL,
   KinhDo FLOAT,
   ViDo FLOAT
 ); 
-INSERT INTO ViTri(Quan) VALUES
-	(N'Quận 10'),
-	(N'Quận Tân Bình'),
-	(N'Huyện Hóc Môn');
+INSERT INTO ViTri(MaVT, Quan) VALUES
+	(1, N'Quận 10'),
+	(2, N'Quận 12'), 
+	(3, N'Quận Tân Bình'), 
+	(4, N'Quận Tân Phú'), 
+	(5, N'Huyện Hóc Môn');
+CREATE TABLE VaiTro (
+  MaVaiTro INT NOT NULL PRIMARY KEY,
+  TenVaiTro NVARCHAR(25) NOT NULL
+);
+INSERT INTO VaiTro VALUES
+	(1, N'Chủ trọ'),
+	(0, N'Khách hàng');
 CREATE TABLE NguoiDung (
   CCCD CHAR(15) NOT NULL PRIMARY KEY,
   Ho NVARCHAR(30) NOT NULL,
   Ten NVARCHAR(15) NOT NULL,
   NgaySinh DATE NOT NULL,
-  GioiTinh INT,
+  GioiTinh INT, -- ISO 0 - 1 - 2 - 9
   DiaChi NVARCHAR(100) NOT NULL
 ); 
-CREATE TABLE VaiTro (
-  MaVaiTro INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
-  TenVaiTro NVARCHAR(25) NOT NULL
-);
-INSERT INTO VaiTro VALUES
-	(N'Chủ trọ'),
-	(N'Khách hàng'),
-	(N'Admin');
-CREATE TABLE TrangThai (
-  MaTT INT IDENTITY (1,1) NOT NULL,
-  TenTT VARCHAR(25) NOT NULL,
-  PRIMARY KEY (MaTT)
-);
-INSERT INTO TrangThai VALUES
-	(N'Còn trống'), 
-	(N'Đã đặt cọc'),
-	(N'Đang cho thuê');
 CREATE TABLE TaiKhoan (
   TenDangNhap CHAR(16) NOT NULL PRIMARY KEY,
   MatKhau VARCHAR(64) NOT NULL,
@@ -54,32 +46,73 @@ CREATE TABLE TaiKhoan (
   FOREIGN KEY (MaVaiTro) REFERENCES VaiTro(MaVaiTro),
   FOREIGN KEY (CCCD) REFERENCES NguoiDung(CCCD)
 );
+CREATE TABLE TTPhongTro (
+  MaTT INT NOT NULL PRIMARY KEY,
+  TenTT VARCHAR(25) NOT NULL,
+);
+INSERT INTO TTPhongTro VALUES
+  (1, N'Đang cho thuê'), 
+  (2, N'Đã đặt cọc'),
+  (3, N'Đã cho thuê');
 CREATE TABLE PhongTro (
   MaPT INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
   TieuDe NVARCHAR(75) NOT NULL,
-  HinhAnh NVARCHAR(MAX) NOT NULL,
   NgayDang DATE NOT NULL,
+  DienTich FLOAT NOT NULL,
+  SoTien FLOAT NOT NULL,
+  TienCoc FLOAT, 
   MoTa NVARCHAR(100),
-  DienTich INT NOT NULL,
-  Gia INT NOT NULL,
+  HinhAnh NVARCHAR(MAX) NOT NULL,
   TenDangNhap CHAR(16) NOT NULL,
   MaVT INT NOT NULL,
   MaTT INT NOT NULL
   FOREIGN KEY (TenDangNhap) REFERENCES TaiKhoan(TenDangNhap),
   FOREIGN KEY (MaVT) REFERENCES ViTri(MaVT),
-  FOREIGN KEY (MaTT) REFERENCES TrangThai(MaTT)
+  FOREIGN KEY (MaTT) REFERENCES TTPhongTro(MaTT)
 );
-CREATE TABLE CTDatPhong (
-  NgayDat DATE NOT NULL,
+CREATE TABLE LoaiGiaoDich (
+	MaLoaiGD INT IDENTITY(1, 1) PRIMARY KEY, 
+	TenLoaiGD NVARCHAR(20) NOT NULL
+);
+INSERT INTO LoaiGiaoDich VALUES (N'Đặt cọc');
+INSERT INTO LoaiGiaoDich VALUES (N'Chuyển toàn bộ');
+CREATE TABLE GiaoDich (
+	MaGD CHAR(8) NOT NULL PRIMARY KEY, 
+	MaLoaiGD INT NOT NULL, 
+	NgayGD DATE NOT NULL, 
+	SoTien FLOAT NOT NULL, 
+	TenDangNhap CHAR(16) NOT NULL, 
+	FOREIGN KEY(MaLoaiGD) REFERENCES LoaiGiaoDich(MaLoaiGD), 
+	FOREIGN KEY(TenDangNhap) REFERENCES TaiKhoan(TenDangNhap) 
+);
+CREATE TABLE PTYeuThich (
   GhiChu NVARCHAR(100),
-  TienCoc FLOAT NOT NULL,
   MaPT INT NOT NULL,
-  TenDangNhap CHAR(16) NOT NULL,
-  PRIMARY KEY (MaPT, TenDangNhap),
-  FOREIGN KEY (MaPT) REFERENCES PhongTro(MaPT),
-  FOREIGN KEY (TenDangNhap) REFERENCES TaiKhoan(TenDangNhap)
+  TenDangNhap CHAR(16) NOT NULL, 
+  PRIMARY KEY(MaPT, TenDangNhap), 
+  FOREIGN KEY(MaPT) REFERENCES PhongTro(MaPT), 
+  FOREIGN KEY(TenDangNhap) REFERENCES TaiKhoan(TenDangNhap)
 );
 
+-- Triggers
+-- Calculate deposit 
+CREATE OR ALTER TRIGGER tg_calcdeposit_r1 ON PhongTro 
+AFTER INSERT, UPDATE AS BEGIN 
+	DECLARE @maPT INT; 
+	SELECT @maPT = (
+		SELECT MaPT 
+		FROM inserted
+	); 
+	UPDATE PhongTro 
+		SET TienCoc = SoTien * 100 / 30 
+		WHERE MaPT = @maPT;
+END; 
+-- Prevent deleting Transaction informations 
+CREATE OR ALTER TRIGGER tg_deltransaction_r2 ON GiaoDich 
+FOR DELETE AS BEGIN 
+	Rollback Transaction; 
+	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá giao dịch', 16, 1);
+END;
 -- Emergency case only (use with Pointer for ease)
 CREATE PROCEDURE sp_changeimg_phongtro_01 @MaPT INT, @HinhAnh NVARCHAR(MAX)
 AS BEGIN

@@ -25,11 +25,14 @@ namespace AndroidWebService.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<CTDatPhong> CTDatPhong { get; set; }
+        public virtual DbSet<GiaoDich> GiaoDich { get; set; }
+        public virtual DbSet<LoaiGiaoDich> LoaiGiaoDich { get; set; }
         public virtual DbSet<NguoiDung> NguoiDung { get; set; }
+        public virtual DbSet<PTYeuThich> PTYeuThich { get; set; }
         public virtual DbSet<PhongTro> PhongTro { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoan { get; set; }
-        public virtual DbSet<TrangThai> TrangThai { get; set; }
+        public virtual DbSet<TTPhongTro> TTPhongTro { get; set; }
         public virtual DbSet<VaiTro> VaiTro { get; set; }
         public virtual DbSet<ViTri> ViTri { get; set; }
     }

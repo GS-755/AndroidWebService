@@ -9,7 +9,7 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     
     public partial class TaiKhoan
@@ -17,7 +17,8 @@ namespace AndroidWebService.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
-            this.CTDatPhong = new HashSet<CTDatPhong>();
+            this.GiaoDich = new HashSet<GiaoDich>();
+            this.PTYeuThich = new HashSet<PTYeuThich>();
             this.PhongTro = new HashSet<PhongTro>();
         }
     
@@ -27,24 +28,14 @@ namespace AndroidWebService.Models
         public string SoDT { get; set; }
         public int MaVaiTro { get; set; }
         public string CCCD { get; set; }
-
-        public void TrimAccount()
-        {
-            this.TenDangNhap = this.TenDangNhap.Trim();
-            this.Email = this.Email.Trim();
-            this.SoDT = this.SoDT.Trim();
-            this.CCCD = this.CCCD.Trim();
-        }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
-        public virtual ICollection<CTDatPhong> CTDatPhong { get; set; }
-        [JsonIgnore]
+        public virtual ICollection<GiaoDich> GiaoDich { get; set; }
         public virtual NguoiDung NguoiDung { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
+        public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
-        [JsonIgnore]
         public virtual VaiTro VaiTro { get; set; }
     }
 }

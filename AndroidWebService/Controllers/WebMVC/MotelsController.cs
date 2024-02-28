@@ -18,7 +18,7 @@ namespace AndroidWebService.Controllers.WebMVC
         // GET: Motels
         public ActionResult Index()
         {
-            var phongTro = db.PhongTro.Include(p => p.TaiKhoan).Include(p => p.TrangThai).Include(p => p.ViTri);
+            var phongTro = db.PhongTro.Include(p => p.TaiKhoan).Include(p => p.TTPhongTro).Include(p => p.ViTri);
             return View(phongTro.ToList());
         }
 
@@ -41,7 +41,7 @@ namespace AndroidWebService.Controllers.WebMVC
         public ActionResult Create()
         {
             ViewBag.TenDangNhap = new SelectList(db.TaiKhoan, "TenDangNhap", "TenDangNhap");
-            ViewBag.MaTT = new SelectList(db.TrangThai, "MaTT", "TenTT");
+            ViewBag.MaTT = new SelectList(db.TTPhongTro, "MaTT", "TenTT");
             ViewBag.MaVT = new SelectList(db.ViTri, "MaVT", "Quan");
             return View();
         }
@@ -69,7 +69,7 @@ namespace AndroidWebService.Controllers.WebMVC
             }
 
             ViewBag.TenDangNhap = new SelectList(db.TaiKhoan, "TenDangNhap", "MatKhau", phongTro.TenDangNhap);
-            ViewBag.MaTT = new SelectList(db.TrangThai, "MaTT", "TenTT", phongTro.MaTT);
+            ViewBag.MaTT = new SelectList(db.TTPhongTro, "MaTT", "TenTT", phongTro.MaTT);
             ViewBag.MaVT = new SelectList(db.ViTri, "MaVT", "Quan", phongTro.MaVT);
             return View(phongTro);
         }
@@ -87,7 +87,7 @@ namespace AndroidWebService.Controllers.WebMVC
                 return HttpNotFound();
             }
             ViewBag.TenDangNhap = new SelectList(db.TaiKhoan, "TenDangNhap", "MatKhau", phongTro.TenDangNhap);
-            ViewBag.MaTT = new SelectList(db.TrangThai, "MaTT", "TenTT", phongTro.MaTT);
+            ViewBag.MaTT = new SelectList(db.TTPhongTro, "MaTT", "TenTT", phongTro.MaTT);
             ViewBag.MaVT = new SelectList(db.ViTri, "MaVT", "Quan", phongTro.MaVT);
             return View(phongTro);
         }
@@ -106,7 +106,7 @@ namespace AndroidWebService.Controllers.WebMVC
                 return RedirectToAction("Index");
             }
             ViewBag.TenDangNhap = new SelectList(db.TaiKhoan, "TenDangNhap", "MatKhau", phongTro.TenDangNhap);
-            ViewBag.MaTT = new SelectList(db.TrangThai, "MaTT", "TenTT", phongTro.MaTT);
+            ViewBag.MaTT = new SelectList(db.TTPhongTro, "MaTT", "TenTT", phongTro.MaTT);
             ViewBag.MaVT = new SelectList(db.ViTri, "MaVT", "Quan", phongTro.MaVT);
             return View(phongTro);
         }

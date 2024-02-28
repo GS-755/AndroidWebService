@@ -4,21 +4,26 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="40576e9cc0074c48b5230284208440ef" Name="Diagram1">
-        <EntityTypeShape EntityType="DoAnAndroidModel.CTDatPhong" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.NguoiDung" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.PhongTro" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.TaiKhoan" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.TrangThai" Width="1.5" PointX="6" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.VaiTro" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.ViTri" Width="1.5" PointX="6" PointY="7.125" IsExpanded="true" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__CTDatPhon__TenDa__48CFD27E" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__CTDatPhong__MaPT__47DBAE45" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__CCCD__403A8C7D" ManuallyRouted="false" />
+      <Diagram DiagramId="1246ab7953b443bfa4e12219b511833d" Name="Diagram1">
+        <EntityTypeShape EntityType="DoAnAndroidModel.GiaoDich" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.LoaiGiaoDich" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.NguoiDung" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.PTYeuThich" Width="1.5" PointX="5.25" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.PhongTro" Width="1.5" PointX="8.25" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.TaiKhoan" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.TTPhongTro" Width="1.5" PointX="6" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.VaiTro" Width="1.5" PointX="0.75" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.ViTri" Width="1.5" PointX="6" PointY="12.375" IsExpanded="true" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaLoai__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__TenDan__5070F446" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__CCCD__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PTYeuThic__TenDa__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PTYeuThich__MaPT__49C3F6B7" ManuallyRouted="false" />
         <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__4316F928" ManuallyRouted="false" />
         <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__44FF419A" ManuallyRouted="false" />
         <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaVT__440B1D61" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__MaVaiT__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__MaVaiT__3D5E1FD2" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
