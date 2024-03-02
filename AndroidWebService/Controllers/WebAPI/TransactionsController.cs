@@ -1,7 +1,5 @@
-﻿using System.Net;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
-using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
@@ -30,41 +28,6 @@ namespace AndroidWebService.Controllers.WebAPI
             }
 
             return Ok(giaoDich);
-        }
-
-        // PUT: api/Transactions/5
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(string id, GiaoDich giaoDich)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != giaoDich.MaGD)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(giaoDich).State = EntityState.Modified;
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TransactionExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST: api/Transactions
@@ -128,22 +91,6 @@ namespace AndroidWebService.Controllers.WebAPI
             }
 
             return CreatedAtRoute("DefaultApi", new { id = giaoDich.MaGD }, giaoDich);
-        }
-
-        // DELETE: api/Transactions/5
-        [ResponseType(typeof(GiaoDich))]
-        public async Task<IHttpActionResult> Delete(string id)
-        {
-            GiaoDich giaoDich = await db.GiaoDich.FindAsync(id);
-            if (giaoDich == null)
-            {
-                return NotFound();
-            }
-
-            db.GiaoDich.Remove(giaoDich);
-            await db.SaveChangesAsync();
-
-            return Ok(giaoDich);
         }
 
         protected override void Dispose(bool disposing)

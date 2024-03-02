@@ -9,11 +9,12 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System;
+    using System.Web;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Web;
+
 
     public partial class PhongTro
     {
@@ -35,6 +36,7 @@ namespace AndroidWebService.Models
         public Nullable<double> TienCoc { get; set; }
         public string MoTa { get; set; }
         public string HinhAnh { get; set; }
+        public string Base64Image { get; set; } 
         [NotMapped]
         [JsonIgnore]
         public HttpPostedFileBase UploadImage { get; set; }

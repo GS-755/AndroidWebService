@@ -224,6 +224,7 @@
     <Compile Include="Models\TTPhongTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Utils\MyBase64Converter.cs" />
     <Compile Include="Models\Utils\RandomID.cs" />
     <Compile Include="Models\Utils\SHA256.cs" />
     <Compile Include="Models\VaiTro.cs">

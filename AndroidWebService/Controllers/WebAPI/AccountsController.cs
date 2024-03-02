@@ -17,26 +17,31 @@ namespace AndroidWebService.Controllers.WebAPI
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
-        [HttpGet]
         public HttpResponseMessage GetCookie(string userName) 
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            CookieHeaderValue cookie = Request.Headers.
-                GetCookies(userName.Trim()).FirstOrDefault();
-            if(cookie != null)
+            try
             {
-                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-                response.StatusCode = HttpStatusCode.OK;
+                CookieHeaderValue cookie = Request.Headers.
+                    GetCookies(userName.Trim()).FirstOrDefault();
+                if (cookie == null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                }
+                else
+                {
+                    response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                    response.StatusCode = HttpStatusCode.OK;
+                }
             }
-            else
+            catch
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
             }
+            
 
             return response;
         }
-        // GET [cookie-header]: api/Accounts/ra21006en
-        [HttpGet]
         public HttpResponseMessage SaveCookie(string userName)
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -49,7 +54,7 @@ namespace AndroidWebService.Controllers.WebAPI
                 {
                     CookieHeaderValue cookie = new 
                         CookieHeaderValue("cookie-header", users.TenDangNhap.Trim());
-                    cookie.Expires = DateTimeOffset.Now.AddDays(1);
+                    cookie.Expires = DateTimeOffset.Now.AddDays(7);
                     cookie.Domain = Request.RequestUri.Host;
                     cookie.Path = "/";
                     response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
@@ -67,8 +72,9 @@ namespace AndroidWebService.Controllers.WebAPI
 
             return response;
         }
-        // GET: api/Accounts/Login?userName=adu666&password=adu_adu_adu
+        // POST: api/Accounts/Login?userName=adu666&password=adu_adu_adu
         [ResponseType(typeof(TaiKhoan))]
+        [HttpPost]
         public async Task<IHttpActionResult> Login(string userName, string password)
         {
             string authTmp = SHA256.Get(password);
@@ -80,7 +86,7 @@ namespace AndroidWebService.Controllers.WebAPI
             }
             else if(taiKhoan.MatKhau == authTmp)
             {
-                SaveCookie(taiKhoan.TenDangNhap.Trim());
+                SaveCookie(userName.Trim());
 
                 return Ok(taiKhoan);
             }

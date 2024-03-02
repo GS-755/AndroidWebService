@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
-using System.IO;
-using System.Web.Hosting;
+using System.Drawing;
+using AndroidWebService.Models.Utils;
+using System.Web;
+using System;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
@@ -43,10 +45,25 @@ namespace AndroidWebService.Controllers.WebAPI
             {
                 return BadRequest(ModelState);
             }
-            db.PhongTro.Add(phongTro);
-            await db.SaveChangesAsync();
+            else
+            {
+                if(phongTro.Base64Image != null)
+                {
+                    Image motelImage = MyBase64Converter.
+                            Base64ToImage(phongTro.Base64Image);
+                    string fileName = $"{phongTro.TenDangNhap.Trim()}" +
+                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
+                    string extension = ".jpg";
+                    string filePath = HttpContext.Current.Server.
+                               MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
+                    motelImage.Save(filePath);
+                    phongTro.HinhAnh = fileName + extension;
+                }
+                db.PhongTro.Add(phongTro);
+                await db.SaveChangesAsync();
 
-            return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
+                return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
+            }
         }
 
         // PUT: api/Motels/PutPhongTro/5
@@ -62,26 +79,39 @@ namespace AndroidWebService.Controllers.WebAPI
             {
                 return BadRequest();
             }
-
-            db.Entry(phongTro).State = EntityState.Modified;
-
-            try
+            else
             {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PhongTroExists(id))
+                if (phongTro.Base64Image != null)
                 {
-                    return NotFound();
+                    Image motelImage = MyBase64Converter.
+                            Base64ToImage(phongTro.Base64Image);
+                    string fileName = $"{phongTro.TenDangNhap.Trim()}" +
+                            $"_{phongTro.NgayDang.ToString("mmddyyyy_HHmm")}";
+                    string extension = ".jpg";
+                    string filePath = HttpContext.Current.Server.
+                               MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
+                    motelImage.Save(filePath);
+                    phongTro.HinhAnh = fileName + extension;
                 }
-                else
+                db.Entry(phongTro).State = EntityState.Modified;
+                try
                 {
-                    throw;
+                    await db.SaveChangesAsync();
                 }
-            }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!PhongTroExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
 
-            return StatusCode(HttpStatusCode.NoContent);
+                return StatusCode(HttpStatusCode.OK);
+            }
         }
 
         // DELETE: api/Motels/5

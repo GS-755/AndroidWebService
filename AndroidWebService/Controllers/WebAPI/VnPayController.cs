@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
 using AndroidWebService.Models.VNPay;
-using System.Data.Entity;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
