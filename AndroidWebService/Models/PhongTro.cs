@@ -17,14 +17,14 @@ namespace AndroidWebService.Models
 
     public partial class PhongTro
     {
-        public static readonly string SERVER_IMG_PATH = "~/Resources/Pictures/";
+        public static readonly string 
+            SERVER_IMG_PATH = "~/Resources/Pictures/";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PhongTro()
         {
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.GiaoDich = new HashSet<GiaoDich>();
-            this.NgayDang = DateTime.Now;
         }
     
         public int MaPT { get; set; }

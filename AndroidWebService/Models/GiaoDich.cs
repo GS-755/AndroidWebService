@@ -9,8 +9,8 @@
 
 namespace AndroidWebService.Models
 {
-    using System;
     using Newtonsoft.Json;
+    using System;
 
     public partial class GiaoDich
     {

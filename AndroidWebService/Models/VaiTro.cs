@@ -9,7 +9,7 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     
     public partial class VaiTro
@@ -24,7 +24,6 @@ namespace AndroidWebService.Models
         public string TenVaiTro { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
         public virtual ICollection<TaiKhoan> TaiKhoan { get; set; }
     }
 }

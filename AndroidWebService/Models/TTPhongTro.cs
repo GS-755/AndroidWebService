@@ -11,7 +11,7 @@ namespace AndroidWebService.Models
 {
     using Newtonsoft.Json;
     using System.Collections.Generic;
-    
+
     public partial class TTPhongTro
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]

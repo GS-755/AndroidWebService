@@ -7,19 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Newtonsoft.Json;
-
 namespace AndroidWebService.Models
-{  
+{
     public partial class PTYeuThich
     {
         public string GhiChu { get; set; }
         public int MaPT { get; set; }
         public string TenDangNhap { get; set; }
-
-        [JsonIgnore]
+    
         public virtual TaiKhoan TaiKhoan { get; set; }
-        [JsonIgnore] 
         public virtual PhongTro PhongTro { get; set; }
     }
 }

@@ -9,8 +9,8 @@
 
 namespace AndroidWebService.Models
 {
-    using System;
     using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     
     public partial class NguoiDung
@@ -24,7 +24,7 @@ namespace AndroidWebService.Models
         public string CCCD { get; set; }
         public string Ho { get; set; }
         public string Ten { get; set; }
-        public System.DateTime NgaySinh { get; set; }
+        public DateTime NgaySinh { get; set; }
         public Nullable<int> GioiTinh { get; set; }
         public string DiaChi { get; set; }
     

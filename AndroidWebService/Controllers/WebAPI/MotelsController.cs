@@ -34,7 +34,7 @@ namespace AndroidWebService.Controllers.WebAPI
             return Ok(phongTro);
         }
 
-        // POST: api/Motels
+        // POST: api/Motels/PostPhongTro
         [HttpPost]
         [ResponseType(typeof(PhongTro))]
         public async Task<IHttpActionResult> PostPhongTro(PhongTro phongTro)
@@ -49,10 +49,10 @@ namespace AndroidWebService.Controllers.WebAPI
             return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
         }
 
-        // PUT: api/Motels/5
+        // PUT: api/Motels/PutPhongTro/5
         [HttpPut]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(int id, PhongTro phongTro)
+        public async Task<IHttpActionResult> PutPhongTro(int id, PhongTro phongTro)
         {
             if (!ModelState.IsValid)
             {
@@ -89,12 +89,12 @@ namespace AndroidWebService.Controllers.WebAPI
         [ResponseType(typeof(PhongTro))]
         public async Task<IHttpActionResult> DeletePhongTro(int id)
         {
-            PhongTro phongTro = await db.PhongTro.FindAsync(id);
+            PhongTro phongTro = await 
+                db.PhongTro.FindAsync(id);
             if (phongTro == null)
             {
                 return NotFound();
             }
-
             db.PhongTro.Remove(phongTro);
             await db.SaveChangesAsync();
 
