@@ -68,7 +68,7 @@ namespace AndroidWebService.Controllers.WebAPI
 
         // PUT: api/Motels/PutPhongTro/5
         [HttpPut]
-        [ResponseType(typeof(void))]
+        [ResponseType(typeof(PhongTro))]
         public async Task<IHttpActionResult> PutPhongTro(int id, PhongTro phongTro)
         {
             if (!ModelState.IsValid)
@@ -93,10 +93,12 @@ namespace AndroidWebService.Controllers.WebAPI
                     motelImage.Save(filePath);
                     phongTro.HinhAnh = fileName + extension;
                 }
-                db.Entry(phongTro).State = EntityState.Modified;
                 try
                 {
+                    db.Entry(phongTro).State = EntityState.Modified;
                     await db.SaveChangesAsync();
+
+                    return Ok(phongTro);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -109,8 +111,6 @@ namespace AndroidWebService.Controllers.WebAPI
                         throw;
                     }
                 }
-
-                return StatusCode(HttpStatusCode.OK);
             }
         }
 

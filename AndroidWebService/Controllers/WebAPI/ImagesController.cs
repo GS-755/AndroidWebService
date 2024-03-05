@@ -8,8 +8,6 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using AndroidWebService.Models;
-using System.Collections.Generic;
-using AndroidWebService.Models.Utils;
 
 namespace AndroidWebService.Controllers.WebAPI
 {

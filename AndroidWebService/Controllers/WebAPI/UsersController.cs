@@ -61,31 +61,30 @@ namespace AndroidWebService.Controllers.WebAPI
 
             return CreatedAtRoute("DefaultApi", new { id = nguoiDung.CCCD }, nguoiDung);
         }
-
         // PUT: api/Users/5
-        [HttpPost]
-        [ResponseType(typeof(void))]
+        [HttpPut]
+        [ResponseType(typeof(NguoiDung))]
         public async Task<IHttpActionResult> EditUser(string id, NguoiDung nguoiDung)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != nguoiDung.CCCD)
+            if (id != nguoiDung.CCCD.Trim())
             {
                 return BadRequest();
             }
 
-            db.Entry(nguoiDung).State = EntityState.Modified;
-
             try
             {
+                db.Entry(nguoiDung).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+
+                return Ok(nguoiDung);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NguoiDungExists(id))
+                if (!NguoiDungExists(id.Trim()))
                 {
                     return NotFound();
                 }
@@ -94,8 +93,6 @@ namespace AndroidWebService.Controllers.WebAPI
                     throw;
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)

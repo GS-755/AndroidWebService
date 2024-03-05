@@ -3,6 +3,9 @@ using System.Web.Http;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
+using System.Data.Entity;
+using System.Net.Http;
+using System.Net;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
@@ -13,7 +16,15 @@ namespace AndroidWebService.Controllers.WebAPI
         // GET: api/Locations
         public IQueryable<ViTri> Get()
         {
-            return db.ViTri;
+            HttpResponseMessage response = new HttpResponseMessage();    
+            DbSet<ViTri> locations = db.ViTri;
+            if(locations.Count() <= 0) 
+            {
+                response.StatusCode = HttpStatusCode.NoContent;
+            }
+            response.StatusCode = HttpStatusCode.OK;
+
+            return locations;
         }
 
         // GET: api/Locations/5

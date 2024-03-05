@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
@@ -16,9 +20,9 @@ namespace AndroidWebService.Controllers.WebAPI
         [HttpGet]
         public IQueryable<PTYeuThich> GetByUserName(string userName)
         {
-            return db.PTYeuThich.Where(
-                k => userName.Trim() == k.TenDangNhap.Trim()
-            );
+            return db.PTYeuThich.
+                Where(k => k.TenDangNhap.Trim() == userName.Trim());
+
         }
         [ResponseType(typeof(PTYeuThich))]
         [HttpGet]

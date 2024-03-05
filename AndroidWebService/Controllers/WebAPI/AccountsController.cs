@@ -17,28 +17,35 @@ namespace AndroidWebService.Controllers.WebAPI
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
+        [HttpGet]
         public HttpResponseMessage GetCookie(string userName) 
         {
             HttpResponseMessage response = new HttpResponseMessage();
             try
             {
                 CookieHeaderValue cookie = Request.Headers.
-                    GetCookies(userName.Trim()).FirstOrDefault();
+                    GetCookies("cookie-header").FirstOrDefault();
                 if (cookie == null)
                 {
                     response.StatusCode = HttpStatusCode.BadRequest;
                 }
                 else
                 {
-                    response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-                    response.StatusCode = HttpStatusCode.OK;
+                    if (cookie["cookie-header"].Values.ToString() == userName.Trim())
+                    {
+                        response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                        response.StatusCode = HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.NotFound;
+                    }
                 }
             }
             catch
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
             }
-            
 
             return response;
         }
