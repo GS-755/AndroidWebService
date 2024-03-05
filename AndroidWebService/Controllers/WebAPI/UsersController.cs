@@ -34,7 +34,7 @@ namespace AndroidWebService.Controllers.WebAPI
         // POST: api/Users
         [ResponseType(typeof(NguoiDung))]
         [HttpPost]
-        public async Task<IHttpActionResult> PostNguoiDung(NguoiDung nguoiDung)
+        public async Task<IHttpActionResult> AddUser(NguoiDung nguoiDung)
         {
             if (!ModelState.IsValid)
             {
@@ -61,31 +61,30 @@ namespace AndroidWebService.Controllers.WebAPI
 
             return CreatedAtRoute("DefaultApi", new { id = nguoiDung.CCCD }, nguoiDung);
         }
-
         // PUT: api/Users/5
-        [HttpPost]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> PutNguoiDung(string id, NguoiDung nguoiDung)
+        [HttpPut]
+        [ResponseType(typeof(NguoiDung))]
+        public async Task<IHttpActionResult> EditUser(string id, NguoiDung nguoiDung)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != nguoiDung.CCCD)
+            if (id != nguoiDung.CCCD.Trim())
             {
                 return BadRequest();
             }
 
-            db.Entry(nguoiDung).State = EntityState.Modified;
-
             try
             {
+                db.Entry(nguoiDung).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+
+                return Ok(nguoiDung);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!NguoiDungExists(id))
+                if (!NguoiDungExists(id.Trim()))
                 {
                     return NotFound();
                 }
@@ -94,25 +93,6 @@ namespace AndroidWebService.Controllers.WebAPI
                     throw;
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // DELETE: api/Users/5
-        [HttpDelete]
-        [ResponseType(typeof(NguoiDung))]
-        public async Task<IHttpActionResult> DeleteNguoiDung(string id)
-        {
-            NguoiDung nguoiDung = await db.NguoiDung.FindAsync(id);
-            if (nguoiDung == null)
-            {
-                return NotFound();
-            }
-
-            db.NguoiDung.Remove(nguoiDung);
-            await db.SaveChangesAsync();
-
-            return Ok(nguoiDung);
         }
 
         protected override void Dispose(bool disposing)

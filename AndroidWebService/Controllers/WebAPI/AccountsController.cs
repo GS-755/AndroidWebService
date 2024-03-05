@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
+using AndroidWebService.Models.Utils;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
@@ -17,36 +18,57 @@ namespace AndroidWebService.Controllers.WebAPI
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         [HttpGet]
-        public HttpResponseMessage GetCookie(string usrName) 
+        public HttpResponseMessage GetCookie(string userName) 
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            CookieHeaderValue cookie = Request.Headers.GetCookies(usrName.Trim()).FirstOrDefault();
-            if(cookie != null)
+            try
             {
-                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-                response.StatusCode = HttpStatusCode.OK;
+                CookieHeaderValue cookie = Request.Headers.
+                    GetCookies("cookie-header").FirstOrDefault();
+                if (cookie == null)
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                }
+                else
+                {
+                    if (cookie["cookie-header"].Values.ToString() == userName.Trim())
+                    {
+                        response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                        response.StatusCode = HttpStatusCode.OK;
+                    }
+                    else
+                    {
+                        response.StatusCode = HttpStatusCode.NotFound;
+                    }
+                }
             }
-            else
+            catch
             {
                 response.StatusCode = HttpStatusCode.BadRequest;
             }
 
             return response;
         }
-        // GET [cookie-header]: api/Accounts/ra21006en
-        [HttpGet]
-        public HttpResponseMessage SaveCookie(TaiKhoan users)
+        public HttpResponseMessage SaveCookie(string userName)
         {
             HttpResponseMessage response = new HttpResponseMessage();
+            TaiKhoan users = db.TaiKhoan.FirstOrDefault(
+                k => userName.Trim() == k.TenDangNhap.Trim()
+            );
             try
             {
-                if (ModelState.IsValid)
+                if(users != null)
                 {
-                    CookieHeaderValue cookie = new CookieHeaderValue("cookie-header", users.TenDangNhap.Trim());
-                    cookie.Expires = DateTimeOffset.Now.AddDays(1);
+                    CookieHeaderValue cookie = new 
+                        CookieHeaderValue("cookie-header", users.TenDangNhap.Trim());
+                    cookie.Expires = DateTimeOffset.Now.AddDays(7);
                     cookie.Domain = Request.RequestUri.Host;
                     cookie.Path = "/";
                     response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.BadRequest;
                 }
             }
             catch (Exception ex)
@@ -57,23 +79,63 @@ namespace AndroidWebService.Controllers.WebAPI
 
             return response;
         }
-        // GET: api/Accounts/?userName=adu666&password=adu_adu_adu
+        // POST: api/Accounts/Login?userName=adu666&password=adu_adu_adu
         [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Login([FromBody] string userName, string password)
+        [HttpPost]
+        public async Task<IHttpActionResult> Login(string userName, string password)
         {
-            TaiKhoan taiKhoan = await db.TaiKhoan.FindAsync(userName, password);
+            string authTmp = SHA256.Get(password);
+            TaiKhoan taiKhoan = await db.
+                TaiKhoan.FindAsync(userName);
             if (taiKhoan == null)
             {
                 return NotFound();
             }
+            else if(taiKhoan.MatKhau == authTmp)
+            {
+                SaveCookie(userName.Trim());
 
-            return Ok(taiKhoan);
+                return Ok(taiKhoan);
+            }
+
+            return BadRequest("Incorrect password");
+        }
+
+        // POST: api/Accounts/Register?...
+        [HttpPost]
+        [ResponseType(typeof(TaiKhoan))]
+        public async Task<IHttpActionResult> Register(TaiKhoan taiKhoan)
+        {
+            try
+            {
+                if(ModelState.IsValid)
+                {
+                    string authTmp = SHA256.Get(taiKhoan.MatKhau);
+                    taiKhoan.MatKhau = authTmp;
+                    db.TaiKhoan.Add(taiKhoan);
+
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (DbUpdateException)
+            {
+                if (TaiKhoanExists(taiKhoan.TenDangNhap))
+                {
+                    return Conflict();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
         }
 
         // PUT: api/Accounts/5
         [HttpPost]
         [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(string id, [FromBody]TaiKhoan taiKhoan)
+        public async Task<IHttpActionResult> Put(string id, [FromBody] TaiKhoan taiKhoan)
         {
             if (!ModelState.IsValid)
             {
@@ -104,37 +166,6 @@ namespace AndroidWebService.Controllers.WebAPI
             }
 
             return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST: api/Accounts
-        [HttpPost]
-        [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Post([FromBody] TaiKhoan taiKhoan)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.TaiKhoan.Add(taiKhoan);
-
-            try
-            {
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (TaiKhoanExists(taiKhoan.TenDangNhap))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
         }
 
         protected override void Dispose(bool disposing)

@@ -61,6 +61,9 @@
     <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
     </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -141,6 +144,9 @@
     <Reference Include="System.Web.Optimization">
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -159,26 +165,32 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WebAPI\AccountsController.cs" />
     <Compile Include="Controllers\WebAPI\ImagesController.cs" />
     <Compile Include="Controllers\WebAPI\LocationsController.cs" />
+    <Compile Include="Controllers\WebAPI\LovedMotelsController.cs" />
     <Compile Include="Controllers\WebAPI\MotelsController.cs" />
-    <Compile Include="Controllers\WebAPI\OrderRoomDetailsController.cs" />
+    <Compile Include="Controllers\WebAPI\MotelStatusController.cs" />
     <Compile Include="Controllers\WebAPI\RolesController.cs" />
+    <Compile Include="Controllers\WebAPI\TransactionsController.cs" />
+    <Compile Include="Controllers\WebAPI\TransactionTypesController.cs" />
+    <Compile Include="Controllers\WebAPI\VnPayController.cs" />
     <Compile Include="Controllers\WebAPI\UsersController.cs" />
-    <Compile Include="Controllers\WebAPI\VersionController.cs" />
     <Compile Include="Controllers\WebMVC\AccountsController.cs" />
     <Compile Include="Controllers\WebMVC\LocationsController.cs" />
     <Compile Include="Controllers\WebMVC\MotelsController.cs" />
-    <Compile Include="Controllers\WebMVC\OrderRoomDetailsController.cs" />
     <Compile Include="Controllers\WebMVC\RolesController.cs" />
     <Compile Include="Controllers\WebMVC\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CTDatPhong.cs">
+    <Compile Include="Models\GiaoDich.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoaiGiaoDich.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Model1.Context.cs">
@@ -202,22 +214,32 @@
     <Compile Include="Models\PhongTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PTYeuThich.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagrams.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TaiKhoan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TrangThai.cs">
+    <Compile Include="Models\TTPhongTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Utils\CookieData.cs" />
+    <Compile Include="Models\Utils\MyBase64Converter.cs" />
     <Compile Include="Models\Utils\RandomID.cs" />
     <Compile Include="Models\Utils\SHA256.cs" />
     <Compile Include="Models\VaiTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Version.cs" />
     <Compile Include="Models\ViTri.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VNPay\Utils.cs" />
+    <Compile Include="Models\VNPay\VnPayCompare.cs" />
+    <Compile Include="Models\VNPay\VnPayLibrary.cs" />
+    <Compile Include="Models\VNPay\VNPayObject.cs" />
+    <Compile Include="Models\VNPay\VNPayReturn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -242,8 +264,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
       <DependentUpon>Model1.edmx</DependentUpon>
+      <LastGenOutput>Model1.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\Model1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

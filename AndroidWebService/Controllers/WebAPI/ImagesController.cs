@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Linq;
 using System.Web.Http;
 using System.Net.Http;
 using System.Web.Hosting;
@@ -16,18 +15,14 @@ namespace AndroidWebService.Controllers.WebAPI
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
-        // GET: /api/images
-        public IQueryable<PhongTro> Get()
-        {
-            return db.PhongTro;
-        }
-        // GET: /api/images/getimage/1
-        public async Task<IHttpActionResult> GetImage(int id)
+        // GET: /api/images/getmotelimage/1
+        [HttpGet]
+        public async Task<IHttpActionResult> GetMotelImage(int motelId)
         {
             try
             {
                 HttpResponseMessage response = new HttpResponseMessage();
-                PhongTro phongTro = await db.PhongTro.FirstOrDefaultAsync(k => k.MaPT == id);
+                PhongTro phongTro = await db.PhongTro.FirstOrDefaultAsync(k => k.MaPT == motelId);
                 if (phongTro != null)
                 {
                     string rawName = phongTro.HinhAnh.Trim();
@@ -58,7 +53,7 @@ namespace AndroidWebService.Controllers.WebAPI
                 else
                 {
                     response.StatusCode = HttpStatusCode.NotFound;
-                    response.Content = new StringContent($"The motel with id = {id} was not found!");
+                    response.Content = new StringContent($"The motel with id = {motelId} was not found!");
                 }
 
                 return ResponseMessage(response);
