@@ -14,6 +14,7 @@ namespace AndroidWebService.Controllers.WebAPI
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         // GET: api/TransactionTypes
+        [HttpGet]
         public IQueryable<LoaiGiaoDich> Get()
         {
             HttpResponseMessage response = new HttpResponseMessage();
@@ -32,6 +33,7 @@ namespace AndroidWebService.Controllers.WebAPI
 
         // GET: api/TransactionTypes/5
         [ResponseType(typeof(LoaiGiaoDich))]
+        [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
             LoaiGiaoDich loaiGiaoDich = await db.LoaiGiaoDich.FindAsync(id);

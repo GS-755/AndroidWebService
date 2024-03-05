@@ -14,6 +14,7 @@ namespace AndroidWebService.Controllers.WebAPI
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         // GET: api/Locations
+        [HttpGet]
         public IQueryable<ViTri> Get()
         {
             HttpResponseMessage response = new HttpResponseMessage();    
@@ -29,6 +30,7 @@ namespace AndroidWebService.Controllers.WebAPI
 
         // GET: api/Locations/5
         [ResponseType(typeof(ViTri))]
+        [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
             ViTri viTri = await db.ViTri.FindAsync(id);

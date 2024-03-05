@@ -133,25 +133,25 @@ namespace AndroidWebService.Controllers.WebAPI
         }
 
         // PUT: api/Accounts/5
-        [HttpPost]
-        [ResponseType(typeof(void))]
-        public async Task<IHttpActionResult> Put(string id, [FromBody] TaiKhoan taiKhoan)
+        [HttpPut]
+        [ResponseType(typeof(TaiKhoan))]
+        public async Task<IHttpActionResult> Put(string id, TaiKhoan taiKhoan)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             if (id != taiKhoan.TenDangNhap)
             {
                 return BadRequest();
             }
 
-            db.Entry(taiKhoan).State = EntityState.Modified;
-
             try
             {
+                db.Entry(taiKhoan).State = EntityState.Modified;
                 await db.SaveChangesAsync();
+
+                return Ok(taiKhoan);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -164,8 +164,6 @@ namespace AndroidWebService.Controllers.WebAPI
                     throw;
                 }
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
         }
 
         protected override void Dispose(bool disposing)
