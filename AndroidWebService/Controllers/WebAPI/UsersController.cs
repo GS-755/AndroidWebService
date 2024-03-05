@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
@@ -14,12 +13,14 @@ namespace AndroidWebService.Controllers.WebAPI
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         // GET: api/Users
+        [HttpGet]
         public IQueryable<NguoiDung> Get()
         {
             return db.NguoiDung;
         }
         // GET: api/Users/5
         [ResponseType(typeof(NguoiDung))]
+        [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
             NguoiDung nguoiDung = await db.NguoiDung.FindAsync(id);

@@ -4,10 +4,6 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
-using System.Data.Entity;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net;
 
 namespace AndroidWebService.Controllers.WebAPI
 {
@@ -34,6 +30,7 @@ namespace AndroidWebService.Controllers.WebAPI
         }
         // POST: api/LovedMotels
         [ResponseType(typeof(PTYeuThich))]
+        [HttpPost]
         public async Task<IHttpActionResult> Post(PTYeuThich pTYeuThich)
         {
             if (!ModelState.IsValid)
@@ -56,18 +53,25 @@ namespace AndroidWebService.Controllers.WebAPI
         }
         // DELETE: api/LovedMotels/5
         [ResponseType(typeof(PTYeuThich))]
-        public async Task<IHttpActionResult> Delete(int id)
+        [HttpDelete]
+        public async Task<IHttpActionResult> Delete(PTYeuThich lovedMotels) 
         {
-            PTYeuThich pTYeuThich = await db.PTYeuThich.FindAsync(id);
+            PTYeuThich pTYeuThich = await db.
+                PTYeuThich.FindAsync(lovedMotels.MaPT);
             if (pTYeuThich == null)
             {
                 return NotFound();
             }
+            if (pTYeuThich.TenDangNhap.Trim() == lovedMotels.TenDangNhap.Trim()
+                    && pTYeuThich.MaPT == lovedMotels.MaPT)
+            {
+                db.PTYeuThich.Remove(pTYeuThich);
+                await db.SaveChangesAsync();
 
-            db.PTYeuThich.Remove(pTYeuThich);
-            await db.SaveChangesAsync();
+                return Ok(pTYeuThich);
+            }
 
-            return Ok(pTYeuThich);
+            return BadRequest();
         }
 
         protected override void Dispose(bool disposing)

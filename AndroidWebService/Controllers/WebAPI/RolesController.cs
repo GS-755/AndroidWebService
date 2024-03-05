@@ -11,6 +11,7 @@ namespace AndroidWebService.Controllers.WebAPI
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         // GET: api/Roles
+        [HttpGet]
         public IQueryable<VaiTro> Get()
         {
             return db.VaiTro;
@@ -18,6 +19,7 @@ namespace AndroidWebService.Controllers.WebAPI
 
         // GET: api/Roles/5
         [ResponseType(typeof(VaiTro))]
+        [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
             VaiTro vaiTro = await db.VaiTro.FindAsync(id);
