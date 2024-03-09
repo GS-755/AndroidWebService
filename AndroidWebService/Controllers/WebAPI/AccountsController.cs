@@ -131,7 +131,6 @@ namespace AndroidWebService.Controllers.WebAPI
 
             return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
         }
-
         // PUT: api/Accounts/5
         [HttpPut]
         [ResponseType(typeof(TaiKhoan))]
@@ -148,6 +147,8 @@ namespace AndroidWebService.Controllers.WebAPI
 
             try
             {
+                string authTmp = SHA256.Get(taiKhoan.MatKhau);
+                taiKhoan.MatKhau = authTmp;
                 db.Entry(taiKhoan).State = EntityState.Modified;
                 await db.SaveChangesAsync();
 

@@ -103,7 +103,7 @@ SELECT *
 FROM sys.triggers;
 -- Calculate deposit 
 CREATE OR ALTER TRIGGER tg_calcdeposit_r1 ON PhongTro 
-AFTER INSERT, UPDATE AS BEGIN 
+FOR INSERT, UPDATE AS BEGIN 
 	DECLARE @maPT INT; 
 	DECLARE @oldAmount FLOAT;
 	SELECT @maPT = (
@@ -154,3 +154,10 @@ AS BEGIN
 		PRINT(N'Đã cập nhật ảnh cho phòng trọ #' + @MaPT);
 	END;
 END;
+
+SELECT * 
+FROM PhongTro
+---------------------------
+SELECT * 
+FROM PhongTro
+WHERE MaPT = 1;

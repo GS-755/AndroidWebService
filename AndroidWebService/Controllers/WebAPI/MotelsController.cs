@@ -87,7 +87,7 @@ namespace AndroidWebService.Controllers.WebAPI
                     Image motelImage = MyBase64Converter.
                             Base64ToImage(phongTro.Base64Image);
                     string fileName = $"{phongTro.TenDangNhap.Trim()}" +
-                            $"_{phongTro.NgayDang.ToString("mmddyyyy_HHmm")}";
+                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
                     string extension = ".jpg";
                     string filePath = HttpContext.Current.Server.
                                MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
