@@ -45,11 +45,16 @@ namespace AndroidWebService.Models
         public int MaTT { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
+        [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
+        [JsonIgnore]
         public virtual TTPhongTro TTPhongTro { get; set; }
+        [JsonIgnore]    
         public virtual ViTri ViTri { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
     }
 }
