@@ -9,7 +9,6 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System;
 
     public partial class GiaoDich
@@ -21,11 +20,8 @@ namespace AndroidWebService.Models
         public string TenDangNhap { get; set; }
         public int MaPT { get; set; }
 
-        [JsonIgnore]
         public virtual LoaiGiaoDich LoaiGiaoDich { get; set; }
-        [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
-        [JsonIgnore]
         public virtual PhongTro PhongTro { get; set; }
     }
 }

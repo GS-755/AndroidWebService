@@ -9,8 +9,8 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     
     public partial class NguoiDung

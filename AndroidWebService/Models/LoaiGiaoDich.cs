@@ -9,7 +9,6 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System.Collections.Generic;
 
     public partial class LoaiGiaoDich
@@ -24,7 +23,6 @@ namespace AndroidWebService.Models
         public string TenLoaiGD { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
     }
 }
