@@ -30,7 +30,6 @@ namespace AndroidWebService.Models
         public virtual DbSet<NguoiDung> NguoiDung { get; set; }
         public virtual DbSet<PTYeuThich> PTYeuThich { get; set; }
         public virtual DbSet<PhongTro> PhongTro { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoan { get; set; }
         public virtual DbSet<TTPhongTro> TTPhongTro { get; set; }
         public virtual DbSet<VaiTro> VaiTro { get; set; }
