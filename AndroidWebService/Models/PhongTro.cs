@@ -9,41 +9,41 @@
 
 namespace AndroidWebService.Models
 {
-    using System;
-    using System.Web;
     using Newtonsoft.Json;
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
-
+    using System.Web;
 
     public partial class PhongTro
     {
-        public static readonly string 
-            SERVER_IMG_PATH = "~/Resources/Pictures/";
+        public static readonly string
+                SERVER_IMG_PATH = "~/Resources/Pictures/";
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PhongTro()
         {
-            this.PTYeuThich = new HashSet<PTYeuThich>();
             this.GiaoDich = new HashSet<GiaoDich>();
+            this.PTYeuThich = new HashSet<PTYeuThich>();
         }
     
         public int MaPT { get; set; }
         public string TieuDe { get; set; }
-        public DateTime NgayDang { get; set; }
+        public System.DateTime NgayDang { get; set; }
         public double DienTich { get; set; }
         public double SoTien { get; set; }
         public Nullable<double> TienCoc { get; set; }
         public string MoTa { get; set; }
         public string HinhAnh { get; set; }
-        public string Base64Image { get; set; } 
+        public string Base64Image { get; set; }
         [NotMapped]
         [JsonIgnore]
         public HttpPostedFileBase UploadImage { get; set; }
+        public string DiaChi { get; set; }
         public string TenDangNhap { get; set; }
         public int MaVT { get; set; }
         public int MaTT { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
@@ -51,7 +51,7 @@ namespace AndroidWebService.Models
         public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
         [JsonIgnore]
         public virtual TTPhongTro TTPhongTro { get; set; }
-        [JsonIgnore]    
+        [JsonIgnore]
         public virtual ViTri ViTri { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
