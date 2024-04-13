@@ -98,10 +98,7 @@ CREATE TABLE PTYeuThich (
   FOREIGN KEY(TenDangNhap) REFERENCES TaiKhoan(TenDangNhap)
 );
 
--- Triggers
--- Show the list of triggers 
-SELECT * 
-FROM sys.triggers;
+-- Trigger(s)
 -- Calculate deposit 
 CREATE OR ALTER TRIGGER tg_calcdeposit_r1 ON PhongTro 
 FOR INSERT, UPDATE AS BEGIN 
@@ -137,10 +134,9 @@ FOR DELETE AS BEGIN
 	Rollback Transaction; 
 	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá tài khoản người dùng', 16, 1);
 END; 
+
+-- Stored procedure(s)
 -- Emergency case only (use with Pointer for ease)
--- Show the list of SP(s)
-SELECT * 
-FROM sys.procedures;
 CREATE PROCEDURE sp_changeimg_phongtro_01 @MaPT INT, @HinhAnh NVARCHAR(MAX)
 AS BEGIN
 	IF EXISTS (
@@ -156,9 +152,9 @@ AS BEGIN
 	END;
 END;
 
+-- Show the list of triggers 
 SELECT * 
-FROM PhongTro
----------------------------
+FROM sys.triggers;
+-- Show the list of SP(s)
 SELECT * 
-FROM PhongTro
-WHERE MaPT = 1;
+FROM sys.procedures;

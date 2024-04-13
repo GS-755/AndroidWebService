@@ -1,83 +1,82 @@
 ﻿using System;
 using System.Configuration;
 using static System.Web.HttpContext;
+using System.Collections.Specialized;
 
 namespace QLMB.Models.VNPay
 {
     public class VNPayReturn
     {
-        private string terminalID;
-        private string clientTransacID;
-        private string serverTransacID;
-        private string bankCode;
-        private double paymentAmount;
-        private int transacStatus;
-        private string returnText;
-
-        public static readonly string RESPONSE_CODE = "00";
-        public static readonly string TRANSAC_CODE = "00";
-        public static readonly string HASH_SECRET = ConfigurationManager.AppSettings["vnp_HashSecret"];
+        private readonly string RESPONSE_CODE = "00";
+        private readonly string TRANSAC_CODE = "00";
+        private readonly int TRIM_AMOUNT = 100; 
+        private readonly string HASH_SECRET = ConfigurationManager.AppSettings["vnp_HashSecret"].Trim();
+        public string TerminalID { get; set; }
+        public string ClientTransacID { get; set; }
+        public string ServerTransacID { get; set; }
+        public double PaymentAmount { get; set; }
+        public int TransacStatus { get; set; }
+        public string ReturnText { get; set; }
+        public string BankCode { get; set; }
 
         public VNPayReturn() { }
 
-        public string TerminalID { get => this.terminalID; set => this.terminalID = value; }
-        public string ClientTransacID { get => this.clientTransacID; set => this.clientTransacID = value; }
-        public string ServerTransacID { get => this.serverTransacID; set => this.serverTransacID = value; }
-        public double PaymentAmount { get => this.paymentAmount; set => this.paymentAmount = value; }
-        public int TransacStatus { get => this.transacStatus; set => this.transacStatus = value; }
-        public string ReturnText { get => this.returnText; set => this.returnText = value; }
-        public string BankCode { get => this.bankCode; set => this.bankCode = value; }
-
         public bool ProcessResponses()
         {
-            if (Current.Request.QueryString.Count > 0)
+            try
             {
-                string vnp_HashSecret = HASH_SECRET; //ssssskill :))
-                var vnpayData = Current.Request.QueryString;
-                VnPayLibrary vnpay = new VnPayLibrary();
-
-                foreach (string s in vnpayData)
+                if (Current.Request.QueryString.Count > 0)
                 {
-                    // Get all querystring data
-                    if (!string.IsNullOrEmpty(s) && s.StartsWith("vnp_"))
+                    string vnp_HashSecret = this.HASH_SECRET; 
+                    NameValueCollection vnpayData = Current.Request.QueryString;
+                    VnPayLibrary vnpay = new VnPayLibrary();
+                    foreach (string s in vnpayData)
                     {
-                        vnpay.AddResponseData(s, vnpayData[s]);
+                        // Convert all querystring data
+                        if (!string.IsNullOrEmpty(s) && s.StartsWith("vnp_"))
+                        {
+                            vnpay.AddResponseData(s, vnpayData[s].Trim());
+                        }
                     }
-                }
-                long orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
-                long vnpayTranId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
-                string vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
-                string vnp_TransactionStatus = vnpay.GetResponseData("vnp_TransactionStatus");
-                string vnp_SecureHash = Current.Request.QueryString["vnp_SecureHash"];
-                string TerminalID = Current.Request.QueryString["vnp_TmnCode"];
-                long vnp_Amount = Convert.ToInt64(vnpay.GetResponseData("vnp_Amount")) / 100;
-                string bankCode = Current.Request.QueryString["vnp_BankCode"];
+                    long vnp_TxnRef = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
+                    long vnp_TransactionNo = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
+                    string vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
+                    string vnp_TransactionStatus = vnpay.GetResponseData("vnp_TransactionStatus");
+                    string vnp_SecureHash = Current.Request.QueryString["vnp_SecureHash"];
+                    string vnp_TmnCode = Current.Request.QueryString["vnp_TmnCode"];
+                    long vnp_Amount = Convert.ToInt64(vnpay.GetResponseData("vnp_Amount")) / this.TRIM_AMOUNT;
+                    string vnp_bankCode = Current.Request.QueryString["vnp_BankCode"];
 
-                bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
-                if (checkSignature)
-                {
-                    this.TerminalID = TerminalID;
-                    this.ClientTransacID = orderId.ToString();
-                    this.ServerTransacID = vnpayTranId.ToString();
-                    this.PaymentAmount = vnp_Amount;
-                    this.BankCode = bankCode;
-                    if (vnp_ResponseCode == RESPONSE_CODE && vnp_TransactionStatus == TRANSAC_CODE)
+                    bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, vnp_HashSecret);
+                    if (checkSignature)
                     {
-                        //Thanh toan thanh cong
-                        this.ReturnText = "Cảm ơn quý khách đã giao dịch";
+                        this.TerminalID = vnp_TmnCode;
+                        this.ClientTransacID = vnp_TxnRef.ToString();
+                        this.ServerTransacID = vnp_TransactionNo.ToString();
+                        this.PaymentAmount = vnp_Amount;
+                        this.BankCode = vnp_bankCode;
+                        if (vnp_ResponseCode == this.RESPONSE_CODE && vnp_TransactionStatus == this.TRANSAC_CODE)
+                        {
+                            //Thanh toan thanh cong
+                            this.ReturnText = "Cảm ơn quý khách đã giao dịch";
 
-                        return true;
+                            return true;
+                        }
+                        else
+                        {
+                            //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
+                            this.ReturnText = $"Có lỗi xảy ra trong quá trình xử lý. (Mã lỗi: {vnp_ResponseCode})";
+                        }
                     }
                     else
                     {
-                        //Thanh toan khong thanh cong. Ma loi: vnp_ResponseCode
-                        this.ReturnText = "Có lỗi xảy ra trong quá trình xử lý. (Mã lỗi: " + vnp_ResponseCode + ")";
+                        this.ReturnText = $"Có lỗi xảy ra trong quá trình xử lý. (Mã lỗi: {vnp_ResponseCode})";
                     }
                 }
-                else
-                {
-                    this.ReturnText = "Có lỗi xảy ra trong quá trình xử lý. (Mã lỗi: " + vnp_ResponseCode + ")";
-                }
+            }
+            catch (Exception ex)
+            {
+                this.ReturnText = ex.Message;
             }
 
             return false;
