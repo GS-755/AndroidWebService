@@ -207,6 +207,9 @@
     <Compile Include="Models\TaiKhoan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TTGiaoDich.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TTPhongTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -219,6 +222,7 @@
     <Compile Include="Models\ViTri.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VNPay\IPaymentResonse.cs" />
     <Compile Include="Models\VNPay\Utils.cs" />
     <Compile Include="Models\VNPay\VnPayCompare.cs" />
     <Compile Include="Models\VNPay\VnPayLibrary.cs" />

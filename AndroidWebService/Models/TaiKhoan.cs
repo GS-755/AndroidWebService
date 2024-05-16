@@ -10,10 +10,11 @@
 namespace AndroidWebService.Models
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     public partial class TaiKhoan
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
             this.GiaoDich = new HashSet<GiaoDich>();
@@ -28,12 +29,12 @@ namespace AndroidWebService.Models
         public int MaVaiTro { get; set; }
         public string CCCD { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
         public virtual NguoiDung NguoiDung { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
         public virtual VaiTro VaiTro { get; set; }
     }

@@ -9,12 +9,12 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     public partial class VaiTro
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public VaiTro()
         {
             this.TaiKhoan = new HashSet<TaiKhoan>();
@@ -23,8 +23,7 @@ namespace AndroidWebService.Models
         public int MaVaiTro { get; set; }
         public string TenVaiTro { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TaiKhoan> TaiKhoan { get; set; }
     }
 }

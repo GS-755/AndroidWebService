@@ -9,15 +9,15 @@
 
 namespace AndroidWebService.Models
 {
+    using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-
+    
     public partial class DoAnAndroidEntities : DbContext
     {
         public DoAnAndroidEntities()
             : base("name=DoAnAndroidEntities")
         {
-
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -34,5 +34,6 @@ namespace AndroidWebService.Models
         public virtual DbSet<TTPhongTro> TTPhongTro { get; set; }
         public virtual DbSet<VaiTro> VaiTro { get; set; }
         public virtual DbSet<ViTri> ViTri { get; set; }
+        public virtual DbSet<TTGiaoDich> TTGiaoDich { get; set; }
     }
 }
