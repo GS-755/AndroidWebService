@@ -9,18 +9,19 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
     using System.Web;
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class PhongTro
     {
         public static readonly string
                 SERVER_IMG_PATH = "~/Resources/Pictures/";
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PhongTro()
         {
             this.GiaoDich = new HashSet<GiaoDich>();
@@ -29,7 +30,7 @@ namespace AndroidWebService.Models
     
         public int MaPT { get; set; }
         public string TieuDe { get; set; }
-        public System.DateTime NgayDang { get; set; }
+        public DateTime NgayDang { get; set; }
         public double DienTich { get; set; }
         public double SoTien { get; set; }
         public Nullable<double> TienCoc { get; set; }
@@ -44,7 +45,7 @@ namespace AndroidWebService.Models
         public int MaVT { get; set; }
         public int MaTT { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
         [JsonIgnore]
@@ -53,7 +54,7 @@ namespace AndroidWebService.Models
         public virtual TTPhongTro TTPhongTro { get; set; }
         [JsonIgnore]
         public virtual ViTri ViTri { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
     }

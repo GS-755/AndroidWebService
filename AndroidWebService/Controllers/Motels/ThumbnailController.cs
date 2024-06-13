@@ -11,7 +11,7 @@ using AndroidWebService.Models;
 
 namespace AndroidWebService.Controllers.Motels
 {
-    public class ImagesController : ApiController
+    public class ThumbnailController : ApiController
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
