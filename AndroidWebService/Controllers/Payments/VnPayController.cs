@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Web.Http;
 using QLMB.Models.VNPay;
-using System.Configuration;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
 using AndroidWebService.Models.VNPay;
+using AndroidWebService.Models.Utils;
 
 namespace AndroidWebService.Controllers.Payments
 {
@@ -25,10 +25,10 @@ namespace AndroidWebService.Controllers.Payments
             else
             {
                 //Convert Config Info
-                string vnp_ReturnUrl = ConfigurationManager.AppSettings["vnp_Returnurl"]; //URL nhan ket qua tra ve 
-                string vnp_Url = ConfigurationManager.AppSettings["vnp_Url"]; //URL thanh toan cua VNPAY 
-                string vnp_TmnCode = ConfigurationManager.AppSettings["vnp_TmnCode"]; //Ma định danh merchant kết nối (Terminal Id)
-                string vnp_HashSecret = ConfigurationManager.AppSettings["vnp_HashSecret"]; //Secret Key
+                string vnp_ReturnUrl = ConfigParser.Parse("vnp_Returnurl"); //URL nhan ket qua tra ve 
+                string vnp_Url = ConfigParser.Parse("vnp_Url"); //URL thanh toan cua VNPAY 
+                string vnp_TmnCode = ConfigParser.Parse("vnp_TmnCode"); //Ma định danh merchant kết nối (Terminal Id)
+                string vnp_HashSecret = $"{WebURL.GetWebURL()}{ConfigParser.Parse("vnp_HashSecret")}"; //Secret Key
 
                 //Build URL for VNPAY
                 VnPayLibrary transaction = new VnPayLibrary();

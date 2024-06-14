@@ -56,7 +56,7 @@ namespace AndroidWebService.Controllers.Motels
                             $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
                     string extension = ".jpg";
                     string filePath = HttpContext.Current.Server.
-                               MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
+                               MapPath(PhongTro.THUMBNAIL_IMG_PATH + fileName + extension);
                     motelImage.Save(filePath);
                     phongTro.HinhAnh = fileName + extension;
                 }
@@ -90,7 +90,7 @@ namespace AndroidWebService.Controllers.Motels
                             $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
                     string extension = ".jpg";
                     string filePath = HttpContext.Current.Server.
-                               MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
+                               MapPath(PhongTro.THUMBNAIL_IMG_PATH + fileName + extension);
                     motelImage.Save(filePath);
                     phongTro.HinhAnh = fileName + extension;
                 }

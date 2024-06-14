@@ -15,11 +15,12 @@ namespace AndroidWebService.Models
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.DataAnnotations.Schema;
+    using AndroidWebService.Models.Utils;
 
     public partial class PhongTro
     {
         public static readonly string
-                SERVER_IMG_PATH = "~/Resources/Pictures/";
+                THUMBNAIL_IMG_PATH = ConfigParser.Parse("motel_thumbnail_path");
 
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PhongTro()

@@ -361,4 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/AndroidWebService/Resources/Pictures
+
+# Motel thumbnail assets 
+/AndroidWebService/Resources/Pictures/Motels/Thumbnails/*.* 
+!/AndroidWebService/Resources/Pictures/Motels/Thumbnails/example 
+# Motel media assets 
+/AndroidWebService/Resources/Pictures/Motels/Media/*.* 
+!/AndroidWebService/Resources/Pictures/Motels/Media/example 
+# Users avatar assets 
+/AndroidWebService/Resources/Pictures/Users/*.* 
+!/AndroidWebService/Resources/Pictures/Users/defaultProfilePicture.png

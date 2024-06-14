@@ -28,7 +28,7 @@ namespace AndroidWebService.Controllers.Motels
                     string rawName = phongTro.HinhAnh.Trim();
                     string fileName = Path.GetFileNameWithoutExtension(rawName);
                     string extension = Path.GetExtension(rawName).Replace('.', ' ').Trim();
-                    FileStream fs = File.OpenRead(HostingEnvironment.MapPath(PhongTro.SERVER_IMG_PATH + rawName));
+                    FileStream fs = File.OpenRead(HostingEnvironment.MapPath(PhongTro.THUMBNAIL_IMG_PATH + rawName));
                     if(fs == null)
                     {
                         return ResponseMessage(

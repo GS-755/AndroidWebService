@@ -37,7 +37,7 @@ namespace AndroidWebService.Controllers.Customers
                     }
                     else
                     {
-                        string hashedUserName = HmacSHA256.Convert(userName.Trim());
+                        string hashedUserName = StrSHA256.Convert(userName.Trim());
                         if (cookie["cookie-header"].Values.ToString() == hashedUserName)
                         {
                             response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
@@ -67,7 +67,7 @@ namespace AndroidWebService.Controllers.Customers
             {
                 if(users != null)
                 {
-                    string hashedUserName = HmacSHA256.Convert(users.TenDangNhap.Trim());
+                    string hashedUserName = StrSHA256.Convert(users.TenDangNhap.Trim());
                     CookieHeaderValue cookie = new 
                         CookieHeaderValue("cookie-header", hashedUserName);
                     cookie.Expires = DateTimeOffset.Now.AddDays(7);
@@ -93,7 +93,7 @@ namespace AndroidWebService.Controllers.Customers
         [HttpPost]
         public async Task<IHttpActionResult> Login(string userName, string password)
         {
-            string authTmp = HmacSHA256.Convert(password);
+            string authTmp = StrSHA256.Convert(password);
             TaiKhoan taiKhoan = await DbInstance.Execute.GetDatabase.
                 TaiKhoan.FindAsync(userName);
             if (taiKhoan == null)
@@ -119,7 +119,7 @@ namespace AndroidWebService.Controllers.Customers
             {
                 if(ModelState.IsValid)
                 {
-                    string authTmp = HmacSHA256.Convert(taiKhoan.MatKhau);
+                    string authTmp = StrSHA256.Convert(taiKhoan.MatKhau);
                     taiKhoan.MatKhau = authTmp;
                     DbInstance.Execute.GetDatabase.TaiKhoan.Add(taiKhoan);
 
@@ -156,7 +156,7 @@ namespace AndroidWebService.Controllers.Customers
 
             try
             {
-                string authTmp = HmacSHA256.Convert(taiKhoan.MatKhau);
+                string authTmp = StrSHA256.Convert(taiKhoan.MatKhau);
                 taiKhoan.MatKhau = authTmp;
                 DbInstance.Execute.GetDatabase.
                     Entry(taiKhoan).State = EntityState.Modified;
