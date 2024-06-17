@@ -161,19 +161,21 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Customers\AccountsController.cs" />
-    <Compile Include="Controllers\Motels\MediaController.cs" />
+    <Compile Include="Controllers\Media\MediaController.cs" />
     <Compile Include="Controllers\Motels\LocationsController.cs" />
     <Compile Include="Controllers\Reservations\LovedMotelsController.cs" />
     <Compile Include="Controllers\Motels\MotelsController.cs" />
-    <Compile Include="Controllers\Motels\MotelStatusController.cs" />
-    <Compile Include="Controllers\Customers\RolesController.cs" />
     <Compile Include="Controllers\Payments\TransactionsController.cs" />
-    <Compile Include="Controllers\Payments\TransactionTypesController.cs" />
     <Compile Include="Controllers\Payments\VnPayController.cs" />
     <Compile Include="Controllers\Customers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Enums\MediaType.cs" />
+    <Compile Include="Models\Enums\MotelStatus.cs" />
+    <Compile Include="Models\Enums\Roles.cs" />
+    <Compile Include="Models\Enums\TransactionStatus.cs" />
+    <Compile Include="Models\Enums\TransactionTypes.cs" />
     <Compile Include="Models\Utils\MediaPath.cs" />
     <Compile Include="Models\GiaoDich.cs">
       <DependentUpon>Model1.tt</DependentUpon>

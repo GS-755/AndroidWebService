@@ -10,6 +10,9 @@ using AndroidWebService.Models;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
+using AndroidWebService.Models.Enums;
+using System.IO;
+using System.Threading;
 
 namespace AndroidWebService.Controllers.Customers
 {
@@ -94,17 +97,17 @@ namespace AndroidWebService.Controllers.Customers
         public async Task<IHttpActionResult> Login(string userName, string password)
         {
             string authTmp = StrSHA256.Convert(password);
-            TaiKhoan taiKhoan = await DbInstance.Execute.GetDatabase.
+            TaiKhoan account = await DbInstance.Execute.GetDatabase.
                 TaiKhoan.FindAsync(userName);
-            if (taiKhoan == null)
+            if (account == null)
             {
                 return NotFound();
             }
-            else if(taiKhoan.MatKhau == authTmp)
+            else if(account.MatKhau == authTmp)
             {
                 SaveCookie(userName.Trim());
 
-                return Ok(taiKhoan);
+                return Ok(account);
             }
 
             return BadRequest("Incorrect password");
@@ -113,22 +116,36 @@ namespace AndroidWebService.Controllers.Customers
         // POST: api/Accounts/Register?...
         [HttpPost]
         [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Register(TaiKhoan taiKhoan)
+        public async Task<IHttpActionResult> Register(TaiKhoan account)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    string authTmp = StrSHA256.Convert(taiKhoan.MatKhau);
-                    taiKhoan.MatKhau = authTmp;
-                    DbInstance.Execute.GetDatabase.TaiKhoan.Add(taiKhoan);
+                    if (!string.IsNullOrEmpty(account.Base64Avatar) 
+                            && !string.IsNullOrEmpty(account.StrAvatar))
+                    {
+                        string extension = Path.GetExtension(account.StrAvatar);
+                        string fileName = $"{account.TenDangNhap.Trim()}" +
+                                $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}{extension}";
+                        bool saveThumbnailResult = MyBase64Utils.SaveImageFromBase64(
+                            account.Base64Avatar, fileName, MediaPath.USER_AVATAR_PATH
+                        );
+                        if(saveThumbnailResult)
+                        {
+                            account.StrAvatar = fileName;
+                        }
+                    }
+                    string authTmp = StrSHA256.Convert(account.MatKhau);
+                    account.MatKhau = authTmp;
+                    DbInstance.Execute.GetDatabase.Entry(account).State = EntityState.Added;
 
                     await DbInstance.Execute.GetDatabase.SaveChangesAsync();
                 }
             }
             catch (DbUpdateException)
             {
-                if (TaiKhoanExists(taiKhoan.TenDangNhap))
+                if (TaiKhoanExists(account.TenDangNhap))
                 {
                     return Conflict();
                 }
@@ -138,7 +155,7 @@ namespace AndroidWebService.Controllers.Customers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
+            return CreatedAtRoute("DefaultApi", new { id = account.TenDangNhap }, account);
         }
         // PUT: api/Accounts/5
         [HttpPut]

@@ -19,6 +19,7 @@ namespace AndroidWebService.Models
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
+            this.CCCD = string.Empty;
             this.StrAvatar = string.Empty;
             this.Base64Avatar = string.Empty;
             this.GiaoDich = new HashSet<GiaoDich>();

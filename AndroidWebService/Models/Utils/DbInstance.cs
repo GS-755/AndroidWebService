@@ -1,25 +1,10 @@
 ﻿namespace AndroidWebService.Models.Utils
 {
-    using System;
-    using System.Diagnostics;
-
     public sealed class DbInstance
     {
         private static DbInstance execute;
 
-        private DoAnAndroidEntities db; 
-
-        private DbInstance() 
-        {
-            try
-            {
-                this.db = new DoAnAndroidEntities();
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-            }
-        }
+        private DbInstance() { }
 
         public static DbInstance Execute
         {
@@ -35,7 +20,7 @@
         }
         public DoAnAndroidEntities GetDatabase 
         {
-            get => this.db;
+            get => new DoAnAndroidEntities();
         }  
     }
 }

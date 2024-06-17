@@ -18,6 +18,15 @@ CREATE TABLE VaiTro (
 INSERT INTO VaiTro VALUES
 	(1, N'Chủ trọ'),
 	(0, N'Khách hàng');
+CREATE TABLE TaiKhoan (
+	TenDangNhap CHAR(16) NOT NULL PRIMARY KEY,
+	MatKhau VARCHAR(64) NOT NULL,
+	Email CHAR(75) NOT NULL UNIQUE,
+	SoDT CHAR(15) NOT NULL UNIQUE,
+	StrAvatar NVARCHAR(MAX), 
+	MaVaiTro INT NOT NULL,
+	FOREIGN KEY (MaVaiTro) REFERENCES VaiTro(MaVaiTro)
+);
 CREATE TABLE NguoiDung (
 	CCCD CHAR(15) NOT NULL PRIMARY KEY,
 	Ho NVARCHAR(30) NOT NULL,
@@ -29,20 +38,10 @@ CREATE TABLE NguoiDung (
 	-- 1: Nữ 
 	-- 2: LGBTQ+ 
 	-- 9: N/A
-	DiaChi NVARCHAR(100) NOT NULL
+	DiaChi NVARCHAR(100) NOT NULL, 
+	TenDangNhap CHAR(16), 
+	FOREIGN KEY(TenDangNhap) REFERENCES TaiKhoan(TenDangNhap)
 ); 
-CREATE TABLE TaiKhoan (
-	TenDangNhap CHAR(16) NOT NULL PRIMARY KEY,
-	MatKhau VARCHAR(64) NOT NULL,
-	Email CHAR(75) NOT NULL UNIQUE,
-	SoDT CHAR(15) NOT NULL UNIQUE,
-	StrAvatar NVARCHAR(MAX), 
-	MaVaiTro INT NOT NULL,
-	CCCD CHAR(15),
-	FOREIGN KEY (MaVaiTro) REFERENCES VaiTro(MaVaiTro),
-	FOREIGN KEY (CCCD) REFERENCES NguoiDung(CCCD)
-);
-
 -- Khu vực bảng Phòng trọ
 CREATE TABLE ViTri (
 	MaVT INT NOT NULL PRIMARY KEY,
@@ -61,6 +60,7 @@ CREATE TABLE TTPhongTro (
   TenTT NVARCHAR(25) NOT NULL UNIQUE,
 );
 INSERT INTO TTPhongTro VALUES
+  (0, N'Đã ẩn'),
   (1, N'Đang cho thuê'), 
   (2, N'Đã đặt cọc'),
   (3, N'Đã cho thuê');

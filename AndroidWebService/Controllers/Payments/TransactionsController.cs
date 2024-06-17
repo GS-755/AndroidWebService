@@ -5,18 +5,19 @@ using AndroidWebService.Models;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
+using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace AndroidWebService.Controllers.Payments
 {
     public class TransactionsController : ApiController
     {
-        private DoAnAndroidEntities db = new DoAnAndroidEntities();
-
         // GET: api/Transactions
         [HttpGet]
-        public IQueryable<GiaoDich> Get()
+        public async Task<List<GiaoDich>> Get()
         {
-            return db.GiaoDich;
+            return await DbInstance.Execute.GetDatabase.
+                    GiaoDich.ToListAsync();
         }
 
         // GET: api/Transactions/5
@@ -24,13 +25,14 @@ namespace AndroidWebService.Controllers.Payments
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            GiaoDich giaoDich = await db.GiaoDich.FindAsync(id);
-            if (giaoDich == null)
+            GiaoDich transaction = await DbInstance.Execute.GetDatabase.
+                    GiaoDich.FindAsync(id.Trim());
+            if (transaction == null)
             {
                 return NotFound();
             }
 
-            return Ok(giaoDich);
+            return Ok(transaction);
         }
 
         // POST: api/Transactions
@@ -42,7 +44,8 @@ namespace AndroidWebService.Controllers.Payments
             {
                 if(giaoDich.PhongTro == null)
                 {
-                    giaoDich.PhongTro = db.PhongTro.FirstOrDefault(k => k.MaPT == giaoDich.MaPT);
+                    giaoDich.PhongTro = DbInstance.Execute.GetDatabase.
+                        PhongTro.FirstOrDefault(k => k.MaPT == giaoDich.MaPT);
                 }
                 if(giaoDich.MaGD == null || giaoDich.MaGD.Length == 0)
                 {
@@ -56,31 +59,31 @@ namespace AndroidWebService.Controllers.Payments
                 }
                 if(giaoDich.SoTien <= 0)
                 {
-                    double soTien;
+                    double amount;
                     if(giaoDich.MaLoaiGD == 1)
                     {
                         try
                         {
-                            soTien = (double)giaoDich.PhongTro.TienCoc;
+                            amount = (double)giaoDich.PhongTro.TienCoc;
                         }
                         catch
                         {
-                            soTien = giaoDich.PhongTro.SoTien * (30 / 100);
+                            amount = giaoDich.PhongTro.SoTien * (30 / 100);
                         }
                     }
                     else
                     {
-                        soTien = giaoDich.PhongTro.SoTien;
+                        amount = giaoDich.PhongTro.SoTien;
                     }
 
-                    giaoDich.SoTien = soTien;
+                    giaoDich.SoTien = amount;
                 }
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-                db.GiaoDich.Add(giaoDich);
-                await db.SaveChangesAsync();
+                DbInstance.Execute.GetDatabase.GiaoDich.Add(giaoDich);
+                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -101,14 +104,15 @@ namespace AndroidWebService.Controllers.Payments
         {
             if (disposing)
             {
-                db.Dispose();
+                DbInstance.Execute.GetDatabase.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool TransactionExists(string id)
         {
-            return db.GiaoDich.Count(e => e.MaGD == id) > 0;
+            return DbInstance.Execute.GetDatabase.
+                GiaoDich.Count(e => e.MaGD == id) > 0;
         }
     }
 }

@@ -9,6 +9,7 @@
 
 namespace AndroidWebService.Models
 {
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
@@ -24,6 +25,7 @@ namespace AndroidWebService.Models
         public string TenTT { get; set; }
     
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
     }
 }

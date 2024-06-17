@@ -4,21 +4,25 @@ using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
+using System.IO;
 
-namespace AndroidWebService.Controllers.Motels
+namespace AndroidWebService.Controllers.Media
 {
     public class MotelsController : ApiController
     {
         // GET: api/Motels
         [HttpGet]
-        public IQueryable<PhongTro> Get()
+        public async Task<List<PhongTro>> Get()
         {
-            return DbInstance.Execute.
-                    GetDatabase.PhongTro;
+            List<PhongTro> motels = await DbInstance.Execute.
+                    GetDatabase.PhongTro.ToListAsync();
+
+            return motels;
         }
         // GET: api/Motels/5
         [ResponseType(typeof(PhongTro))]
@@ -34,11 +38,21 @@ namespace AndroidWebService.Controllers.Motels
 
             return Ok(phongTro);
         }
+        // GET: api/Locations/GetMotelByLocationId/5
+        [HttpGet]
+        public async Task<List<PhongTro>> GetMotelByLocationId(int locationId)
+        {
+            List<PhongTro> motels = await DbInstance.Execute.GetDatabase.
+                    PhongTro.ToListAsync();
+            motels = motels.Where(k => k.MaVT == locationId).ToList();
+
+            return motels;
+        }
 
         // POST: api/Motels/PostPhongTro
         [HttpPost]
         [ResponseType(typeof(PhongTro))]
-        public async Task<IHttpActionResult> PostPhongTro(PhongTro phongTro)
+        public async Task<IHttpActionResult> PostPhongTro(PhongTro motel)
         {
             if (!ModelState.IsValid)
             {
@@ -46,22 +60,24 @@ namespace AndroidWebService.Controllers.Motels
             }
             else
             {
-                if (!string.IsNullOrEmpty(phongTro.Base64Thumbnail))
+                if (!string.IsNullOrEmpty(motel.Base64Thumbnail) 
+                        && !string.IsNullOrEmpty(motel.HinhAnh))
                 {
-                    string fileName = $"{phongTro.TenDangNhap.Trim()}" +
-                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}.jpg";
+                    string extension = Path.GetExtension(motel.HinhAnh);
+                    string fileName = $"{motel.TenDangNhap.Trim()}" +
+                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}{extension}";
                     bool saveThumbnailResult = MyBase64Utils.SaveImageFromBase64(
-                        phongTro.Base64Thumbnail, fileName, MediaPath.MOTEL_THUMBNAIL_PATH
+                        motel.Base64Thumbnail, fileName, MediaPath.MOTEL_THUMBNAIL_PATH
                     );
                     if (saveThumbnailResult)
                     {
-                        phongTro.HinhAnh = fileName;
+                        motel.HinhAnh = fileName;
                     }
                 }
-                DbInstance.Execute.GetDatabase.PhongTro.Add(phongTro);
+                DbInstance.Execute.GetDatabase.PhongTro.Add(motel);
                 await DbInstance.Execute.GetDatabase.SaveChangesAsync();
 
-                return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
+                return CreatedAtRoute("DefaultApi", new { id = motel.MaPT }, motel);
             }
         }
 

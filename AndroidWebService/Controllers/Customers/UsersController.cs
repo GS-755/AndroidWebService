@@ -3,27 +3,31 @@ using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
+using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
 
 namespace AndroidWebService.Controllers.Customers
 {
     public class UsersController : ApiController
     {
-        private DoAnAndroidEntities db = new DoAnAndroidEntities();
-
         // GET: api/Users
         [HttpGet]
-        public IQueryable<NguoiDung> Get()
+        public async Task<List<NguoiDung>> Get()
         {
-            return db.NguoiDung;
+            List<NguoiDung> users = await DbInstance.Execute.GetDatabase.
+                    NguoiDung.ToListAsync();
+
+            return users;
         }
         // GET: api/Users/5
         [ResponseType(typeof(NguoiDung))]
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            NguoiDung nguoiDung = await db.NguoiDung.FindAsync(id);
+            NguoiDung nguoiDung = await DbInstance.Execute.GetDatabase.
+                    NguoiDung.FindAsync(id);
             if (nguoiDung == null)
             {
                 return NotFound();
@@ -42,11 +46,11 @@ namespace AndroidWebService.Controllers.Customers
                 return BadRequest(ModelState);
             }
 
-            db.NguoiDung.Add(nguoiDung);
+            DbInstance.Execute.GetDatabase.NguoiDung.Add(nguoiDung);
 
             try
             {
-                await db.SaveChangesAsync();
+                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -78,8 +82,8 @@ namespace AndroidWebService.Controllers.Customers
 
             try
             {
-                db.Entry(nguoiDung).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                DbInstance.Execute.GetDatabase.Entry(nguoiDung).State = EntityState.Modified;
+                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
 
                 return Ok(nguoiDung);
             }
@@ -100,14 +104,14 @@ namespace AndroidWebService.Controllers.Customers
         {
             if (disposing)
             {
-                db.Dispose();
+                DbInstance.Execute.GetDatabase.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool NguoiDungExists(string id)
         {
-            return db.NguoiDung.Count(e => e.CCCD == id) > 0;
+            return DbInstance.Execute.GetDatabase.NguoiDung.Count(e => e.CCCD == id) > 0;
         }
     }
 }
