@@ -10,6 +10,7 @@
 namespace AndroidWebService.Models
 {
     using System;
+    using AndroidWebService.Models.Enums;
 
     public partial class GiaoDich
     {
@@ -23,7 +24,7 @@ namespace AndroidWebService.Models
         
         public GiaoDich()
         {
-            this.MaTTGD = 0;
+            this.MaTTGD = (short)TransactionStatus.Failed;
         }
 
         public virtual LoaiGiaoDich LoaiGiaoDich { get; set; }

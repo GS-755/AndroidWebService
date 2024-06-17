@@ -11,26 +11,18 @@ namespace AndroidWebService.Models
 {
     using System;
     using Newtonsoft.Json;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
 
     public partial class NguoiDung
     {
-        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public NguoiDung()
-        {
-            this.TaiKhoan = new HashSet<TaiKhoan>();
-        }
-    
         public string CCCD { get; set; }
         public string Ho { get; set; }
         public string Ten { get; set; }
         public Nullable<DateTime> NgaySinh { get; set; }
         public Nullable<int> GioiTinh { get; set; }
         public string DiaChi { get; set; }
-    
-        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public string TenDangNhap { get; set; }
+
         [JsonIgnore]
-        public virtual ICollection<TaiKhoan> TaiKhoan { get; set; }
+        public virtual TaiKhoan TaiKhoan { get; set; }
     }
 }

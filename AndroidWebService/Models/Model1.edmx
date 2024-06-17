@@ -51,6 +51,7 @@
           <Property Name="NgaySinh" Type="date" />
           <Property Name="GioiTinh" Type="int" />
           <Property Name="DiaChi" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TenDangNhap" Type="char" MaxLength="16" />
         </EntityType>
         <EntityType Name="PTYeuThich">
           <Key>
@@ -88,7 +89,6 @@
           <Property Name="SoDT" Type="char" MaxLength="15" Nullable="false" />
           <Property Name="StrAvatar" Type="nvarchar(max)" />
           <Property Name="MaVaiTro" Type="int" Nullable="false" />
-          <Property Name="CCCD" Type="char" MaxLength="15" />
         </EntityType>
         <EntityType Name="TTGiaoDich">
           <Key>
@@ -120,7 +120,7 @@
           <Property Name="KinhDo" Type="float" />
           <Property Name="ViDo" Type="float" />
         </EntityType>
-        <Association Name="FK__GiaoDich__MaLoai__5DCAEF64">
+        <Association Name="FK__GiaoDich__MaLoai__60A75C0F">
           <End Role="LoaiGiaoDich" Type="Self.LoaiGiaoDich" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -132,7 +132,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__MaPT__5CD6CB2B">
+        <Association Name="FK__GiaoDich__MaPT__5FB337D6">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -144,7 +144,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__MaTTGD__5EBF139D">
+        <Association Name="FK__GiaoDich__MaTTGD__619B8048">
           <End Role="TTGiaoDich" Type="Self.TTGiaoDich" Multiplicity="0..1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -156,7 +156,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__TenDan__5FB337D6">
+        <Association Name="FK__GiaoDich__TenDan__628FA481">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -168,7 +168,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MotelMedi__MaLoa__5070F446">
+        <Association Name="FK__MotelMedi__MaLoa__534D60F1">
           <End Role="LoaiMedia" Type="Self.LoaiMedia" Multiplicity="1" />
           <End Role="MotelMedia" Type="Self.MotelMedia" Multiplicity="*" />
           <ReferentialConstraint>
@@ -180,7 +180,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MotelMedia__MaPT__4F7CD00D">
+        <Association Name="FK__MotelMedia__MaPT__52593CB8">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="MotelMedia" Type="Self.MotelMedia" Multiplicity="*" />
           <ReferentialConstraint>
@@ -192,7 +192,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PTYeuThic__TenDa__5441852A">
+        <Association Name="FK__NguoiDung__TenDa__3F466844">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="0..1" />
+          <End Role="NguoiDung" Type="Self.NguoiDung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="TenDangNhap" />
+            </Principal>
+            <Dependent Role="NguoiDung">
+              <PropertyRef Name="TenDangNhap" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PTYeuThic__TenDa__571DF1D5">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="PTYeuThich" Type="Self.PTYeuThich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -204,7 +216,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PTYeuThich__MaPT__534D60F1">
+        <Association Name="FK__PTYeuThich__MaPT__5629CD9C">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="PTYeuThich" Type="Self.PTYeuThich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -216,7 +228,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PhongTro__MaTT__49C3F6B7">
+        <Association Name="FK__PhongTro__MaTT__4CA06362">
           <End Role="TTPhongTro" Type="Self.TTPhongTro" Multiplicity="1" />
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -228,7 +240,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PhongTro__MaVT__48CFD27E">
+        <Association Name="FK__PhongTro__MaVT__4BAC3F29">
           <End Role="ViTri" Type="Self.ViTri" Multiplicity="1" />
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -240,7 +252,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PhongTro__TenDan__47DBAE45">
+        <Association Name="FK__PhongTro__TenDan__4AB81AF0">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -252,19 +264,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TaiKhoan__CCCD__3F466844">
-          <End Role="NguoiDung" Type="Self.NguoiDung" Multiplicity="0..1" />
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="NguoiDung">
-              <PropertyRef Name="CCCD" />
-            </Principal>
-            <Dependent Role="TaiKhoan">
-              <PropertyRef Name="CCCD" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__TaiKhoan__MaVaiT__3E52440B">
+        <Association Name="FK__TaiKhoan__MaVaiT__3C69FB99">
           <End Role="VaiTro" Type="Self.VaiTro" Multiplicity="1" />
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
           <ReferentialConstraint>
@@ -289,55 +289,55 @@
           <EntitySet Name="TTPhongTro" EntityType="Self.TTPhongTro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VaiTro" EntityType="Self.VaiTro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ViTri" EntityType="Self.ViTri" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__GiaoDich__MaLoai__5DCAEF64" Association="Self.FK__GiaoDich__MaLoai__5DCAEF64">
+          <AssociationSet Name="FK__GiaoDich__MaLoai__60A75C0F" Association="Self.FK__GiaoDich__MaLoai__60A75C0F">
             <End Role="LoaiGiaoDich" EntitySet="LoaiGiaoDich" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__MaPT__5CD6CB2B" Association="Self.FK__GiaoDich__MaPT__5CD6CB2B">
+          <AssociationSet Name="FK__GiaoDich__MaPT__5FB337D6" Association="Self.FK__GiaoDich__MaPT__5FB337D6">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__MaTTGD__5EBF139D" Association="Self.FK__GiaoDich__MaTTGD__5EBF139D">
+          <AssociationSet Name="FK__GiaoDich__MaTTGD__619B8048" Association="Self.FK__GiaoDich__MaTTGD__619B8048">
             <End Role="TTGiaoDich" EntitySet="TTGiaoDich" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__TenDan__5FB337D6" Association="Self.FK__GiaoDich__TenDan__5FB337D6">
+          <AssociationSet Name="FK__GiaoDich__TenDan__628FA481" Association="Self.FK__GiaoDich__TenDan__628FA481">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__MotelMedi__MaLoa__5070F446" Association="Self.FK__MotelMedi__MaLoa__5070F446">
+          <AssociationSet Name="FK__MotelMedi__MaLoa__534D60F1" Association="Self.FK__MotelMedi__MaLoa__534D60F1">
             <End Role="LoaiMedia" EntitySet="LoaiMedia" />
             <End Role="MotelMedia" EntitySet="MotelMedia" />
           </AssociationSet>
-          <AssociationSet Name="FK__MotelMedia__MaPT__4F7CD00D" Association="Self.FK__MotelMedia__MaPT__4F7CD00D">
+          <AssociationSet Name="FK__MotelMedia__MaPT__52593CB8" Association="Self.FK__MotelMedia__MaPT__52593CB8">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="MotelMedia" EntitySet="MotelMedia" />
           </AssociationSet>
-          <AssociationSet Name="FK__PTYeuThic__TenDa__5441852A" Association="Self.FK__PTYeuThic__TenDa__5441852A">
+          <AssociationSet Name="FK__NguoiDung__TenDa__3F466844" Association="Self.FK__NguoiDung__TenDa__3F466844">
+            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="NguoiDung" EntitySet="NguoiDung" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PTYeuThic__TenDa__571DF1D5" Association="Self.FK__PTYeuThic__TenDa__571DF1D5">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="PTYeuThich" EntitySet="PTYeuThich" />
           </AssociationSet>
-          <AssociationSet Name="FK__PTYeuThich__MaPT__534D60F1" Association="Self.FK__PTYeuThich__MaPT__534D60F1">
+          <AssociationSet Name="FK__PTYeuThich__MaPT__5629CD9C" Association="Self.FK__PTYeuThich__MaPT__5629CD9C">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="PTYeuThich" EntitySet="PTYeuThich" />
           </AssociationSet>
-          <AssociationSet Name="FK__PhongTro__MaTT__49C3F6B7" Association="Self.FK__PhongTro__MaTT__49C3F6B7">
+          <AssociationSet Name="FK__PhongTro__MaTT__4CA06362" Association="Self.FK__PhongTro__MaTT__4CA06362">
             <End Role="TTPhongTro" EntitySet="TTPhongTro" />
             <End Role="PhongTro" EntitySet="PhongTro" />
           </AssociationSet>
-          <AssociationSet Name="FK__PhongTro__MaVT__48CFD27E" Association="Self.FK__PhongTro__MaVT__48CFD27E">
+          <AssociationSet Name="FK__PhongTro__MaVT__4BAC3F29" Association="Self.FK__PhongTro__MaVT__4BAC3F29">
             <End Role="ViTri" EntitySet="ViTri" />
             <End Role="PhongTro" EntitySet="PhongTro" />
           </AssociationSet>
-          <AssociationSet Name="FK__PhongTro__TenDan__47DBAE45" Association="Self.FK__PhongTro__TenDan__47DBAE45">
+          <AssociationSet Name="FK__PhongTro__TenDan__4AB81AF0" Association="Self.FK__PhongTro__TenDan__4AB81AF0">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="PhongTro" EntitySet="PhongTro" />
           </AssociationSet>
-          <AssociationSet Name="FK__TaiKhoan__CCCD__3F466844" Association="Self.FK__TaiKhoan__CCCD__3F466844">
-            <End Role="NguoiDung" EntitySet="NguoiDung" />
-            <End Role="TaiKhoan" EntitySet="TaiKhoan" />
-          </AssociationSet>
-          <AssociationSet Name="FK__TaiKhoan__MaVaiT__3E52440B" Association="Self.FK__TaiKhoan__MaVaiT__3E52440B">
+          <AssociationSet Name="FK__TaiKhoan__MaVaiT__3C69FB99" Association="Self.FK__TaiKhoan__MaVaiT__3C69FB99">
             <End Role="VaiTro" EntitySet="VaiTro" />
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
           </AssociationSet>
@@ -358,10 +358,10 @@
           <Property Name="SoTien" Type="Double" Nullable="false" />
           <Property Name="MaTTGD" Type="Int16" />
           <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="LoaiGiaoDich" Relationship="Self.FK__GiaoDich__MaLoai__5DCAEF64" FromRole="GiaoDich" ToRole="LoaiGiaoDich" />
-          <NavigationProperty Name="PhongTro" Relationship="Self.FK__GiaoDich__MaPT__5CD6CB2B" FromRole="GiaoDich" ToRole="PhongTro" />
-          <NavigationProperty Name="TTGiaoDich" Relationship="Self.FK__GiaoDich__MaTTGD__5EBF139D" FromRole="GiaoDich" ToRole="TTGiaoDich" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__GiaoDich__TenDan__5FB337D6" FromRole="GiaoDich" ToRole="TaiKhoan" />
+          <NavigationProperty Name="LoaiGiaoDich" Relationship="Self.FK__GiaoDich__MaLoai__60A75C0F" FromRole="GiaoDich" ToRole="LoaiGiaoDich" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__GiaoDich__MaPT__5FB337D6" FromRole="GiaoDich" ToRole="PhongTro" />
+          <NavigationProperty Name="TTGiaoDich" Relationship="Self.FK__GiaoDich__MaTTGD__619B8048" FromRole="GiaoDich" ToRole="TTGiaoDich" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__GiaoDich__TenDan__628FA481" FromRole="GiaoDich" ToRole="TaiKhoan" />
         </EntityType>
         <EntityType Name="LoaiGiaoDich">
           <Key>
@@ -369,7 +369,7 @@
           </Key>
           <Property Name="MaLoaiGD" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenLoaiGD" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__MaLoai__5DCAEF64" FromRole="LoaiGiaoDich" ToRole="GiaoDich" />
+          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__MaLoai__60A75C0F" FromRole="LoaiGiaoDich" ToRole="GiaoDich" />
         </EntityType>
         <EntityType Name="LoaiMedia">
           <Key>
@@ -377,7 +377,7 @@
           </Key>
           <Property Name="MaLoaiMedia" Type="Int32" Nullable="false" />
           <Property Name="TenLoaiMedia" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="MotelMedia" Relationship="Self.FK__MotelMedi__MaLoa__5070F446" FromRole="LoaiMedia" ToRole="MotelMedia" />
+          <NavigationProperty Name="MotelMedia" Relationship="Self.FK__MotelMedi__MaLoa__534D60F1" FromRole="LoaiMedia" ToRole="MotelMedia" />
         </EntityType>
         <EntityType Name="MotelMedia">
           <Key>
@@ -388,8 +388,8 @@
           <Property Name="MaMedia" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TenTepMedia" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="MaLoaiMedia" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="LoaiMedia" Relationship="Self.FK__MotelMedi__MaLoa__5070F446" FromRole="MotelMedia" ToRole="LoaiMedia" />
-          <NavigationProperty Name="PhongTro" Relationship="Self.FK__MotelMedia__MaPT__4F7CD00D" FromRole="MotelMedia" ToRole="PhongTro" />
+          <NavigationProperty Name="LoaiMedia" Relationship="Self.FK__MotelMedi__MaLoa__534D60F1" FromRole="MotelMedia" ToRole="LoaiMedia" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__MotelMedia__MaPT__52593CB8" FromRole="MotelMedia" ToRole="PhongTro" />
         </EntityType>
         <EntityType Name="NguoiDung">
           <Key>
@@ -401,7 +401,8 @@
           <Property Name="NgaySinh" Type="DateTime" Precision="0" />
           <Property Name="GioiTinh" Type="Int32" />
           <Property Name="DiaChi" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__TaiKhoan__CCCD__3F466844" FromRole="NguoiDung" ToRole="TaiKhoan" />
+          <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__NguoiDung__TenDa__3F466844" FromRole="NguoiDung" ToRole="TaiKhoan" />
         </EntityType>
         <EntityType Name="PTYeuThich">
           <Key>
@@ -411,8 +412,8 @@
           <Property Name="GhiChu" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="MaPT" Type="Int32" Nullable="false" />
           <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__PTYeuThic__TenDa__5441852A" FromRole="PTYeuThich" ToRole="TaiKhoan" />
-          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PTYeuThich__MaPT__534D60F1" FromRole="PTYeuThich" ToRole="PhongTro" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__PTYeuThic__TenDa__571DF1D5" FromRole="PTYeuThich" ToRole="TaiKhoan" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PTYeuThich__MaPT__5629CD9C" FromRole="PTYeuThich" ToRole="PhongTro" />
         </EntityType>
         <EntityType Name="PhongTro">
           <Key>
@@ -430,12 +431,12 @@
           <Property Name="TenDangNhap" Type="String" MaxLength="16" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="MaVT" Type="Int32" Nullable="false" />
           <Property Name="MaTT" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__MaPT__5CD6CB2B" FromRole="PhongTro" ToRole="GiaoDich" />
-          <NavigationProperty Name="MotelMedia" Relationship="Self.FK__MotelMedia__MaPT__4F7CD00D" FromRole="PhongTro" ToRole="MotelMedia" />
-          <NavigationProperty Name="PTYeuThich" Relationship="Self.FK__PTYeuThich__MaPT__534D60F1" FromRole="PhongTro" ToRole="PTYeuThich" />
-          <NavigationProperty Name="TTPhongTro" Relationship="Self.FK__PhongTro__MaTT__49C3F6B7" FromRole="PhongTro" ToRole="TTPhongTro" />
-          <NavigationProperty Name="ViTri" Relationship="Self.FK__PhongTro__MaVT__48CFD27E" FromRole="PhongTro" ToRole="ViTri" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__PhongTro__TenDan__47DBAE45" FromRole="PhongTro" ToRole="TaiKhoan" />
+          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__MaPT__5FB337D6" FromRole="PhongTro" ToRole="GiaoDich" />
+          <NavigationProperty Name="MotelMedia" Relationship="Self.FK__MotelMedia__MaPT__52593CB8" FromRole="PhongTro" ToRole="MotelMedia" />
+          <NavigationProperty Name="PTYeuThich" Relationship="Self.FK__PTYeuThich__MaPT__5629CD9C" FromRole="PhongTro" ToRole="PTYeuThich" />
+          <NavigationProperty Name="TTPhongTro" Relationship="Self.FK__PhongTro__MaTT__4CA06362" FromRole="PhongTro" ToRole="TTPhongTro" />
+          <NavigationProperty Name="ViTri" Relationship="Self.FK__PhongTro__MaVT__4BAC3F29" FromRole="PhongTro" ToRole="ViTri" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__PhongTro__TenDan__4AB81AF0" FromRole="PhongTro" ToRole="TaiKhoan" />
         </EntityType>
         <EntityType Name="TaiKhoan">
           <Key>
@@ -447,12 +448,11 @@
           <Property Name="SoDT" Type="String" MaxLength="15" FixedLength="true" Unicode="false" Nullable="false" />
           <Property Name="StrAvatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="MaVaiTro" Type="Int32" Nullable="false" />
-          <Property Name="CCCD" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__TenDan__5FB337D6" FromRole="TaiKhoan" ToRole="GiaoDich" />
-          <NavigationProperty Name="NguoiDung" Relationship="Self.FK__TaiKhoan__CCCD__3F466844" FromRole="TaiKhoan" ToRole="NguoiDung" />
-          <NavigationProperty Name="PTYeuThich" Relationship="Self.FK__PTYeuThic__TenDa__5441852A" FromRole="TaiKhoan" ToRole="PTYeuThich" />
-          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__TenDan__47DBAE45" FromRole="TaiKhoan" ToRole="PhongTro" />
-          <NavigationProperty Name="VaiTro" Relationship="Self.FK__TaiKhoan__MaVaiT__3E52440B" FromRole="TaiKhoan" ToRole="VaiTro" />
+          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__TenDan__628FA481" FromRole="TaiKhoan" ToRole="GiaoDich" />
+          <NavigationProperty Name="NguoiDung" Relationship="Self.FK__NguoiDung__TenDa__3F466844" FromRole="TaiKhoan" ToRole="NguoiDung" />
+          <NavigationProperty Name="PTYeuThich" Relationship="Self.FK__PTYeuThic__TenDa__571DF1D5" FromRole="TaiKhoan" ToRole="PTYeuThich" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__TenDan__4AB81AF0" FromRole="TaiKhoan" ToRole="PhongTro" />
+          <NavigationProperty Name="VaiTro" Relationship="Self.FK__TaiKhoan__MaVaiT__3C69FB99" FromRole="TaiKhoan" ToRole="VaiTro" />
         </EntityType>
         <EntityType Name="TTGiaoDich">
           <Key>
@@ -460,7 +460,7 @@
           </Key>
           <Property Name="MaTTGD" Type="Int16" Nullable="false" />
           <Property Name="TenTTGD" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__MaTTGD__5EBF139D" FromRole="TTGiaoDich" ToRole="GiaoDich" />
+          <NavigationProperty Name="GiaoDich" Relationship="Self.FK__GiaoDich__MaTTGD__619B8048" FromRole="TTGiaoDich" ToRole="GiaoDich" />
         </EntityType>
         <EntityType Name="TTPhongTro">
           <Key>
@@ -468,7 +468,7 @@
           </Key>
           <Property Name="MaTT" Type="Int32" Nullable="false" />
           <Property Name="TenTT" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaTT__49C3F6B7" FromRole="TTPhongTro" ToRole="PhongTro" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaTT__4CA06362" FromRole="TTPhongTro" ToRole="PhongTro" />
         </EntityType>
         <EntityType Name="VaiTro">
           <Key>
@@ -476,7 +476,7 @@
           </Key>
           <Property Name="MaVaiTro" Type="Int32" Nullable="false" />
           <Property Name="TenVaiTro" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__TaiKhoan__MaVaiT__3E52440B" FromRole="VaiTro" ToRole="TaiKhoan" />
+          <NavigationProperty Name="TaiKhoan" Relationship="Self.FK__TaiKhoan__MaVaiT__3C69FB99" FromRole="VaiTro" ToRole="TaiKhoan" />
         </EntityType>
         <EntityType Name="ViTri">
           <Key>
@@ -486,9 +486,9 @@
           <Property Name="Quan" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="KinhDo" Type="Double" />
           <Property Name="ViDo" Type="Double" />
-          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaVT__48CFD27E" FromRole="ViTri" ToRole="PhongTro" />
+          <NavigationProperty Name="PhongTro" Relationship="Self.FK__PhongTro__MaVT__4BAC3F29" FromRole="ViTri" ToRole="PhongTro" />
         </EntityType>
-        <Association Name="FK__GiaoDich__MaLoai__5DCAEF64">
+        <Association Name="FK__GiaoDich__MaLoai__60A75C0F">
           <End Role="LoaiGiaoDich" Type="Self.LoaiGiaoDich" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -500,7 +500,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__MaPT__5CD6CB2B">
+        <Association Name="FK__GiaoDich__MaPT__5FB337D6">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -512,7 +512,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__MaTTGD__5EBF139D">
+        <Association Name="FK__GiaoDich__MaTTGD__619B8048">
           <End Role="TTGiaoDich" Type="Self.TTGiaoDich" Multiplicity="0..1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -524,7 +524,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GiaoDich__TenDan__5FB337D6">
+        <Association Name="FK__GiaoDich__TenDan__628FA481">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="GiaoDich" Type="Self.GiaoDich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -536,7 +536,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MotelMedi__MaLoa__5070F446">
+        <Association Name="FK__MotelMedi__MaLoa__534D60F1">
           <End Role="LoaiMedia" Type="Self.LoaiMedia" Multiplicity="1" />
           <End Role="MotelMedia" Type="Self.MotelMedia" Multiplicity="*" />
           <ReferentialConstraint>
@@ -548,7 +548,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__MotelMedia__MaPT__4F7CD00D">
+        <Association Name="FK__MotelMedia__MaPT__52593CB8">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="MotelMedia" Type="Self.MotelMedia" Multiplicity="*" />
           <ReferentialConstraint>
@@ -560,19 +560,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TaiKhoan__CCCD__3F466844">
-          <End Role="NguoiDung" Type="Self.NguoiDung" Multiplicity="0..1" />
-          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
+        <Association Name="FK__NguoiDung__TenDa__3F466844">
+          <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="0..1" />
+          <End Role="NguoiDung" Type="Self.NguoiDung" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="NguoiDung">
-              <PropertyRef Name="CCCD" />
+            <Principal Role="TaiKhoan">
+              <PropertyRef Name="TenDangNhap" />
             </Principal>
-            <Dependent Role="TaiKhoan">
-              <PropertyRef Name="CCCD" />
+            <Dependent Role="NguoiDung">
+              <PropertyRef Name="TenDangNhap" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PTYeuThic__TenDa__5441852A">
+        <Association Name="FK__PTYeuThic__TenDa__571DF1D5">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="PTYeuThich" Type="Self.PTYeuThich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -584,7 +584,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PTYeuThich__MaPT__534D60F1">
+        <Association Name="FK__PTYeuThich__MaPT__5629CD9C">
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="1" />
           <End Role="PTYeuThich" Type="Self.PTYeuThich" Multiplicity="*" />
           <ReferentialConstraint>
@@ -596,7 +596,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PhongTro__MaTT__49C3F6B7">
+        <Association Name="FK__PhongTro__MaTT__4CA06362">
           <End Role="TTPhongTro" Type="Self.TTPhongTro" Multiplicity="1" />
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -608,7 +608,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PhongTro__MaVT__48CFD27E">
+        <Association Name="FK__PhongTro__MaVT__4BAC3F29">
           <End Role="ViTri" Type="Self.ViTri" Multiplicity="1" />
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -620,7 +620,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PhongTro__TenDan__47DBAE45">
+        <Association Name="FK__PhongTro__TenDan__4AB81AF0">
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="1" />
           <End Role="PhongTro" Type="Self.PhongTro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -632,7 +632,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__TaiKhoan__MaVaiT__3E52440B">
+        <Association Name="FK__TaiKhoan__MaVaiT__3C69FB99">
           <End Role="VaiTro" Type="Self.VaiTro" Multiplicity="1" />
           <End Role="TaiKhoan" Type="Self.TaiKhoan" Multiplicity="*" />
           <ReferentialConstraint>
@@ -657,55 +657,55 @@
           <EntitySet Name="TTPhongTro" EntityType="Self.TTPhongTro" />
           <EntitySet Name="VaiTro" EntityType="Self.VaiTro" />
           <EntitySet Name="ViTri" EntityType="Self.ViTri" />
-          <AssociationSet Name="FK__GiaoDich__MaLoai__5DCAEF64" Association="Self.FK__GiaoDich__MaLoai__5DCAEF64">
+          <AssociationSet Name="FK__GiaoDich__MaLoai__60A75C0F" Association="Self.FK__GiaoDich__MaLoai__60A75C0F">
             <End Role="LoaiGiaoDich" EntitySet="LoaiGiaoDich" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__MaPT__5CD6CB2B" Association="Self.FK__GiaoDich__MaPT__5CD6CB2B">
+          <AssociationSet Name="FK__GiaoDich__MaPT__5FB337D6" Association="Self.FK__GiaoDich__MaPT__5FB337D6">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__MaTTGD__5EBF139D" Association="Self.FK__GiaoDich__MaTTGD__5EBF139D">
+          <AssociationSet Name="FK__GiaoDich__MaTTGD__619B8048" Association="Self.FK__GiaoDich__MaTTGD__619B8048">
             <End Role="TTGiaoDich" EntitySet="TTGiaoDich" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__GiaoDich__TenDan__5FB337D6" Association="Self.FK__GiaoDich__TenDan__5FB337D6">
+          <AssociationSet Name="FK__GiaoDich__TenDan__628FA481" Association="Self.FK__GiaoDich__TenDan__628FA481">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="GiaoDich" EntitySet="GiaoDich" />
           </AssociationSet>
-          <AssociationSet Name="FK__MotelMedi__MaLoa__5070F446" Association="Self.FK__MotelMedi__MaLoa__5070F446">
+          <AssociationSet Name="FK__MotelMedi__MaLoa__534D60F1" Association="Self.FK__MotelMedi__MaLoa__534D60F1">
             <End Role="LoaiMedia" EntitySet="LoaiMedia" />
             <End Role="MotelMedia" EntitySet="MotelMedia" />
           </AssociationSet>
-          <AssociationSet Name="FK__MotelMedia__MaPT__4F7CD00D" Association="Self.FK__MotelMedia__MaPT__4F7CD00D">
+          <AssociationSet Name="FK__MotelMedia__MaPT__52593CB8" Association="Self.FK__MotelMedia__MaPT__52593CB8">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="MotelMedia" EntitySet="MotelMedia" />
           </AssociationSet>
-          <AssociationSet Name="FK__TaiKhoan__CCCD__3F466844" Association="Self.FK__TaiKhoan__CCCD__3F466844">
-            <End Role="NguoiDung" EntitySet="NguoiDung" />
+          <AssociationSet Name="FK__NguoiDung__TenDa__3F466844" Association="Self.FK__NguoiDung__TenDa__3F466844">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
+            <End Role="NguoiDung" EntitySet="NguoiDung" />
           </AssociationSet>
-          <AssociationSet Name="FK__PTYeuThic__TenDa__5441852A" Association="Self.FK__PTYeuThic__TenDa__5441852A">
+          <AssociationSet Name="FK__PTYeuThic__TenDa__571DF1D5" Association="Self.FK__PTYeuThic__TenDa__571DF1D5">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="PTYeuThich" EntitySet="PTYeuThich" />
           </AssociationSet>
-          <AssociationSet Name="FK__PTYeuThich__MaPT__534D60F1" Association="Self.FK__PTYeuThich__MaPT__534D60F1">
+          <AssociationSet Name="FK__PTYeuThich__MaPT__5629CD9C" Association="Self.FK__PTYeuThich__MaPT__5629CD9C">
             <End Role="PhongTro" EntitySet="PhongTro" />
             <End Role="PTYeuThich" EntitySet="PTYeuThich" />
           </AssociationSet>
-          <AssociationSet Name="FK__PhongTro__MaTT__49C3F6B7" Association="Self.FK__PhongTro__MaTT__49C3F6B7">
+          <AssociationSet Name="FK__PhongTro__MaTT__4CA06362" Association="Self.FK__PhongTro__MaTT__4CA06362">
             <End Role="TTPhongTro" EntitySet="TTPhongTro" />
             <End Role="PhongTro" EntitySet="PhongTro" />
           </AssociationSet>
-          <AssociationSet Name="FK__PhongTro__MaVT__48CFD27E" Association="Self.FK__PhongTro__MaVT__48CFD27E">
+          <AssociationSet Name="FK__PhongTro__MaVT__4BAC3F29" Association="Self.FK__PhongTro__MaVT__4BAC3F29">
             <End Role="ViTri" EntitySet="ViTri" />
             <End Role="PhongTro" EntitySet="PhongTro" />
           </AssociationSet>
-          <AssociationSet Name="FK__PhongTro__TenDan__47DBAE45" Association="Self.FK__PhongTro__TenDan__47DBAE45">
+          <AssociationSet Name="FK__PhongTro__TenDan__4AB81AF0" Association="Self.FK__PhongTro__TenDan__4AB81AF0">
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
             <End Role="PhongTro" EntitySet="PhongTro" />
           </AssociationSet>
-          <AssociationSet Name="FK__TaiKhoan__MaVaiT__3E52440B" Association="Self.FK__TaiKhoan__MaVaiT__3E52440B">
+          <AssociationSet Name="FK__TaiKhoan__MaVaiT__3C69FB99" Association="Self.FK__TaiKhoan__MaVaiT__3C69FB99">
             <End Role="VaiTro" EntitySet="VaiTro" />
             <End Role="TaiKhoan" EntitySet="TaiKhoan" />
           </AssociationSet>
@@ -764,6 +764,7 @@
                 <ScalarProperty Name="NgaySinh" ColumnName="NgaySinh" />
                 <ScalarProperty Name="GioiTinh" ColumnName="GioiTinh" />
                 <ScalarProperty Name="DiaChi" ColumnName="DiaChi" />
+                <ScalarProperty Name="TenDangNhap" ColumnName="TenDangNhap" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -803,7 +804,6 @@
                 <ScalarProperty Name="SoDT" ColumnName="SoDT" />
                 <ScalarProperty Name="StrAvatar" ColumnName="StrAvatar" />
                 <ScalarProperty Name="MaVaiTro" ColumnName="MaVaiTro" />
-                <ScalarProperty Name="CCCD" ColumnName="CCCD" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -64,10 +64,6 @@ INSERT INTO TTPhongTro VALUES
   (1, N'Đang cho thuê'), 
   (2, N'Đã đặt cọc'),
   (3, N'Đã cho thuê');
-CREATE TABLE MediaType (
-	IDMediaType INT PRIMARY KEY, 
-	MediaType NVARCHAR(25) NOT NULL UNIQUE, 
-);
 CREATE TABLE PhongTro (
   MaPT INT IDENTITY (1,1) NOT NULL PRIMARY KEY,
   TieuDe NVARCHAR(75) NOT NULL,

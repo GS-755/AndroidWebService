@@ -19,10 +19,9 @@ namespace AndroidWebService.Models
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
-            this.CCCD = string.Empty;
-            this.StrAvatar = string.Empty;
             this.Base64Avatar = string.Empty;
             this.GiaoDich = new HashSet<GiaoDich>();
+            this.NguoiDung = new HashSet<NguoiDung>();
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.PhongTro = new HashSet<PhongTro>();
         }
@@ -33,20 +32,20 @@ namespace AndroidWebService.Models
         public string SoDT { get; set; }
         public string StrAvatar { get; set; }
         [NotMapped]
-        public string Base64Avatar { get; set; } 
+        public string Base64Avatar { get; set; }
         public int MaVaiTro { get; set; }
-        public string CCCD { get; set; }
-
-        public virtual NguoiDung NguoiDung { get; set; }
-        public virtual VaiTro VaiTro { get; set; }
+    
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        [JsonIgnore]
+        public virtual ICollection<NguoiDung> NguoiDung { get; set; }
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]    
         public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
+        public virtual VaiTro VaiTro { get; set; }
     }
 }
