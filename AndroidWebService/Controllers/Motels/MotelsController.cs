@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Web.Http;
 using System.Data.Entity;
@@ -9,18 +10,18 @@ using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
-using System.IO;
 
 namespace AndroidWebService.Controllers.Media
 {
     public class MotelsController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         // GET: api/Motels
         [HttpGet]
         public async Task<List<PhongTro>> Get()
         {
-            List<PhongTro> motels = await DbInstance.Execute.
-                    GetDatabase.PhongTro.ToListAsync();
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
 
             return motels;
         }
@@ -29,8 +30,7 @@ namespace AndroidWebService.Controllers.Media
         [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
-            PhongTro phongTro = await DbInstance.Execute.GetDatabase
-                    .PhongTro.FindAsync(id);
+            PhongTro phongTro = await db.PhongTro.FindAsync(id);
             if (phongTro == null)
             {
                 return NotFound();
@@ -42,8 +42,7 @@ namespace AndroidWebService.Controllers.Media
         [HttpGet]
         public async Task<List<PhongTro>> GetMotelByLocationId(int locationId)
         {
-            List<PhongTro> motels = await DbInstance.Execute.GetDatabase.
-                    PhongTro.ToListAsync();
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
             motels = motels.Where(k => k.MaVT == locationId).ToList();
 
             return motels;
@@ -74,8 +73,8 @@ namespace AndroidWebService.Controllers.Media
                         motel.HinhAnh = fileName;
                     }
                 }
-                DbInstance.Execute.GetDatabase.PhongTro.Add(motel);
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                db.PhongTro.Add(motel);
+                await db.SaveChangesAsync();
 
                 return CreatedAtRoute("DefaultApi", new { id = motel.MaPT }, motel);
             }
@@ -110,9 +109,9 @@ namespace AndroidWebService.Controllers.Media
                 }
                 try
                 {
-                    DbInstance.Execute.GetDatabase.
+                    db.
                             Entry(phongTro).State = EntityState.Modified;
-                    await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                    await db.SaveChangesAsync();
 
                     return Ok(phongTro);
                 }
@@ -136,13 +135,13 @@ namespace AndroidWebService.Controllers.Media
         public async Task<IHttpActionResult> DeletePhongTro(int id)
         {
             PhongTro phongTro = await 
-                DbInstance.Execute.GetDatabase.PhongTro.FindAsync(id);
+                db.PhongTro.FindAsync(id);
             if (phongTro == null)
             {
                 return NotFound();
             }
-            DbInstance.Execute.GetDatabase.PhongTro.Remove(phongTro);
-            await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+            db.PhongTro.Remove(phongTro);
+            await db.SaveChangesAsync();
 
             return Ok(phongTro);
         }
@@ -151,15 +150,14 @@ namespace AndroidWebService.Controllers.Media
         {
             if (disposing)
             {
-                DbInstance.Execute.GetDatabase.Dispose();
+                db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool PhongTroExists(int id)
         {
-            return DbInstance.Execute.GetDatabase.
-                    PhongTro.Count(e => e.MaPT == id) > 0;
+            return db.PhongTro.Count(e => e.MaPT == id) > 0;
         }
     }
 }

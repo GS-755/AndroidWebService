@@ -10,13 +10,14 @@ namespace AndroidWebService.Controllers.Payments
 {
     public class VnPayController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         // GET: api/vnpay/sendtransaction?mapt=1&vnpbankcode=vnpay
         [HttpGet]
         public async Task<IHttpActionResult> SendTransaction(string maGd, string vnpBankCode)
         {
             string tmpMaGd = maGd.Trim();
-            GiaoDich giaoDich = await DbInstance.Execute.GetDatabase.
-                    GiaoDich.FindAsync(tmpMaGd);
+            GiaoDich giaoDich = await db.GiaoDich.FindAsync(tmpMaGd);
             if(giaoDich == null)
             {
                 return NotFound();

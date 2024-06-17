@@ -1,23 +1,24 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
-using System.Collections.Generic;
-using System.Data.Entity;
 
 namespace AndroidWebService.Controllers.Payments
 {
     public class TransactionsController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         // GET: api/Transactions
         [HttpGet]
         public async Task<List<GiaoDich>> Get()
         {
-            return await DbInstance.Execute.GetDatabase.
-                    GiaoDich.ToListAsync();
+            return await db.GiaoDich.ToListAsync();
         }
 
         // GET: api/Transactions/5
@@ -25,8 +26,7 @@ namespace AndroidWebService.Controllers.Payments
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            GiaoDich transaction = await DbInstance.Execute.GetDatabase.
-                    GiaoDich.FindAsync(id.Trim());
+            GiaoDich transaction = await db.GiaoDich.FindAsync(id.Trim());
             if (transaction == null)
             {
                 return NotFound();
@@ -44,7 +44,7 @@ namespace AndroidWebService.Controllers.Payments
             {
                 if(giaoDich.PhongTro == null)
                 {
-                    giaoDich.PhongTro = DbInstance.Execute.GetDatabase.
+                    giaoDich.PhongTro = db.
                         PhongTro.FirstOrDefault(k => k.MaPT == giaoDich.MaPT);
                 }
                 if(giaoDich.MaGD == null || giaoDich.MaGD.Length == 0)
@@ -82,8 +82,8 @@ namespace AndroidWebService.Controllers.Payments
                 {
                     return BadRequest(ModelState);
                 }
-                DbInstance.Execute.GetDatabase.GiaoDich.Add(giaoDich);
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                db.GiaoDich.Add(giaoDich);
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -104,15 +104,14 @@ namespace AndroidWebService.Controllers.Payments
         {
             if (disposing)
             {
-                DbInstance.Execute.GetDatabase.Dispose();
+                db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool TransactionExists(string id)
         {
-            return DbInstance.Execute.GetDatabase.
-                GiaoDich.Count(e => e.MaGD == id) > 0;
+            return db.GiaoDich.Count(e => e.MaGD == id) > 0;
         }
     }
 }

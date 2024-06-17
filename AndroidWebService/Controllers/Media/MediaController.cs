@@ -9,13 +9,14 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using AndroidWebService.Models;
-using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 
 namespace AndroidWebService.Controllers.Media
 {
     public class MediaController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         private (bool, FileStream) GetMediaFileStream(string mediaPath, string fileName)
         {
             try
@@ -42,7 +43,7 @@ namespace AndroidWebService.Controllers.Media
             try
             {
                 HttpResponseMessage response = new HttpResponseMessage();
-                PhongTro phongTro = await DbInstance.Execute.GetDatabase.
+                PhongTro phongTro = await db.
                     PhongTro.FirstOrDefaultAsync(k => k.MaPT == motelId);
                 if (phongTro != null)
                 {
@@ -102,7 +103,7 @@ namespace AndroidWebService.Controllers.Media
             try
             {
                 HttpResponseMessage response = new HttpResponseMessage();
-                TaiKhoan user = await DbInstance.Execute.GetDatabase.TaiKhoan.
+                TaiKhoan user = await db.TaiKhoan.
                         FindAsync(userName.Trim());
                 if (user != null)
                 {

@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Collections.Generic;
 using System.Web.Http.Description;
-using AndroidWebService.Models.Utils;
 
 namespace AndroidWebService.Controllers.Media
 {
     public class LocationsController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         // GET: api/Locations
         [HttpGet]
         public async Task<List<ViTri>> Get()
         {
             HttpResponseMessage response = new HttpResponseMessage();    
-            List<ViTri> locations = await DbInstance.Execute.GetDatabase.
-                    ViTri.ToListAsync();
+            List<ViTri> locations = await db.ViTri.ToListAsync();
             if(locations.Count() <= 0) 
             {
                 response.StatusCode = HttpStatusCode.NoContent;
@@ -34,7 +34,7 @@ namespace AndroidWebService.Controllers.Media
         [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
-            ViTri location = await DbInstance.Execute.GetDatabase.ViTri.FindAsync(id);
+            ViTri location = await db.ViTri.FindAsync(id);
             if (location == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace AndroidWebService.Controllers.Media
         {
             if (disposing)
             {
-                DbInstance.Execute.GetDatabase.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);

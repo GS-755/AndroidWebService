@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Linq;
 using System.Net.Http;
@@ -9,15 +10,15 @@ using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
-using System.Data.Entity.Infrastructure;
 using AndroidWebService.Models.Enums;
-using System.IO;
-using System.Threading;
+using System.Data.Entity.Infrastructure;
 
 namespace AndroidWebService.Controllers.Customers
 {
     public class AccountsController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         [HttpGet]
         public HttpResponseMessage GetCookie(string userName) 
         {
@@ -32,7 +33,7 @@ namespace AndroidWebService.Controllers.Customers
                 }
                 else
                 {
-                    TaiKhoan account = DbInstance.Execute.GetDatabase.
+                    TaiKhoan account = db.
                         TaiKhoan.FirstOrDefault(k => k.TenDangNhap.Trim() == userName);
                     if (account == null)
                     {
@@ -63,7 +64,7 @@ namespace AndroidWebService.Controllers.Customers
         public HttpResponseMessage SaveCookie(string userName)
         {
             HttpResponseMessage response = new HttpResponseMessage();
-            TaiKhoan users = DbInstance.Execute.GetDatabase.TaiKhoan.FirstOrDefault(
+            TaiKhoan users = db.TaiKhoan.FirstOrDefault(
                 k => userName.Trim() == k.TenDangNhap.Trim()
             );
             try
@@ -97,8 +98,7 @@ namespace AndroidWebService.Controllers.Customers
         public async Task<IHttpActionResult> Login(string userName, string password)
         {
             string authTmp = StrSHA256.Convert(password);
-            TaiKhoan account = await DbInstance.Execute.GetDatabase.
-                TaiKhoan.FindAsync(userName);
+            TaiKhoan account = await db.TaiKhoan.FindAsync(userName);
             if (account == null)
             {
                 return NotFound();
@@ -138,9 +138,9 @@ namespace AndroidWebService.Controllers.Customers
                     }
                     string authTmp = StrSHA256.Convert(account.MatKhau);
                     account.MatKhau = authTmp;
-                    DbInstance.Execute.GetDatabase.Entry(account).State = EntityState.Added;
+                    db.Entry(account).State = EntityState.Added;
 
-                    await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                    await db.SaveChangesAsync();
                 }
             }
             catch (DbUpdateException)
@@ -175,9 +175,8 @@ namespace AndroidWebService.Controllers.Customers
             {
                 string authTmp = StrSHA256.Convert(taiKhoan.MatKhau);
                 taiKhoan.MatKhau = authTmp;
-                DbInstance.Execute.GetDatabase.
-                    Entry(taiKhoan).State = EntityState.Modified;
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                db.Entry(taiKhoan).State = EntityState.Modified;
+                await db.SaveChangesAsync();
 
                 return Ok(taiKhoan);
             }
@@ -198,15 +197,15 @@ namespace AndroidWebService.Controllers.Customers
         {
             if (disposing)
             {
-                DbInstance.Execute.GetDatabase.Dispose();
+                db.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
         private bool TaiKhoanExists(string id)
         {
-            return DbInstance.Execute.GetDatabase.
-                TaiKhoan.Count(e => e.TenDangNhap == id) > 0;
+            return db.TaiKhoan.Count(e => e.TenDangNhap == id) > 0;
         }
     }
 }

@@ -5,18 +5,19 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Collections.Generic;
 using System.Web.Http.Description;
-using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
 
 namespace AndroidWebService.Controllers.Customers
 {
     public class UsersController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         // GET: api/Users
         [HttpGet]
         public async Task<List<NguoiDung>> Get()
         {
-            List<NguoiDung> users = await DbInstance.Execute.GetDatabase.
+            List<NguoiDung> users = await db.
                     NguoiDung.ToListAsync();
 
             return users;
@@ -26,7 +27,7 @@ namespace AndroidWebService.Controllers.Customers
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            NguoiDung nguoiDung = await DbInstance.Execute.GetDatabase.
+            NguoiDung nguoiDung = await db.
                     NguoiDung.FindAsync(id);
             if (nguoiDung == null)
             {
@@ -46,11 +47,11 @@ namespace AndroidWebService.Controllers.Customers
                 return BadRequest(ModelState);
             }
 
-            DbInstance.Execute.GetDatabase.NguoiDung.Add(nguoiDung);
+            db.NguoiDung.Add(nguoiDung);
 
             try
             {
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -82,8 +83,8 @@ namespace AndroidWebService.Controllers.Customers
 
             try
             {
-                DbInstance.Execute.GetDatabase.Entry(nguoiDung).State = EntityState.Modified;
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                db.Entry(nguoiDung).State = EntityState.Modified;
+                await db.SaveChangesAsync();
 
                 return Ok(nguoiDung);
             }
@@ -104,14 +105,14 @@ namespace AndroidWebService.Controllers.Customers
         {
             if (disposing)
             {
-                DbInstance.Execute.GetDatabase.Dispose();
+                db.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool NguoiDungExists(string id)
         {
-            return DbInstance.Execute.GetDatabase.NguoiDung.Count(e => e.CCCD == id) > 0;
+            return db.NguoiDung.Count(e => e.CCCD == id) > 0;
         }
     }
 }

@@ -5,20 +5,20 @@ using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Collections.Generic;
 using System.Web.Http.Description;
-using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
 
 namespace AndroidWebService.Controllers.Reservations
 {
     public class LovedMotelsController : ApiController
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
+
         // GET: api/LovedMotels/GetByUserName?username=ra21006en
         [ResponseType(typeof(PTYeuThich))]
         [HttpGet]
         public async Task<List<PTYeuThich>> GetByUserName(string userName)
         {
-            List<PTYeuThich> lovedMotels = await DbInstance.Execute.GetDatabase.
-                    PTYeuThich.ToListAsync();
+            List<PTYeuThich> lovedMotels = await db.PTYeuThich.ToListAsync();
 
             return lovedMotels.Where(k => k.TenDangNhap.Trim() == userName.Trim()).ToList();
         }
@@ -26,8 +26,7 @@ namespace AndroidWebService.Controllers.Reservations
         [HttpGet]
         public async Task<List<PTYeuThich>> GetByMotelId(int motelId)
         {
-            List<PTYeuThich> lovedMotels = await DbInstance.Execute.GetDatabase.
-                    PTYeuThich.ToListAsync();
+            List<PTYeuThich> lovedMotels = await db.PTYeuThich.ToListAsync();
 
             return lovedMotels.Where(k => k.MaPT == motelId).ToList();
         }
@@ -41,11 +40,11 @@ namespace AndroidWebService.Controllers.Reservations
                 return BadRequest(ModelState);
             }
 
-            DbInstance.Execute.GetDatabase.PTYeuThich.Add(lovedMotel);
+            db.PTYeuThich.Add(lovedMotel);
 
             try
             {
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                await db.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
@@ -59,8 +58,7 @@ namespace AndroidWebService.Controllers.Reservations
         [HttpDelete]
         public async Task<IHttpActionResult> Delete(PTYeuThich lovedMotels) 
         {
-            PTYeuThich lovedMotel = await DbInstance.Execute.GetDatabase.
-                PTYeuThich.FindAsync(lovedMotels.MaPT);
+            PTYeuThich lovedMotel = await db.PTYeuThich.FindAsync(lovedMotels.MaPT);
             if (lovedMotel == null)
             {
                 return NotFound();
@@ -68,8 +66,8 @@ namespace AndroidWebService.Controllers.Reservations
             if (lovedMotel.TenDangNhap.Trim() == lovedMotels.TenDangNhap.Trim()
                     && lovedMotel.MaPT == lovedMotels.MaPT)
             {
-                DbInstance.Execute.GetDatabase.PTYeuThich.Remove(lovedMotel);
-                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
+                db.PTYeuThich.Remove(lovedMotel);
+                await db.SaveChangesAsync();
 
                 return Ok(lovedMotel);
             }
@@ -81,7 +79,7 @@ namespace AndroidWebService.Controllers.Reservations
         {
             if (disposing)
             {
-                DbInstance.Execute.GetDatabase.Dispose();
+                db.Dispose();
             }
 
             base.Dispose(disposing);
