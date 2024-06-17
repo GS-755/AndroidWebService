@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Web;
 using System.Linq;
-using System.Drawing;
 using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
+using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
 
 namespace AndroidWebService.Controllers.Motels
 {
     public class MotelsController : ApiController
     {
-        private DoAnAndroidEntities 
-            db = new DoAnAndroidEntities();
-
         // GET: api/Motels
         [HttpGet]
         public IQueryable<PhongTro> Get()
         {
-            return db.PhongTro;
+            return DbInstance.Execute.
+                    GetDatabase.PhongTro;
         }
         // GET: api/Motels/5
         [ResponseType(typeof(PhongTro))]
         [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
-            PhongTro phongTro = await db.PhongTro.FindAsync(id);
+            PhongTro phongTro = await DbInstance.Execute.GetDatabase
+                    .PhongTro.FindAsync(id);
             if (phongTro == null)
             {
                 return NotFound();
@@ -48,20 +46,20 @@ namespace AndroidWebService.Controllers.Motels
             }
             else
             {
-                if(phongTro.Base64Image != null)
+                if (!string.IsNullOrEmpty(phongTro.Base64Thumbnail))
                 {
-                    Image motelImage = Models.Utils.ImageConverter.
-                            Base64ToImage(phongTro.Base64Image);
                     string fileName = $"{phongTro.TenDangNhap.Trim()}" +
-                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
-                    string extension = ".jpg";
-                    string filePath = HttpContext.Current.Server.
-                               MapPath(PhongTro.THUMBNAIL_IMG_PATH + fileName + extension);
-                    motelImage.Save(filePath);
-                    phongTro.HinhAnh = fileName + extension;
+                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}.jpg";
+                    bool saveThumbnailResult = MyBase64Utils.SaveImageFromBase64(
+                        phongTro.Base64Thumbnail, fileName, MediaPath.MOTEL_THUMBNAIL_PATH
+                    );
+                    if (saveThumbnailResult)
+                    {
+                        phongTro.HinhAnh = fileName;
+                    }
                 }
-                db.PhongTro.Add(phongTro);
-                await db.SaveChangesAsync();
+                DbInstance.Execute.GetDatabase.PhongTro.Add(phongTro);
+                await DbInstance.Execute.GetDatabase.SaveChangesAsync();
 
                 return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
             }
@@ -82,22 +80,23 @@ namespace AndroidWebService.Controllers.Motels
             }
             else
             {
-                if (phongTro.Base64Image != null)
+                if (!string.IsNullOrEmpty(phongTro.Base64Thumbnail))
                 {
-                    Image motelImage = Models.Utils.ImageConverter.
-                            Base64ToImage(phongTro.Base64Image);
                     string fileName = $"{phongTro.TenDangNhap.Trim()}" +
-                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
-                    string extension = ".jpg";
-                    string filePath = HttpContext.Current.Server.
-                               MapPath(PhongTro.THUMBNAIL_IMG_PATH + fileName + extension);
-                    motelImage.Save(filePath);
-                    phongTro.HinhAnh = fileName + extension;
+                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}.jpg";
+                    bool saveThumbnailResult = MyBase64Utils.SaveImageFromBase64(
+                        phongTro.Base64Thumbnail, fileName, MediaPath.MOTEL_THUMBNAIL_PATH
+                    );
+                    if(saveThumbnailResult)
+                    {
+                        phongTro.HinhAnh = fileName;
+                    }
                 }
                 try
                 {
-                    db.Entry(phongTro).State = EntityState.Modified;
-                    await db.SaveChangesAsync();
+                    DbInstance.Execute.GetDatabase.
+                            Entry(phongTro).State = EntityState.Modified;
+                    await DbInstance.Execute.GetDatabase.SaveChangesAsync();
 
                     return Ok(phongTro);
                 }
@@ -121,13 +120,13 @@ namespace AndroidWebService.Controllers.Motels
         public async Task<IHttpActionResult> DeletePhongTro(int id)
         {
             PhongTro phongTro = await 
-                db.PhongTro.FindAsync(id);
+                DbInstance.Execute.GetDatabase.PhongTro.FindAsync(id);
             if (phongTro == null)
             {
                 return NotFound();
             }
-            db.PhongTro.Remove(phongTro);
-            await db.SaveChangesAsync();
+            DbInstance.Execute.GetDatabase.PhongTro.Remove(phongTro);
+            await DbInstance.Execute.GetDatabase.SaveChangesAsync();
 
             return Ok(phongTro);
         }
@@ -136,14 +135,15 @@ namespace AndroidWebService.Controllers.Motels
         {
             if (disposing)
             {
-                db.Dispose();
+                DbInstance.Execute.GetDatabase.Dispose();
             }
             base.Dispose(disposing);
         }
 
         private bool PhongTroExists(int id)
         {
-            return db.PhongTro.Count(e => e.MaPT == id) > 0;
+            return DbInstance.Execute.GetDatabase.
+                    PhongTro.Count(e => e.MaPT == id) > 0;
         }
     }
 }

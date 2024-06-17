@@ -5,8 +5,7 @@
 
     public sealed class DbInstance
     {
-        public static DbInstance Execute 
-            { get; private set; } = new DbInstance();
+        private static DbInstance execute;
 
         private DoAnAndroidEntities db; 
 
@@ -14,11 +13,7 @@
         {
             try
             {
-                if (DbInstance.Execute == null)
-                {
-                    DbInstance.Execute = new DbInstance();
-                    this.db = new DoAnAndroidEntities();
-                }
+                this.db = new DoAnAndroidEntities();
             }
             catch(Exception ex)
             {
@@ -26,6 +21,18 @@
             }
         }
 
+        public static DbInstance Execute
+        {
+            get
+            {
+                if(DbInstance.execute == null)
+                {
+                    DbInstance.execute = new DbInstance();
+                }
+
+                return DbInstance.execute;
+            }
+        }
         public DoAnAndroidEntities GetDatabase 
         {
             get => this.db;

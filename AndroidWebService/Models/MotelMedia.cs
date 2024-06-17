@@ -6,24 +6,18 @@
 //     Manual changes to this file will be overwritten if the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-
-using Newtonsoft.Json;
-
 namespace AndroidWebService.Models
 {
-    public partial class PTYeuThich
-    {
-        public string GhiChu { get; set; }
-        public int MaPT { get; set; }
-        public string TenDangNhap { get; set; }
-        
-        public PTYeuThich()
-        {
-            this.GhiChu = string.Empty;
-        }
+    using Newtonsoft.Json;
 
-        [JsonIgnore]
-        public virtual TaiKhoan TaiKhoan { get; set; }
+    public partial class MotelMedia
+    {
+        public int MaPT { get; set; }
+        public int MaMedia { get; set; }
+        public string TenTepMedia { get; set; }
+        public int MaLoaiMedia { get; set; }
+    
+        public virtual LoaiMedia LoaiMedia { get; set; }
         [JsonIgnore]
         public virtual PhongTro PhongTro { get; set; }
     }

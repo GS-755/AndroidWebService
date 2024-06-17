@@ -10,20 +10,25 @@
 namespace AndroidWebService.Models
 {
     using System;
-    using Newtonsoft.Json;
 
     public partial class GiaoDich
     {
         public string MaGD { get; set; }
         public int MaLoaiGD { get; set; }
+        public int MaPT { get; set; }
         public DateTime NgayGD { get; set; }
         public double SoTien { get; set; }
+        public Nullable<short> MaTTGD { get; set; }
         public string TenDangNhap { get; set; }
-        public int MaPT { get; set; }
+        
+        public GiaoDich()
+        {
+            this.MaTTGD = 0;
+        }
 
-        public virtual PhongTro PhongTro { get; set; }
         public virtual LoaiGiaoDich LoaiGiaoDich { get; set; }
-        [JsonIgnore]
+        public virtual PhongTro PhongTro { get; set; }
+        public virtual TTGiaoDich TTGiaoDich { get; set; }
         public virtual TaiKhoan TaiKhoan { get; set; }
     }
 }

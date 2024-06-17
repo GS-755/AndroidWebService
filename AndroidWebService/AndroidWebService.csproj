@@ -161,7 +161,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Customers\AccountsController.cs" />
-    <Compile Include="Controllers\Motels\ThumbnailController.cs" />
+    <Compile Include="Controllers\Motels\MediaController.cs" />
     <Compile Include="Controllers\Motels\LocationsController.cs" />
     <Compile Include="Controllers\Reservations\LovedMotelsController.cs" />
     <Compile Include="Controllers\Motels\MotelsController.cs" />
@@ -174,10 +174,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Utils\MediaPath.cs" />
     <Compile Include="Models\GiaoDich.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LoaiGiaoDich.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LoaiMedia.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Model1.Context.cs">
@@ -195,6 +199,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\MotelMedia.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\NguoiDung.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -207,13 +214,16 @@
     <Compile Include="Models\TaiKhoan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TTGiaoDich.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\TTPhongTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Utils\DbInstance.cs" />
     <Compile Include="Models\Utils\WebURL.cs" />
     <Compile Include="Models\Utils\ConfigParser.cs" />
-    <Compile Include="Models\Utils\ImageConverter.cs" />
+    <Compile Include="Models\Utils\MyBase64Utils.cs" />
     <Compile Include="Models\Utils\RandomID.cs" />
     <Compile Include="Models\Utils\StrSHA256.cs" />
     <Compile Include="Models\VaiTro.cs">
@@ -245,13 +255,6 @@
     </Content>
     <Content Include="Resources\Pictures\Users\defaultProfilePicture.png" />
     <Content Include="Resources\Query\DoAnAndroid.sql" />
-    <EntityDeploy Include="Models\Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -270,6 +273,13 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="Models\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Resources\Pictures\Motels\Media\example" />
     <Content Include="Resources\Pictures\Motels\Thumbnails\example" />

@@ -13,16 +13,16 @@ namespace AndroidWebService.Models
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
-    public partial class LoaiGiaoDich
+    public partial class TTGiaoDich
     {
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public LoaiGiaoDich()
+        public TTGiaoDich()
         {
             this.GiaoDich = new HashSet<GiaoDich>();
         }
     
-        public int MaLoaiGD { get; set; }
-        public string TenLoaiGD { get; set; }
+        public short MaTTGD { get; set; }
+        public string TenTTGD { get; set; }
     
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]

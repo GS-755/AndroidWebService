@@ -4,26 +4,32 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9385c76611b24af48b838177b47a4d47" Name="Diagram1" ZoomLevel="55">
-        <EntityTypeShape EntityType="DoAnAndroidModel.GiaoDich" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.LoaiGiaoDich" Width="1.5" PointX="3" PointY="2.125" IsExpanded="true" />
+      <Diagram DiagramId="668aaa2dfda146509f6cc496dbb6c686" Name="Diagram1" ZoomLevel="47">
+        <EntityTypeShape EntityType="DoAnAndroidModel.GiaoDich" Width="1.5" PointX="5.25" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.LoaiGiaoDich" Width="1.5" PointX="3" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.LoaiMedia" Width="1.5" PointX="8.25" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.MotelMedia" Width="1.5" PointX="10.5" PointY="1.875" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAnAndroidModel.NguoiDung" Width="1.5" PointX="0.75" PointY="5.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.PTYeuThich" Width="1.5" PointX="8.25" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.PTYeuThich" Width="1.5" PointX="8.25" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAnAndroidModel.PhongTro" Width="1.5" PointX="8.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DoAnAndroidModel.TaiKhoan" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.TTPhongTro" Width="1.5" PointX="6" PointY="2.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.VaiTro" Width="1.5" PointX="0.75" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DoAnAndroidModel.ViTri" Width="1.5" PointX="6" PointY="9.625" IsExpanded="true" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaLoai__4AB81AF0" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaPT__49C3F6B7" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__TenDan__4BAC3F29" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__CCCD__3E52440B" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__PTYeuThic__TenDa__4F7CD00D" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__PTYeuThich__MaPT__4E88ABD4" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__44FF419A" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaVT__440B1D61" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__TenDan__4316F928" ManuallyRouted="false" />
-        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__MaVaiT__3D5E1FD2" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.TTGiaoDich" Width="1.5" PointX="3" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.TTPhongTro" Width="1.5" PointX="6" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.VaiTro" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DoAnAndroidModel.ViTri" Width="1.5" PointX="6" PointY="10.125" IsExpanded="true" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaLoai__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaPT__5CD6CB2B" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__MaTTGD__5EBF139D" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__GiaoDich__TenDan__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__MotelMedi__MaLoa__5070F446" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__MotelMedia__MaPT__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__CCCD__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PTYeuThic__TenDa__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PTYeuThich__MaPT__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaTT__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__MaVT__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__PhongTro__TenDan__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="DoAnAndroidModel.FK__TaiKhoan__MaVaiT__3E52440B" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

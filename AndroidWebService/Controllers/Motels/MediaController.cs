@@ -8,27 +8,28 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using AndroidWebService.Models;
+using AndroidWebService.Models.Utils;
+using AndroidWebService.Models.Enums;
 
 namespace AndroidWebService.Controllers.Motels
 {
-    public class ThumbnailController : ApiController
+    public class MediaController : ApiController
     {
-        private DoAnAndroidEntities db = new DoAnAndroidEntities();
-
-        // GET: /api/images/getmotelimage/1
+        // GET: /api/media/getmotelimage/1
         [HttpGet]
         public async Task<IHttpActionResult> GetMotelImage(int motelId)
         {
             try
             {
                 HttpResponseMessage response = new HttpResponseMessage();
-                PhongTro phongTro = await db.PhongTro.FirstOrDefaultAsync(k => k.MaPT == motelId);
+                PhongTro phongTro = await DbInstance.Execute.GetDatabase.
+                    PhongTro.FirstOrDefaultAsync(k => k.MaPT == motelId);
                 if (phongTro != null)
                 {
                     string rawName = phongTro.HinhAnh.Trim();
                     string fileName = Path.GetFileNameWithoutExtension(rawName);
                     string extension = Path.GetExtension(rawName).Replace('.', ' ').Trim();
-                    FileStream fs = File.OpenRead(HostingEnvironment.MapPath(PhongTro.THUMBNAIL_IMG_PATH + rawName));
+                    FileStream fs = File.OpenRead(HostingEnvironment.MapPath(MediaPath.MOTEL_THUMBNAIL_PATH + rawName));
                     if(fs == null)
                     {
                         return ResponseMessage(
