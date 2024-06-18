@@ -11,10 +11,11 @@ namespace AndroidWebService.Models
 {
     using Newtonsoft.Json;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
 
     public partial class LoaiGiaoDich
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public LoaiGiaoDich()
         {
             this.GiaoDich = new HashSet<GiaoDich>();
@@ -23,7 +24,7 @@ namespace AndroidWebService.Models
         public int MaLoaiGD { get; set; }
         public string TenLoaiGD { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
     }

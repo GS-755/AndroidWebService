@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-
-namespace AndroidWebService.Models.Utils
+﻿namespace AndroidWebService.Models.Utils
 {
+    using System;
+    using System.Text;
+
     public class RandomID
     {
         private static readonly string characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

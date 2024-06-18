@@ -13,19 +13,19 @@ namespace AndroidWebService.Models
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
 
-    public partial class TTPhongTro
+    public partial class LoaiMedia
     {
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TTPhongTro()
+        public LoaiMedia()
         {
-            this.PhongTro = new HashSet<PhongTro>();
+            this.MotelMedia = new HashSet<MotelMedia>();
         }
     
-        public int MaTT { get; set; }
-        public string TenTT { get; set; }
+        public int MaLoaiMedia { get; set; }
+        public string TenLoaiMedia { get; set; }
     
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
-        public virtual ICollection<PhongTro> PhongTro { get; set; }
+        public virtual ICollection<MotelMedia> MotelMedia { get; set; }
     }
 }

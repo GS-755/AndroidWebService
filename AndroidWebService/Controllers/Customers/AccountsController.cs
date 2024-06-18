@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Linq;
 using System.Net.Http;
@@ -9,7 +10,10 @@ using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
+using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
+using System.Web.Http.Results;
 
 namespace AndroidWebService.Controllers.Customers
 {
@@ -17,109 +21,81 @@ namespace AndroidWebService.Controllers.Customers
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
-        [HttpGet]
-        public HttpResponseMessage GetCookie(string userName) 
-        {
-            HttpResponseMessage response = new HttpResponseMessage();
-            try
-            {
-                CookieHeaderValue cookie = Request.Headers.
-                    GetCookies("cookie-header").FirstOrDefault();
-                if (cookie == null)
-                {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                }
-                else
-                {
-                    if (cookie["cookie-header"].Values.ToString() == userName.Trim())
-                    {
-                        response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-                        response.StatusCode = HttpStatusCode.OK;
-                    }
-                    else
-                    {
-                        response.StatusCode = HttpStatusCode.NotFound;
-                    }
-                }
-            }
-            catch
-            {
-                response.StatusCode = HttpStatusCode.BadRequest;
-            }
-
-            return response;
-        }
-        public HttpResponseMessage SaveCookie(string userName)
-        {
-            HttpResponseMessage response = new HttpResponseMessage();
-            TaiKhoan users = db.TaiKhoan.FirstOrDefault(
-                k => userName.Trim() == k.TenDangNhap.Trim()
-            );
-            try
-            {
-                if(users != null)
-                {
-                    CookieHeaderValue cookie = new 
-                        CookieHeaderValue("cookie-header", users.TenDangNhap.Trim());
-                    cookie.Expires = DateTimeOffset.Now.AddDays(7);
-                    cookie.Domain = Request.RequestUri.Host;
-                    cookie.Path = "/";
-                    response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
-                }
-                else
-                {
-                    response.StatusCode = HttpStatusCode.BadRequest;
-                }
-            }
-            catch (Exception ex)
-            {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                response.ReasonPhrase = ex.Message;
-            }
-
-            return response;
-        }
         // POST: api/Accounts/Login?userName=adu666&password=adu_adu_adu
         [ResponseType(typeof(TaiKhoan))]
         [HttpPost]
-        public async Task<IHttpActionResult> Login(string userName, string password)
+        public async Task<HttpResponseMessage> Login(string userName, string password)
         {
-            string authTmp = HmacSHA256.Convert(password);
-            TaiKhoan taiKhoan = await db.
-                TaiKhoan.FindAsync(userName);
-            if (taiKhoan == null)
+            HttpResponseMessage response = new HttpResponseMessage();   
+            // Hash user's Password
+            string authTmp = StrSHA256.Convert(password);
+            TaiKhoan account = await db.TaiKhoan.FindAsync(userName);
+            if (account == null)
             {
-                return NotFound();
+                response.StatusCode = HttpStatusCode.NotFound;
+                response.ReasonPhrase = "Account does not exists.";
             }
-            else if(taiKhoan.MatKhau == authTmp)
+            else if(account.MatKhau == authTmp)
             {
-                SaveCookie(userName.Trim());
-
-                return Ok(taiKhoan);
+                // HttpStatusCode.OK if credential matches with database
+                response.StatusCode = HttpStatusCode.OK;
+                // Inject login-cookie into the header 
+                string hashedUserName = StrSHA256.Convert(account.TenDangNhap.Trim());
+                CookieHeaderValue cookie = new
+                    CookieHeaderValue("cookie-header", hashedUserName);
+                cookie.Expires = DateTimeOffset.Now.AddDays(7);
+                cookie.Domain = Request.RequestUri.Host;
+                cookie.Path = "/";
+                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                response.ReasonPhrase = "Login successfully!";
+                // Parse user informations into response content 
+                JsonContent jsonContent = new JsonContent(account);
+                response.Content = jsonContent;
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            }
+            else
+            {
+                response.StatusCode = HttpStatusCode.BadRequest;
+                response.ReasonPhrase = "Incorrect password";
             }
 
-            return BadRequest("Incorrect password");
+
+            return response;
         }
 
         // POST: api/Accounts/Register?...
         [HttpPost]
         [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Register(TaiKhoan taiKhoan)
+        public async Task<IHttpActionResult> Register(TaiKhoan account)
         {
             try
             {
                 if(ModelState.IsValid)
                 {
-                    string authTmp = HmacSHA256.Convert(taiKhoan.MatKhau);
-                    taiKhoan.MatKhau = authTmp;
-                    db.TaiKhoan.Add(taiKhoan);
+                    if (!string.IsNullOrEmpty(account.Base64Avatar) 
+                            && !string.IsNullOrEmpty(account.StrAvatar))
+                    {
+                        string extension = Path.GetExtension(account.StrAvatar);
+                        string fileName = $"{account.TenDangNhap.Trim()}" +
+                                $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}{extension}";
+                        bool saveAvatarResult = MyBase64Utils.SaveImageFromBase64(
+                            account.Base64Avatar, fileName, MediaPath.USER_AVATAR_PATH
+                        );
+                        if(saveAvatarResult)
+                        {
+                            account.StrAvatar = fileName;
+                        }
+                    }
+                    string authTmp = StrSHA256.Convert(account.MatKhau);
+                    account.MatKhau = authTmp;
+                    db.Entry(account).State = EntityState.Added;
 
                     await db.SaveChangesAsync();
                 }
             }
             catch (DbUpdateException)
             {
-                if (TaiKhoanExists(taiKhoan.TenDangNhap))
+                if (TaiKhoanExists(account.TenDangNhap))
                 {
                     return Conflict();
                 }
@@ -129,42 +105,88 @@ namespace AndroidWebService.Controllers.Customers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = taiKhoan.TenDangNhap }, taiKhoan);
+            return CreatedAtRoute("DefaultApi", new { id = account.TenDangNhap }, account);
+        }
+        // POST: api/Logout
+        [HttpPost]
+        public IHttpActionResult Logout()
+        {
+            // Lấy cookie đã đặt trước đó
+            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if (cookie != null)
+            {
+                // Xóa cookie bằng cách đặt Expires về quá khứ
+                cookie.Expires = DateTimeOffset.Now.AddDays(-1);
+                // Tạo một response mới với cookie đã xóa
+                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+                response.Headers.AddCookies(new[] { cookie });
+
+                return new ResponseMessageResult(response);
+            }
+
+            // Nếu không tìm thấy cookie, trả về 200 OK
+            return NotFound();
         }
         // PUT: api/Accounts/5
         [HttpPut]
         [ResponseType(typeof(TaiKhoan))]
-        public async Task<IHttpActionResult> Put(string id, TaiKhoan taiKhoan)
+        public async Task<IHttpActionResult> Put(string id, TaiKhoan account)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            if (id != taiKhoan.TenDangNhap)
+            if (id.Trim() != account.TenDangNhap.Trim())
             {
                 return BadRequest();
             }
-
-            try
+            TaiKhoan oldAccount = db.TaiKhoan.FirstOrDefault(
+                k => k.TenDangNhap.Trim() == id.Trim()
+            );
+            if (oldAccount != null) 
             {
-                string authTmp = HmacSHA256.Convert(taiKhoan.MatKhau);
-                taiKhoan.MatKhau = authTmp;
-                db.Entry(taiKhoan).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                try
+                {
+                    CookieHeaderValue cookie = Request.Headers.
+                        GetCookies("cookie-header").FirstOrDefault();
+                    if (cookie != null)
+                    {
+                        if (!string.IsNullOrEmpty(account.Base64Avatar))
+                        {
+                            string extension = Path.GetExtension(account.StrAvatar);
+                            string fileName = $"{account.TenDangNhap.Trim()}" +
+                                    $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}{extension}";
+                            bool saveAvatarResult = MyBase64Utils.SaveImageFromBase64(
+                                account.Base64Avatar, fileName, MediaPath.USER_AVATAR_PATH
+                            );
+                            if (saveAvatarResult)
+                            {
+                                account.StrAvatar = fileName;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(account.MatKhau))
+                        {
+                            string authTmp = StrSHA256.Convert(account.MatKhau);
+                            account.MatKhau = authTmp;
+                        }
+                        db.Entry(account).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
 
-                return Ok(taiKhoan);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TaiKhoanExists(id))
-                {
-                    return NotFound();
+                        return Ok(account);
+                    }
+
+                    return Unauthorized();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!TaiKhoanExists(id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
             }
+
+            return NotFound();
         }
 
         protected override void Dispose(bool disposing)
@@ -173,6 +195,7 @@ namespace AndroidWebService.Controllers.Customers
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
 

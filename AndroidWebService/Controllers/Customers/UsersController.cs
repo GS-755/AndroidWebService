@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
 
@@ -14,16 +15,20 @@ namespace AndroidWebService.Controllers.Customers
 
         // GET: api/Users
         [HttpGet]
-        public IQueryable<NguoiDung> Get()
+        public async Task<List<NguoiDung>> Get()
         {
-            return db.NguoiDung;
+            List<NguoiDung> users = await db.
+                    NguoiDung.ToListAsync();
+
+            return users;
         }
         // GET: api/Users/5
         [ResponseType(typeof(NguoiDung))]
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            NguoiDung nguoiDung = await db.NguoiDung.FindAsync(id);
+            NguoiDung nguoiDung = await db.
+                    NguoiDung.FindAsync(id);
             if (nguoiDung == null)
             {
                 return NotFound();
@@ -35,14 +40,14 @@ namespace AndroidWebService.Controllers.Customers
         // POST: api/Users
         [ResponseType(typeof(NguoiDung))]
         [HttpPost]
-        public async Task<IHttpActionResult> AddUser(NguoiDung nguoiDung)
+        public async Task<IHttpActionResult> AddUser(NguoiDung user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.NguoiDung.Add(nguoiDung);
+            db.NguoiDung.Add(user);
 
             try
             {
@@ -50,7 +55,7 @@ namespace AndroidWebService.Controllers.Customers
             }
             catch (DbUpdateException)
             {
-                if (NguoiDungExists(nguoiDung.CCCD))
+                if (NguoiDungExists(user.CCCD))
                 {
                     return Conflict();
                 }
@@ -60,28 +65,28 @@ namespace AndroidWebService.Controllers.Customers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = nguoiDung.CCCD }, nguoiDung);
+            return CreatedAtRoute("DefaultApi", new { id = user.CCCD }, user);
         }
         // PUT: api/Users/5
         [HttpPut]
         [ResponseType(typeof(NguoiDung))]
-        public async Task<IHttpActionResult> EditUser(string id, NguoiDung nguoiDung)
+        public async Task<IHttpActionResult> EditUser(string id, NguoiDung user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (id != nguoiDung.CCCD.Trim())
+            if (id != user.CCCD.Trim())
             {
                 return BadRequest();
             }
 
             try
             {
-                db.Entry(nguoiDung).State = EntityState.Modified;
+                db.Entry(user).State = EntityState.Modified;
                 await db.SaveChangesAsync();
 
-                return Ok(nguoiDung);
+                return Ok(user);
             }
             catch (DbUpdateConcurrencyException)
             {

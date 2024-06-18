@@ -9,13 +9,14 @@
 
 namespace AndroidWebService.Models
 {
-    using Newtonsoft.Json;
     using System;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     
     public partial class ViTri
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ViTri()
         {
             this.PhongTro = new HashSet<PhongTro>();
@@ -26,7 +27,7 @@ namespace AndroidWebService.Models
         public Nullable<double> KinhDo { get; set; }
         public Nullable<double> ViDo { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
     }

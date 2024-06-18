@@ -16,9 +16,15 @@ namespace AndroidWebService.Models
         public string GhiChu { get; set; }
         public int MaPT { get; set; }
         public string TenDangNhap { get; set; }
+        
+        public PTYeuThich()
+        {
+            this.GhiChu = string.Empty;
+        }
 
-        public virtual PhongTro PhongTro { get; set; }
         [JsonIgnore]
         public virtual TaiKhoan TaiKhoan { get; set; }
+        [JsonIgnore]
+        public virtual PhongTro PhongTro { get; set; }
     }
 }

@@ -1,10 +1,14 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace AndroidWebService.Controllers.Payments
 {
@@ -14,9 +18,15 @@ namespace AndroidWebService.Controllers.Payments
 
         // GET: api/Transactions
         [HttpGet]
-        public IQueryable<GiaoDich> Get()
+        public async Task<List<GiaoDich>> Get()
         {
-            return db.GiaoDich;
+            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if (cookie != null)
+            {
+                return await db.GiaoDich.ToListAsync();
+            }
+            
+            return new List<GiaoDich>();
         }
 
         // GET: api/Transactions/5
@@ -24,77 +34,90 @@ namespace AndroidWebService.Controllers.Payments
         [HttpGet]
         public async Task<IHttpActionResult> Get(string id)
         {
-            GiaoDich giaoDich = await db.GiaoDich.FindAsync(id);
-            if (giaoDich == null)
+            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if(cookie != null)
             {
-                return NotFound();
-            }
+                GiaoDich transaction = await db.GiaoDich.FindAsync(id.Trim());
+                if (transaction == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(giaoDich);
+                return Ok(transaction);
+            }
+            
+            return Unauthorized();  
         }
 
         // POST: api/Transactions
         [ResponseType(typeof(GiaoDich))]
         [HttpPost]
         public async Task<IHttpActionResult> PostGiaoDich(GiaoDich giaoDich)
-        {         
-            try
+        {
+            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if (cookie != null)
             {
-                if(giaoDich.PhongTro == null)
+                try
                 {
-                    giaoDich.PhongTro = db.PhongTro.FirstOrDefault(k => k.MaPT == giaoDich.MaPT);
-                }
-                if(giaoDich.MaGD == null || giaoDich.MaGD.Length == 0)
-                {
-                    string maGd = RandomID.Get(8);
-                    while (TransactionExists(maGd))
+                    if (giaoDich.PhongTro == null)
                     {
-                        maGd = RandomID.Get(8);
+                        giaoDich.PhongTro = db.
+                            PhongTro.FirstOrDefault(k => k.MaPT == giaoDich.MaPT);
                     }
-
-                    giaoDich.MaGD = maGd;
-                }
-                if(giaoDich.SoTien <= 0)
-                {
-                    double soTien;
-                    if(giaoDich.MaLoaiGD == 1)
+                    if (giaoDich.MaGD == null || giaoDich.MaGD.Length == 0)
                     {
-                        try
+                        string maGd = RandomID.Get(8);
+                        while (TransactionExists(maGd))
                         {
-                            soTien = (double)giaoDich.PhongTro.TienCoc;
+                            maGd = RandomID.Get(8);
                         }
-                        catch
+
+                        giaoDich.MaGD = maGd;
+                    }
+                    if (giaoDich.SoTien <= 0)
+                    {
+                        double amount;
+                        if (giaoDich.MaLoaiGD == 1)
                         {
-                            soTien = giaoDich.PhongTro.SoTien * (30 / 100);
+                            try
+                            {
+                                amount = (double)giaoDich.PhongTro.TienCoc;
+                            }
+                            catch
+                            {
+                                amount = giaoDich.PhongTro.SoTien * (30 / 100);
+                            }
                         }
+                        else
+                        {
+                            amount = giaoDich.PhongTro.SoTien;
+                        }
+
+                        giaoDich.SoTien = amount;
+                    }
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest(ModelState);
+                    }
+                    db.GiaoDich.Add(giaoDich);
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    if (TransactionExists(giaoDich.MaGD))
+                    {
+                        return Conflict();
                     }
                     else
                     {
-                        soTien = giaoDich.PhongTro.SoTien;
+                        throw;
                     }
+                }
 
-                    giaoDich.SoTien = soTien;
-                }
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                db.GiaoDich.Add(giaoDich);
-                await db.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (TransactionExists(giaoDich.MaGD))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return CreatedAtRoute("DefaultApi", new { id = giaoDich.MaGD }, giaoDich);
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = giaoDich.MaGD }, giaoDich);
+            return Unauthorized();
         }
 
         protected override void Dispose(bool disposing)

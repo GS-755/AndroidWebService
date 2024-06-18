@@ -13,34 +13,39 @@ USE DoAnAndroid;
 -- Khu vực bảng Tài khoản
 CREATE TABLE VaiTro (
 	MaVaiTro INT NOT NULL PRIMARY KEY,
-	TenVaiTro NVARCHAR(25) NOT NULL
+	TenVaiTro NVARCHAR(25) NOT NULL UNIQUE 
 );
 INSERT INTO VaiTro VALUES
 	(1, N'Chủ trọ'),
 	(0, N'Khách hàng');
+CREATE TABLE TaiKhoan (
+	TenDangNhap CHAR(16) NOT NULL PRIMARY KEY,
+	MatKhau VARCHAR(64) NOT NULL,
+	Email CHAR(75) NOT NULL UNIQUE,
+	SoDT CHAR(15) NOT NULL UNIQUE,
+	StrAvatar NVARCHAR(MAX), 
+	MaVaiTro INT NOT NULL,
+	FOREIGN KEY (MaVaiTro) REFERENCES VaiTro(MaVaiTro)
+);
 CREATE TABLE NguoiDung (
 	CCCD CHAR(15) NOT NULL PRIMARY KEY,
 	Ho NVARCHAR(30) NOT NULL,
 	Ten NVARCHAR(15) NOT NULL,
-	NgaySinh DATE NOT NULL,
-	GioiTinh INT, -- ISO 0 - 1 - 2 - 9
-	DiaChi NVARCHAR(100) NOT NULL
+	NgaySinh DATE,
+	GioiTinh INT, 
+	-- ISO 0 - 1 - 2 - 9: 
+	-- 0: Nam 
+	-- 1: Nữ 
+	-- 2: LGBTQ+ 
+	-- 9: N/A
+	DiaChi NVARCHAR(100) NOT NULL, 
+	TenDangNhap CHAR(16), 
+	FOREIGN KEY(TenDangNhap) REFERENCES TaiKhoan(TenDangNhap)
 ); 
-CREATE TABLE TaiKhoan (
-	TenDangNhap CHAR(16) NOT NULL PRIMARY KEY,
-	MatKhau VARCHAR(64) NOT NULL,
-	Email CHAR(75),
-	SoDT CHAR(15) NOT NULL,
-	MaVaiTro INT NOT NULL,
-	CCCD CHAR(15) NOT NULL,
-	FOREIGN KEY (MaVaiTro) REFERENCES VaiTro(MaVaiTro),
-	FOREIGN KEY (CCCD) REFERENCES NguoiDung(CCCD)
-);
-
 -- Khu vực bảng Phòng trọ
 CREATE TABLE ViTri (
 	MaVT INT NOT NULL PRIMARY KEY,
-	Quan NVARCHAR(25) NOT NULL,
+	Quan NVARCHAR(25) NOT NULL UNIQUE,
 	KinhDo FLOAT,
 	ViDo FLOAT
 ); 
@@ -52,9 +57,10 @@ INSERT INTO ViTri(MaVT, Quan) VALUES
 	(5, N'Huyện Hóc Môn');
 CREATE TABLE TTPhongTro (
   MaTT INT NOT NULL PRIMARY KEY,
-  TenTT NVARCHAR(25) NOT NULL,
+  TenTT NVARCHAR(25) NOT NULL UNIQUE,
 );
 INSERT INTO TTPhongTro VALUES
+  (0, N'Đã ẩn'),
   (1, N'Đang cho thuê'), 
   (2, N'Đã đặt cọc'),
   (3, N'Đã cho thuê');
@@ -65,7 +71,7 @@ CREATE TABLE PhongTro (
   DienTich FLOAT NOT NULL,
   SoTien FLOAT NOT NULL,
   TienCoc FLOAT, 
-  MoTa NVARCHAR(100),
+  MoTa NVARCHAR(MAX),
   HinhAnh NVARCHAR(MAX),
   DiaChi NVARCHAR(200) NOT NULL, 
   TenDangNhap CHAR(16) NOT NULL,
@@ -74,6 +80,22 @@ CREATE TABLE PhongTro (
   FOREIGN KEY (TenDangNhap) REFERENCES TaiKhoan(TenDangNhap),
   FOREIGN KEY (MaVT) REFERENCES ViTri(MaVT),
   FOREIGN KEY (MaTT) REFERENCES TTPhongTro(MaTT)
+);
+CREATE TABLE LoaiMedia (
+	MaLoaiMedia INT NOT NULL PRIMARY KEY, 
+	TenLoaiMedia NVARCHAR(25) NOT NULL UNIQUE
+); 
+INSERT INTO LoaiMedia VALUES 
+	(1, N'Hình ảnh'), 
+	(2, N'Video');
+CREATE TABLE MotelMedia (
+	MaPT INT NOT NULL, 
+	MaMedia INT NOT NULL IDENTITY(1, 1), 
+	TenTepMedia NVARCHAR(MAX) NOT NULL, 
+	MaLoaiMedia INT NOT NULL, 
+	PRIMARY KEY(MaPT, MaMedia), 
+	FOREIGN KEY(MaPT) REFERENCES PhongTro(MaPT), 
+	FOREIGN KEY(MaLoaiMedia) REFERENCES LoaiMedia(MaLoaiMedia)
 );
 CREATE TABLE PTYeuThich (
   GhiChu NVARCHAR(100), 
@@ -87,13 +109,13 @@ CREATE TABLE PTYeuThich (
 -- Khu vực bảng Giao dịch
 CREATE TABLE LoaiGiaoDich (
 	MaLoaiGD INT IDENTITY(1, 1) PRIMARY KEY, 
-	TenLoaiGD NVARCHAR(20) NOT NULL
+	TenLoaiGD NVARCHAR(20) NOT NULL UNIQUE
 );
 INSERT INTO LoaiGiaoDich VALUES (N'Đặt cọc');
 INSERT INTO LoaiGiaoDich VALUES (N'Chuyển toàn bộ');
 CREATE TABLE TTGiaoDich (
 	MaTTGD SMALLINT NOT NULL PRIMARY KEY, 
-	TenTTGD NVARCHAR(25) NOT NULL
+	TenTTGD NVARCHAR(25) NOT NULL UNIQUE 
 ); 
 INSERT INTO TTGiaoDich VALUES(0, N'Thất bại');
 INSERT INTO TTGiaoDich VALUES(1, N'Thành công');
@@ -147,6 +169,20 @@ FOR DELETE AS BEGIN
 	Rollback Transaction; 
 	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá tài khoản người dùng', 16, 1);
 END; 
+-- Assign default profile picture for non-updated avatar account 
+CREATE OR ALTER TRIGGER tg_setdefaultavatar_r5 ON TaiKhoan 
+FOR INSERT, UPDATE AS BEGIN 
+	DECLARE @tenDangNhap CHAR(16); 
+	DECLARE @strAvatar NVARCHAR(MAX); 
+	SELECT @tenDangNhap = (
+		SELECT TenDangNhap 
+		FROM inserted
+	); 
+	SET @strAvatar = N'defaultProfilePicture.png';
+	UPDATE TaiKhoan 
+		SET StrAvatar = @strAvatar 
+		WHERE TenDangNhap = @tenDangNhap; 
+END;
 
 -- Stored procedure(s)
 -- Emergency case only (use with Pointer for ease)

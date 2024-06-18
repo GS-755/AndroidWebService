@@ -5,9 +5,10 @@ using System.Net.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
 
-namespace AndroidWebService.Controllers.Motels
+namespace AndroidWebService.Controllers.Media
 {
     public class LocationsController : ApiController
     {
@@ -15,10 +16,10 @@ namespace AndroidWebService.Controllers.Motels
 
         // GET: api/Locations
         [HttpGet]
-        public IQueryable<ViTri> Get()
+        public async Task<List<ViTri>> Get()
         {
             HttpResponseMessage response = new HttpResponseMessage();    
-            DbSet<ViTri> locations = db.ViTri;
+            List<ViTri> locations = await db.ViTri.ToListAsync();
             if(locations.Count() <= 0) 
             {
                 response.StatusCode = HttpStatusCode.NoContent;
@@ -33,21 +34,23 @@ namespace AndroidWebService.Controllers.Motels
         [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
-            ViTri viTri = await db.ViTri.FindAsync(id);
-            if (viTri == null)
+            ViTri location = await db.ViTri.FindAsync(id);
+            if (location == null)
             {
                 return NotFound();
             }
 
-            return Ok(viTri);
+            return Ok(location);
         }
 
+        [HttpGet]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
     }

@@ -9,31 +9,50 @@
 
 namespace AndroidWebService.Models
 {
+    using System.Linq;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class TaiKhoan
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        private DoAnAndroidEntities db = new DoAnAndroidEntities(); 
+
+        [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
+            this.StrAvatar = string.Empty;
+            this.Base64Avatar = string.Empty;
             this.GiaoDich = new HashSet<GiaoDich>();
+            this.NguoiDung = new HashSet<NguoiDung>();
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.PhongTro = new HashSet<PhongTro>();
+            this.User = this.db.NguoiDung.FirstOrDefault(k => k.TenDangNhap.Trim() == this.TenDangNhap);
         }
     
         public string TenDangNhap { get; set; }
         public string MatKhau { get; set; }
         public string Email { get; set; }
         public string SoDT { get; set; }
+        public string StrAvatar { get; set; }
+        [NotMapped]
+        public string Base64Avatar { get; set; }
         public int MaVaiTro { get; set; }
-        public string CCCD { get; set; }
+        [NotMapped]
+        public NguoiDung User { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
-        public virtual NguoiDung NguoiDung { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
+        public virtual ICollection<NguoiDung> NguoiDung { get; set; }
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]    
         public virtual ICollection<PTYeuThich> PTYeuThich { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
         public virtual VaiTro VaiTro { get; set; }
     }

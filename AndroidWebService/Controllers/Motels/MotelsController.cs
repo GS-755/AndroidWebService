@@ -1,27 +1,33 @@
 ﻿using System;
-using System.Web;
+using System.IO;
 using System.Linq;
-using System.Drawing;
 using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
+using System.Collections.Generic;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
+using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
-namespace AndroidWebService.Controllers.Motels
+namespace AndroidWebService.Controllers.Media
 {
     public class MotelsController : ApiController
     {
-        private DoAnAndroidEntities 
-            db = new DoAnAndroidEntities();
+        private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
         // GET: api/Motels
         [HttpGet]
-        public IQueryable<PhongTro> Get()
+        public async Task<List<PhongTro>> Get()
         {
-            return db.PhongTro;
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
+
+            return motels.Where(k => k.MaTT == Convert.ToInt32(
+                MotelStatus.Available)
+            ).ToList();
         }
         // GET: api/Motels/5
         [ResponseType(typeof(PhongTro))]
@@ -36,11 +42,23 @@ namespace AndroidWebService.Controllers.Motels
 
             return Ok(phongTro);
         }
+        // GET: api/Locations/GetMotelByLocationId/5
+        [HttpGet]
+        public async Task<List<PhongTro>> GetMotelByLocationId(int locationId)
+        {
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
+            motels = motels.Where(
+                k => k.MaVT == locationId 
+                && k.MaTT == Convert.ToInt32(MotelStatus.Available)
+            ).ToList();
+
+            return motels;
+        }
 
         // POST: api/Motels/PostPhongTro
         [HttpPost]
         [ResponseType(typeof(PhongTro))]
-        public async Task<IHttpActionResult> PostPhongTro(PhongTro phongTro)
+        public async Task<IHttpActionResult> PostPhongTro(PhongTro motel)
         {
             if (!ModelState.IsValid)
             {
@@ -48,58 +66,68 @@ namespace AndroidWebService.Controllers.Motels
             }
             else
             {
-                if(phongTro.Base64Image != null)
+                CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+                if(cookie != null)
                 {
-                    Image motelImage = Models.Utils.ImageConverter.
-                            Base64ToImage(phongTro.Base64Image);
-                    string fileName = $"{phongTro.TenDangNhap.Trim()}" +
-                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
-                    string extension = ".jpg";
-                    string filePath = HttpContext.Current.Server.
-                               MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
-                    motelImage.Save(filePath);
-                    phongTro.HinhAnh = fileName + extension;
-                }
-                db.PhongTro.Add(phongTro);
-                await db.SaveChangesAsync();
+                    if (!string.IsNullOrEmpty(motel.Base64Thumbnail)
+                            && !string.IsNullOrEmpty(motel.HinhAnh))
+                    {
+                        string extension = Path.GetExtension(motel.HinhAnh);
+                        string fileName = $"{motel.TenDangNhap.Trim()}" +
+                                $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}{extension}";
+                        bool saveThumbnailResult = MyBase64Utils.SaveImageFromBase64(
+                            motel.Base64Thumbnail, fileName, MediaPath.MOTEL_THUMBNAIL_PATH
+                        );
+                        if (saveThumbnailResult)
+                        {
+                            motel.HinhAnh = fileName;
+                        }
+                    }
+                    db.PhongTro.Add(motel);
+                    await db.SaveChangesAsync();
 
-                return CreatedAtRoute("DefaultApi", new { id = phongTro.MaPT }, phongTro);
+                    return CreatedAtRoute("DefaultApi", new { id = motel.MaPT }, motel);
+                }
+
+                return Unauthorized();
             }
         }
 
         // PUT: api/Motels/PutPhongTro/5
         [HttpPut]
         [ResponseType(typeof(PhongTro))]
-        public async Task<IHttpActionResult> PutPhongTro(int id, PhongTro phongTro)
+        public async Task<IHttpActionResult> PutPhongTro(int id, PhongTro motel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            if (id != phongTro.MaPT)
+            if (id != motel.MaPT)
             {
                 return BadRequest();
             }
-            else
+            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if(cookie != null)
             {
-                if (phongTro.Base64Image != null)
+                if (!string.IsNullOrEmpty(motel.Base64Thumbnail))
                 {
-                    Image motelImage = Models.Utils.ImageConverter.
-                            Base64ToImage(phongTro.Base64Image);
-                    string fileName = $"{phongTro.TenDangNhap.Trim()}" +
-                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}";
-                    string extension = ".jpg";
-                    string filePath = HttpContext.Current.Server.
-                               MapPath(PhongTro.SERVER_IMG_PATH + fileName + extension);
-                    motelImage.Save(filePath);
-                    phongTro.HinhAnh = fileName + extension;
+                    string extension = Path.GetExtension(motel.HinhAnh);
+                    string fileName = $"{motel.TenDangNhap.Trim()}" +
+                            $"_{DateTime.Now.ToString("mmddyyyy_HHmm")}{extension}";
+                    bool saveThumbnailResult = MyBase64Utils.SaveImageFromBase64(
+                        motel.Base64Thumbnail, fileName, MediaPath.MOTEL_THUMBNAIL_PATH
+                    );
+                    if (saveThumbnailResult)
+                    {
+                        motel.HinhAnh = fileName;
+                    }
                 }
                 try
                 {
-                    db.Entry(phongTro).State = EntityState.Modified;
+                    db.Entry(motel).State = EntityState.Modified;
                     await db.SaveChangesAsync();
 
-                    return Ok(phongTro);
+                    return Ok(motel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,6 +141,8 @@ namespace AndroidWebService.Controllers.Motels
                     }
                 }
             }
+
+            return Unauthorized();
         }
 
         // DELETE: api/Motels/5
@@ -120,16 +150,21 @@ namespace AndroidWebService.Controllers.Motels
         [ResponseType(typeof(PhongTro))]
         public async Task<IHttpActionResult> DeletePhongTro(int id)
         {
-            PhongTro phongTro = await 
-                db.PhongTro.FindAsync(id);
-            if (phongTro == null)
+            PhongTro motel = await db.PhongTro.FindAsync(id);
+            if (motel == null)
             {
                 return NotFound();
             }
-            db.PhongTro.Remove(phongTro);
-            await db.SaveChangesAsync();
+            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if(cookie != null)
+            {
+                motel.MaTT = Convert.ToInt32(MotelStatus.Disabled);
+                await db.SaveChangesAsync();
 
-            return Ok(phongTro);
+                return Ok(motel);
+            }
+
+            return Unauthorized();
         }
 
         protected override void Dispose(bool disposing)
