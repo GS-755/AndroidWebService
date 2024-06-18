@@ -181,7 +181,8 @@ FOR INSERT, UPDATE AS BEGIN
 	SET @strAvatar = N'defaultProfilePicture.png';
 	UPDATE TaiKhoan 
 		SET StrAvatar = @strAvatar 
-		WHERE TenDangNhap = @tenDangNhap; 
+		WHERE TenDangNhap = @tenDangNhap
+			AND (StrAvatar = NULL OR LEN(StrAvatar) = 0); 
 END;
 
 -- Stored procedure(s)
