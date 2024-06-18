@@ -9,6 +9,7 @@
 
 namespace AndroidWebService.Models
 {
+    using System.Linq;
     using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -16,6 +17,8 @@ namespace AndroidWebService.Models
 
     public partial class TaiKhoan
     {
+        private DoAnAndroidEntities db = new DoAnAndroidEntities(); 
+
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
@@ -25,6 +28,7 @@ namespace AndroidWebService.Models
             this.NguoiDung = new HashSet<NguoiDung>();
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.PhongTro = new HashSet<PhongTro>();
+            this.User = this.db.NguoiDung.FirstOrDefault(k => k.TenDangNhap.Trim() == this.TenDangNhap);
         }
     
         public string TenDangNhap { get; set; }
@@ -35,11 +39,14 @@ namespace AndroidWebService.Models
         [NotMapped]
         public string Base64Avatar { get; set; }
         public int MaVaiTro { get; set; }
+        [NotMapped]
+        public NguoiDung User { get; set; }
     
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
         public virtual ICollection<GiaoDich> GiaoDich { get; set; }
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        [JsonIgnore]
         public virtual ICollection<NguoiDung> NguoiDung { get; set; }
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]    

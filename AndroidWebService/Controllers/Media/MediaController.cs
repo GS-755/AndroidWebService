@@ -48,13 +48,12 @@ namespace AndroidWebService.Controllers.Media
                 if (phongTro != null)
                 {
                     // Retrive ImageFS from the file stored in the server 
-                    string rawName = phongTro.HinhAnh.Trim();
-                    string fileName = Path.GetFileNameWithoutExtension(rawName);
-                    string extension = Path.GetExtension(rawName).Replace('.', ' ').Trim();
+                    string rawFileName = phongTro.HinhAnh.Trim();
+                    string extension = Path.GetExtension(rawFileName).Replace('.', ' ').Trim();
 
                     // Try to parse FileStream
                     (bool, FileStream) fileStreamTuple = this.GetMediaFileStream(
-                        MediaPath.MOTEL_THUMBNAIL_PATH, fileName
+                        MediaPath.MOTEL_THUMBNAIL_PATH, rawFileName
                     );    
                     if(!fileStreamTuple.Item1)
                     {
@@ -108,19 +107,20 @@ namespace AndroidWebService.Controllers.Media
                 if (user != null)
                 {
                     // Retrive ImageFS from the file stored in the server 
-                    string rawName = user.StrAvatar.Trim();
-                    string fileName = Path.GetFileNameWithoutExtension(rawName);
-                    string extension = Path.GetExtension(rawName).Replace('.', ' ').Trim();
+                    string rawFileName = user.StrAvatar.Trim();
+                    string extension = Path.GetExtension(rawFileName).Replace('.', ' ').Trim();
 
                     // Try to parse FileStream
                     (bool, FileStream) fileStreamTuple = this.GetMediaFileStream(
-                        MediaPath.USER_AVATAR_PATH, fileName
+                        MediaPath.USER_AVATAR_PATH, rawFileName
                     );
                     if (!fileStreamTuple.Item1)
                     {
-                        fileStreamTuple = this.GetMediaFileStream(
-                            MediaPath.USER_DEFAULT_AVATAR_PATH,
-                            MediaPath.USER_DEFAULT_AVATAR_FILE_NAME
+                        return ResponseMessage(
+                            new HttpResponseMessage(HttpStatusCode.NotFound)
+                            {
+                                Content = new StringContent("The avatar image file in the server was not found!")
+                            }
                         );
                     }
                     // Assign the avatar image to response

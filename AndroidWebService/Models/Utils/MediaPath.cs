@@ -12,7 +12,5 @@
                 USER_AVATAR_PATH = ConfigParser.Parse("user_avatar_path");
         public static readonly string
                 USER_DEFAULT_AVATAR_PATH = ConfigParser.Parse("user_default_avatar_path");
-        public static readonly string
-                USER_DEFAULT_AVATAR_FILE_NAME = "defaultProfilePicture.png";
     }
 }
