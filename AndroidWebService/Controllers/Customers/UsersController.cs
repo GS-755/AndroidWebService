@@ -3,7 +3,6 @@ using System.Web.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
 using AndroidWebService.Models;
-using System.Collections.Generic;
 using System.Web.Http.Description;
 using System.Data.Entity.Infrastructure;
 
@@ -12,30 +11,6 @@ namespace AndroidWebService.Controllers.Customers
     public class UsersController : ApiController
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
-
-        // GET: api/Users
-        [HttpGet]
-        public async Task<List<NguoiDung>> Get()
-        {
-            List<NguoiDung> users = await db.
-                    NguoiDung.ToListAsync();
-
-            return users;
-        }
-        // GET: api/Users/5
-        [ResponseType(typeof(NguoiDung))]
-        [HttpGet]
-        public async Task<IHttpActionResult> Get(string id)
-        {
-            NguoiDung nguoiDung = await db.
-                    NguoiDung.FindAsync(id);
-            if (nguoiDung == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(nguoiDung);
-        }
 
         // POST: api/Users
         [ResponseType(typeof(NguoiDung))]

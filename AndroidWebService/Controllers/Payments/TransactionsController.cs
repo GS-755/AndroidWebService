@@ -1,14 +1,16 @@
 ﻿using System.Linq;
 using System.Web.Http;
+using System.Net.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Collections.Generic;
 using System.Web.Http.Description;
+using AndroidWebService.Models.Nodes;
+using AndroidWebService.Models.Enums;
 using AndroidWebService.Models.Utils;
 using System.Data.Entity.Infrastructure;
-using System.Net.Http.Headers;
-using System.Net.Http;
 
 namespace AndroidWebService.Controllers.Payments
 {
@@ -16,28 +18,32 @@ namespace AndroidWebService.Controllers.Payments
     {
         private DoAnAndroidEntities db = new DoAnAndroidEntities();
 
-        // GET: api/Transactions
+        // GET: api/Transactions/
         [HttpGet]
-        public async Task<List<GiaoDich>> Get()
+        public async Task<List<GiaoDich>> Get(TransactionNode transactionNode)
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
             if (cookie != null)
             {
-                return await db.GiaoDich.ToListAsync();
+                List<GiaoDich> transactions = await db.GiaoDich.ToListAsync();
+
+                return transactions.Where(
+                    k => k.TenDangNhap.Trim() == transactionNode.UserName.Trim()
+                ).ToList();
             }
             
             return new List<GiaoDich>();
         }
 
-        // GET: api/Transactions/5
+        // GET: api/Transactions/
         [ResponseType(typeof(GiaoDich))]
         [HttpGet]
-        public async Task<IHttpActionResult> Get(string id)
+        public async Task<IHttpActionResult> GetSingleTransaction(TransactionNode transactionNode)
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
             if(cookie != null)
             {
-                GiaoDich transaction = await db.GiaoDich.FindAsync(id.Trim());
+                GiaoDich transaction = await db.GiaoDich.FindAsync(transactionNode.TransactionId.Trim());
                 if (transaction == null)
                 {
                     return NotFound();
@@ -52,59 +58,76 @@ namespace AndroidWebService.Controllers.Payments
         // POST: api/Transactions
         [ResponseType(typeof(GiaoDich))]
         [HttpPost]
-        public async Task<IHttpActionResult> PostGiaoDich(GiaoDich giaoDich)
+        public async Task<IHttpActionResult> PostGiaoDich(GiaoDich transaction)
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
             if (cookie != null)
             {
                 try
                 {
-                    if (giaoDich.PhongTro == null)
+                    TaiKhoan account = db.TaiKhoan.FirstOrDefault(
+                        k => k.TenDangNhap.Trim() == transaction.TenDangNhap.Trim()
+                    ); 
+                    if(account != null)
                     {
-                        giaoDich.PhongTro = db.
-                            PhongTro.FirstOrDefault(k => k.MaPT == giaoDich.MaPT);
+                        transaction.TaiKhoan = account;
                     }
-                    if (giaoDich.MaGD == null || giaoDich.MaGD.Length == 0)
+                    else
                     {
-                        string maGd = RandomID.Get(8);
-                        while (TransactionExists(maGd))
+                        return Unauthorized();
+                    }
+                    if(transaction.TaiKhoan.NguoiDung != null && transaction.TaiKhoan.NguoiDung.Count != 0)
+                    {
+                        PhongTro motel = db.PhongTro.FirstOrDefault(k => k.MaPT == transaction.MaPT);
+                        if(motel == null)
                         {
-                            maGd = RandomID.Get(8);
+                            return BadRequest();
                         }
-
-                        giaoDich.MaGD = maGd;
-                    }
-                    if (giaoDich.SoTien <= 0)
-                    {
-                        double amount;
-                        if (giaoDich.MaLoaiGD == 1)
+                        transaction.PhongTro = motel;   
+                        if (string.IsNullOrEmpty(transaction.MaGD))
                         {
-                            try
+                            string transactionId = RandomID.Get(8);
+                            while (TransactionExists(transactionId))
                             {
-                                amount = (double)giaoDich.PhongTro.TienCoc;
+                                transactionId = RandomID.Get(8);
                             }
-                            catch
-                            {
-                                amount = giaoDich.PhongTro.SoTien * (30 / 100);
-                            }
-                        }
-                        else
-                        {
-                            amount = giaoDich.PhongTro.SoTien;
-                        }
 
-                        giaoDich.SoTien = amount;
+                            transaction.MaGD = transactionId;
+                        }
+                        if (transaction.SoTien <= 0)
+                        {
+                            double amount;
+                            if (transaction.MaLoaiGD == (short)TransactionTypes.Deposit)
+                            {
+                                try
+                                {
+                                    amount = (double)transaction.PhongTro.TienCoc;
+                                }
+                                catch
+                                {
+                                    amount = transaction.PhongTro.SoTien * (30 / 100);
+                                }
+                            }
+                            else
+                            {
+                                amount = transaction.PhongTro.SoTien;
+                            }
+
+                            transaction.SoTien = amount;
+                        }
+                        if (!ModelState.IsValid)
+                        {
+                            return BadRequest(ModelState);
+                        }
+                        db.GiaoDich.Add(transaction);
+                        await db.SaveChangesAsync();
+
+                        return CreatedAtRoute("DefaultApi", new { id = transaction.MaGD }, transaction);
                     }
-                    if (!ModelState.IsValid)
-                    {
-                        return BadRequest(ModelState);
-                    }
-                    db.GiaoDich.Add(giaoDich);
-                    await db.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
                 {
-                    if (TransactionExists(giaoDich.MaGD))
+                    if (TransactionExists(transaction.MaGD))
                     {
                         return Conflict();
                     }
@@ -113,8 +136,6 @@ namespace AndroidWebService.Controllers.Payments
                         throw;
                     }
                 }
-
-                return CreatedAtRoute("DefaultApi", new { id = giaoDich.MaGD }, giaoDich);
             }
 
             return Unauthorized();

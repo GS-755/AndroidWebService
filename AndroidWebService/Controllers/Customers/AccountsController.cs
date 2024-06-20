@@ -4,16 +4,17 @@ using System.Net;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using System.Diagnostics;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
-using System.Diagnostics;
-using System.Web.Http.Results;
+using AndroidWebService.Models.Utils.Nodes;
 
 namespace AndroidWebService.Controllers.Customers
 {
@@ -24,12 +25,22 @@ namespace AndroidWebService.Controllers.Customers
         // POST: api/Accounts/Login?userName=adu666&password=adu_adu_adu
         [ResponseType(typeof(TaiKhoan))]
         [HttpPost]
-        public async Task<HttpResponseMessage> Login(string userName, string password)
+        public async Task<HttpResponseMessage> Login(LoginNode loginNode)
         {
             HttpResponseMessage response = new HttpResponseMessage();   
             // Hash user's Password
-            string authTmp = StrSHA256.Convert(password);
-            TaiKhoan account = await db.TaiKhoan.FindAsync(userName);
+            string authTmp = StrSHA256.Convert(loginNode.Password);
+            TaiKhoan account = await db.TaiKhoan.FindAsync(loginNode.UserName.Trim());
+            try
+            {
+                account.User = db.NguoiDung.FirstOrDefault(
+                    k => k.TenDangNhap.Trim() == account.TenDangNhap.Trim()
+                );
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
             if (account == null)
             {
                 response.StatusCode = HttpStatusCode.NotFound;

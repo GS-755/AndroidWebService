@@ -2,16 +2,16 @@
 using System.IO;
 using System.Linq;
 using System.Web.Http;
+using System.Net.Http;
 using System.Data.Entity;
 using System.Threading.Tasks;
+using System.Net.Http.Headers;
 using AndroidWebService.Models;
 using System.Collections.Generic;
 using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
-using System.Net.Http.Headers;
-using System.Net.Http;
 
 namespace AndroidWebService.Controllers.Media
 {

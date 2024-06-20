@@ -119,6 +119,7 @@ CREATE TABLE TTGiaoDich (
 ); 
 INSERT INTO TTGiaoDich VALUES(0, N'Thất bại');
 INSERT INTO TTGiaoDich VALUES(1, N'Thành công');
+INSERT INTO TTGiaoDich VALUES(2, N'Đang chờ thanh toán');
 CREATE TABLE GiaoDich (
 	MaGD CHAR(8) NOT NULL PRIMARY KEY, 
 	MaLoaiGD INT NOT NULL, 
@@ -181,7 +182,8 @@ FOR INSERT, UPDATE AS BEGIN
 	SET @strAvatar = N'defaultProfilePicture.png';
 	UPDATE TaiKhoan 
 		SET StrAvatar = @strAvatar 
-		WHERE TenDangNhap = @tenDangNhap; 
+		WHERE TenDangNhap = @tenDangNhap
+			AND (StrAvatar = NULL OR LEN(StrAvatar) = 0); 
 END;
 
 -- Stored procedure(s)
