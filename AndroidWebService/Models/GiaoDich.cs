@@ -24,7 +24,8 @@ namespace AndroidWebService.Models
         
         public GiaoDich()
         {
-            this.MaTTGD = (short)TransactionStatus.Failed;
+            this.NgayGD = DateTime.Now; 
+            this.MaTTGD = (short)TransactionStatus.Pending;
         }
 
         public virtual LoaiGiaoDich LoaiGiaoDich { get; set; }

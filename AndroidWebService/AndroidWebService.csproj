@@ -205,6 +205,8 @@
     <Compile Include="Models\NguoiDung.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Nodes\TransactionNode.cs" />
+    <Compile Include="Models\Nodes\VNPayNode.cs" />
     <Compile Include="Models\PhongTro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -221,7 +223,7 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Utils\JsonContent.cs" />
-    <Compile Include="Models\Utils\LoginNode.cs" />
+    <Compile Include="Models\Nodes\LoginNode.cs" />
     <Compile Include="Models\Utils\MediaPath.cs" />
     <Compile Include="Models\Utils\WebURL.cs" />
     <Compile Include="Models\Utils\ConfigParser.cs" />
@@ -237,7 +239,7 @@
     <Compile Include="Models\VNPay\Utils.cs" />
     <Compile Include="Models\VNPay\VnPayCompare.cs" />
     <Compile Include="Models\VNPay\VnPayLibrary.cs" />
-    <Compile Include="Models\VNPay\VNPayLink.cs" />
+    <Compile Include="Models\Nodes\VNPayLink.cs" />
     <Compile Include="Models\VNPay\VNPayReturn.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

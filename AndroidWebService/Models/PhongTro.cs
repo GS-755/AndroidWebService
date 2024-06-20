@@ -55,7 +55,8 @@ namespace AndroidWebService.Models
                 return this.MoTa;
             }
         }
-        [NotMapped] 
+        [NotMapped]
+        [JsonIgnore]
         public string Base64Thumbnail { get; set; }
         public string DiaChi { get; set; }
         public string TenDangNhap { get; set; }

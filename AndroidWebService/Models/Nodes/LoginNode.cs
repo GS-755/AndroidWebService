@@ -1,4 +1,4 @@
-﻿namespace AndroidWebService.Models.Utils
+﻿namespace AndroidWebService.Models.Utils.Nodes
 {
     public class LoginNode
     {

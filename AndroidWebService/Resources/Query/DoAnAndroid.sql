@@ -119,6 +119,7 @@ CREATE TABLE TTGiaoDich (
 ); 
 INSERT INTO TTGiaoDich VALUES(0, N'Thất bại');
 INSERT INTO TTGiaoDich VALUES(1, N'Thành công');
+INSERT INTO TTGiaoDich VALUES(2, N'Đang chờ thanh toán');
 CREATE TABLE GiaoDich (
 	MaGD CHAR(8) NOT NULL PRIMARY KEY, 
 	MaLoaiGD INT NOT NULL, 

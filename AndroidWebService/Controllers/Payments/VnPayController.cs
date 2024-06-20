@@ -6,8 +6,9 @@ using QLMB.Models.VNPay;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using AndroidWebService.Models;
-using AndroidWebService.Models.VNPay;
+using AndroidWebService.Models.Nodes;
 using AndroidWebService.Models.Utils;
+using AndroidWebService.Models.Enums;
 
 namespace AndroidWebService.Controllers.Payments
 {
@@ -17,16 +18,15 @@ namespace AndroidWebService.Controllers.Payments
 
         // GET: api/vnpay/sendtransaction?mapt=1&vnpbankcode=vnpay
         [HttpGet]
-        public async Task<IHttpActionResult> SendTransaction(string maGd, string vnpBankCode)
+        public async Task<IHttpActionResult> SendTransaction(VNPayNode vnPayNode)
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault(); 
             if(cookie != null)
             {
-                string tmpMaGd = maGd.Trim();
-                GiaoDich giaoDich = await db.GiaoDich.FindAsync(tmpMaGd);
-                if (giaoDich == null)
+                GiaoDich transaction = await db.GiaoDich.FindAsync(vnPayNode.MaGD.Trim());
+                if (transaction == null)
                 {
-                    return NotFound();
+                    return Unauthorized();
                 }
                 else
                 {
@@ -34,37 +34,36 @@ namespace AndroidWebService.Controllers.Payments
                     string vnp_ReturnUrl = ConfigParser.Parse("vnp_Returnurl"); //URL nhan ket qua tra ve 
                     string vnp_Url = ConfigParser.Parse("vnp_Url"); //URL thanh toan cua VNPAY 
                     string vnp_TmnCode = ConfigParser.Parse("vnp_TmnCode"); //Ma định danh merchant kết nối (Terminal Id)
-                    string vnp_HashSecret = $"{WebURL.GetWebURL()}{ConfigParser.Parse("vnp_HashSecret")}"; //Secret Key
+                    string vnp_HashSecret = ConfigParser.Parse("vnp_HashSecret"); //Secret Key
 
                     //Build URL for VNPAY
-                    VnPayLibrary transaction = new VnPayLibrary();
+                    VnPayLibrary vnpTransaction = new VnPayLibrary();
+                    vnpTransaction.AddRequestData("vnp_BankCode", vnPayNode.vnpBankCode.Trim());
                     //Thông tin đơn hàng
-                    if (giaoDich.MaLoaiGD == 1)
+                    if (transaction.MaLoaiGD == (short)TransactionTypes.Deposit)
                     {
-                        transaction.AddRequestData("vnp_BankCode", vnpBankCode.Trim());
-                        transaction.AddRequestData("vnp_Amount", (giaoDich.PhongTro.TienCoc * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
-                        transaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC 1/3_MA PHONG {giaoDich.MaGD}");
+                        vnpTransaction.AddRequestData("vnp_Amount", (transaction.PhongTro.TienCoc * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
+                        vnpTransaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC 1/3_MA PHONG {vnPayNode.MaGD}");
                     }
                     else
                     {
-                        transaction.AddRequestData("vnp_BankCode", vnpBankCode.Trim());
-                        transaction.AddRequestData("vnp_Amount", (giaoDich.SoTien * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
-                        transaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC FULL_MA PHONG {giaoDich.MaGD}");
+                        vnpTransaction.AddRequestData("vnp_Amount", (transaction.SoTien * 100).ToString()); // Nhân cho 100 để thêm 2 số 0 :)
+                        vnpTransaction.AddRequestData("vnp_OrderInfo", $"THANH TOAN TIEN COC FULL_MA PHONG {vnPayNode.MaGD}");
                     }
                     //Các params khác liên quan 
-                    transaction.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
-                    transaction.AddRequestData("vnp_Command", "pay");
-                    transaction.AddRequestData("vnp_TmnCode", vnp_TmnCode);
-                    transaction.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
-                    transaction.AddRequestData("vnp_CurrCode", "VND");
-                    transaction.AddRequestData("vnp_IpAddr", Utils.GetIpAddress());
-                    transaction.AddRequestData("vnp_Locale", "vn");
-                    transaction.AddRequestData("vnp_OrderType", "other");
-                    transaction.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
-                    transaction.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); // Mã Website (Terminal ID)
+                    vnpTransaction.AddRequestData("vnp_Version", VnPayLibrary.VERSION);
+                    vnpTransaction.AddRequestData("vnp_Command", "pay");
+                    vnpTransaction.AddRequestData("vnp_TmnCode", vnp_TmnCode);
+                    vnpTransaction.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+                    vnpTransaction.AddRequestData("vnp_CurrCode", "VND");
+                    vnpTransaction.AddRequestData("vnp_IpAddr", Utils.GetIpAddress());
+                    vnpTransaction.AddRequestData("vnp_Locale", "vn");
+                    vnpTransaction.AddRequestData("vnp_OrderType", "other");
+                    vnpTransaction.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
+                    vnpTransaction.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); // Mã Website (Terminal ID)
 
                     //Add Params of 2.1.0 Version
-                    string paymentUrl = transaction.CreateRequestUrl(vnp_Url, vnp_HashSecret);
+                    string paymentUrl = vnpTransaction.CreateRequestUrl(vnp_Url, vnp_HashSecret);
 
                     return Ok(new VNPayLink(paymentUrl));
                 }

@@ -1,4 +1,4 @@
-﻿namespace AndroidWebService.Models.VNPay
+﻿namespace AndroidWebService.Models.Nodes
 {
     public class VNPayLink
     {

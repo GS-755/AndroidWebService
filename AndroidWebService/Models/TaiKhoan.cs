@@ -9,7 +9,6 @@
 
 namespace AndroidWebService.Models
 {
-    using System.Linq;
     using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
@@ -17,8 +16,6 @@ namespace AndroidWebService.Models
 
     public partial class TaiKhoan
     {
-        private DoAnAndroidEntities db = new DoAnAndroidEntities(); 
-
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
@@ -28,7 +25,6 @@ namespace AndroidWebService.Models
             this.NguoiDung = new HashSet<NguoiDung>();
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.PhongTro = new HashSet<PhongTro>();
-            this.User = this.db.NguoiDung.FirstOrDefault(k => k.TenDangNhap.Trim() == this.TenDangNhap);
         }
     
         public string TenDangNhap { get; set; }
@@ -38,6 +34,7 @@ namespace AndroidWebService.Models
         public string SoDT { get; set; }
         public string StrAvatar { get; set; }
         [NotMapped]
+        [JsonIgnore]
         public string Base64Avatar { get; set; }
         public int MaVaiTro { get; set; }
         [NotMapped]
