@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Collections.Generic;
 
-namespace QLMB.Models.VNPay
+namespace AndroidWebService.Models.VNPay
 {
     public class VnPayCompare : IComparer<string>
     {

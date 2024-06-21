@@ -3,7 +3,7 @@ using System.Configuration;
 using static System.Web.HttpContext;
 using System.Collections.Specialized;
 
-namespace QLMB.Models.VNPay
+namespace AndroidWebService.Models.VNPay
 {
     public class VNPayReturn
     {

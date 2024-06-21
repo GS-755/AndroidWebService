@@ -175,6 +175,7 @@
     <Compile Include="Models\Enums\Roles.cs" />
     <Compile Include="Models\Enums\TransactionStatus.cs" />
     <Compile Include="Models\Enums\TransactionTypes.cs" />
+    <Compile Include="Models\Enums\VNPayReturnStatus.cs" />
     <Compile Include="Models\GiaoDich.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

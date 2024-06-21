@@ -3,7 +3,7 @@ using System.Net;
 using System.Text;
 using System.Collections.Generic;
 
-namespace QLMB.Models.VNPay
+namespace AndroidWebService.Models.VNPay
 {
     public class VnPayLibrary
     {

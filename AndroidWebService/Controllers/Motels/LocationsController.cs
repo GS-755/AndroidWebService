@@ -43,7 +43,6 @@ namespace AndroidWebService.Controllers.Media
             return Ok(location);
         }
 
-        [HttpGet]
         protected override void Dispose(bool disposing)
         {
             if (disposing)
