@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Web.Http;
 using System.Net.Http;
-using QLMB.Models.VNPay;
+using System.Diagnostics;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using System.Net.Http.Headers;
 using AndroidWebService.Models;
+using AndroidWebService.Models.VNPay;
 using AndroidWebService.Models.Nodes;
 using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
@@ -30,8 +32,8 @@ namespace AndroidWebService.Controllers.Payments
                 }
                 else
                 {
-                    //Convert Config Info
-                    string vnp_ReturnUrl = ConfigParser.Parse("vnp_Returnurl"); //URL nhan ket qua tra ve 
+                    //Fetch VNPay Config Info
+                    string vnp_ReturnUrl = WebURL.GetVnpayResponseURL(); //URL nhan ket qua tra ve 
                     string vnp_Url = ConfigParser.Parse("vnp_Url"); //URL thanh toan cua VNPAY 
                     string vnp_TmnCode = ConfigParser.Parse("vnp_TmnCode"); //Ma định danh merchant kết nối (Terminal Id)
                     string vnp_HashSecret = ConfigParser.Parse("vnp_HashSecret"); //Secret Key
@@ -73,22 +75,58 @@ namespace AndroidWebService.Controllers.Payments
         }
         // GET: api/vnpay/getresponse?...
         [HttpGet]
-        public IHttpActionResult GetResponse()
+        public async Task<IHttpActionResult> GetResponse(string transactionId)
         {
             CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
             if (cookie != null)
             {
-                VNPayReturn vNPayReturn = new VNPayReturn();
-                vNPayReturn.ProcessResponses();
-                if (vNPayReturn != null)
+                VNPayReturn vnPayReturn = new VNPayReturn();
+                vnPayReturn.ProcessResponses();
+                if (vnPayReturn != null)
                 {
-                    return Ok(vNPayReturn);
+                    GiaoDich transaction = await db.GiaoDich.FindAsync(transactionId.Trim());
+                    if (transaction != null) 
+                    {
+                        if(vnPayReturn.TransacStatus == (int)VNPayReturnStatus.Success)
+                        {
+                            transaction.MaTTGD = (short)TransactionStatus.Success;
+                            db.Entry(transaction.PhongTro).State = EntityState.Modified;
+                        }
+                        else
+                        {
+                            transaction.MaTTGD = (short)TransactionStatus.Failed;
+                        }
+                        // Commit changes of transaction object & push update to SQL
+                        try
+                        {
+                            db.Entry(transaction).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine(ex.Message);
+                        }
+
+                        return Ok(vnPayReturn);
+                    }
+
+                    return NotFound();
                 }
 
                 return BadRequest();
             }
 
             return Unauthorized();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

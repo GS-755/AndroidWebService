@@ -28,13 +28,11 @@ namespace AndroidWebService.Models
         }
     
         public string TenDangNhap { get; set; }
-        [JsonIgnore]
         public string MatKhau { get; set; }
         public string Email { get; set; }
         public string SoDT { get; set; }
         public string StrAvatar { get; set; }
         [NotMapped]
-        [JsonIgnore]
         public string Base64Avatar { get; set; }
         public int MaVaiTro { get; set; }
         [NotMapped]

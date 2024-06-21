@@ -3,7 +3,7 @@ using System.Web;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace QLMB.Models.VNPay
+namespace AndroidWebService.Models.VNPay
 {
     public class Utils
     {

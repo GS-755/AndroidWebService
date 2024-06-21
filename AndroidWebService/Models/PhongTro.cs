@@ -10,10 +10,10 @@
 namespace AndroidWebService.Models
 {
     using System;
+    using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.DataAnnotations.Schema;
-    using Newtonsoft.Json;
 
     public partial class PhongTro
     {
@@ -21,6 +21,7 @@ namespace AndroidWebService.Models
         public PhongTro()
         {
             this.HinhAnh = string.Empty;
+            this.NgayDang = DateTime.Now;
             this.GiaoDich = new HashSet<GiaoDich>();
             this.MotelMedia = new HashSet<MotelMedia>();
             this.PTYeuThich = new HashSet<PTYeuThich>();
@@ -56,7 +57,6 @@ namespace AndroidWebService.Models
             }
         }
         [NotMapped]
-        [JsonIgnore]
         public string Base64Thumbnail { get; set; }
         public string DiaChi { get; set; }
         public string TenDangNhap { get; set; }

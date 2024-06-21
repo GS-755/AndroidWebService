@@ -79,7 +79,12 @@ namespace AndroidWebService.Controllers.Payments
                     if(transaction.TaiKhoan.NguoiDung != null && transaction.TaiKhoan.NguoiDung.Count != 0)
                     {
                         PhongTro motel = db.PhongTro.FirstOrDefault(k => k.MaPT == transaction.MaPT);
-                        if(motel == null)
+                        if (motel == null)
+                        {
+                            return BadRequest();
+                        }
+                        else if (motel.MaTT == (short)MotelStatus.Rented 
+                            || motel.MaTT == (short)MotelStatus.Deposited) 
                         {
                             return BadRequest();
                         }
@@ -147,6 +152,7 @@ namespace AndroidWebService.Controllers.Payments
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
