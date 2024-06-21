@@ -12,6 +12,7 @@ namespace AndroidWebService.Models
     using System;
     using Newtonsoft.Json;
     using System.Collections.Generic;
+    using AndroidWebService.Models.Enums;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -25,6 +26,7 @@ namespace AndroidWebService.Models
             this.GiaoDich = new HashSet<GiaoDich>();
             this.MotelMedia = new HashSet<MotelMedia>();
             this.PTYeuThich = new HashSet<PTYeuThich>();
+            this.MaTT = (short)MotelStatus.Available;
         }
     
         public int MaPT { get; set; }

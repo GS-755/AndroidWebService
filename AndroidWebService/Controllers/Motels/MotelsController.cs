@@ -25,8 +25,8 @@ namespace AndroidWebService.Controllers.Media
         {
             List<PhongTro> motels = await db.PhongTro.ToListAsync();
 
-            return motels.Where(k => k.MaTT == Convert.ToInt32(
-                MotelStatus.Available)
+            return motels.Where(
+                k => k.MaTT == Convert.ToInt32(MotelStatus.Available)
             ).ToList();
         }
         // GET: api/Motels/5
@@ -34,13 +34,13 @@ namespace AndroidWebService.Controllers.Media
         [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
         {
-            PhongTro phongTro = await db.PhongTro.FindAsync(id);
-            if (phongTro == null)
+            PhongTro motel = await db.PhongTro.FindAsync(id);
+            if (motel == null)
             {
                 return NotFound();
             }
 
-            return Ok(phongTro);
+            return Ok(motel);
         }
         // GET: api/Locations/GetMotelByLocationId/5
         [HttpGet]
@@ -109,6 +109,7 @@ namespace AndroidWebService.Controllers.Media
             CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
             if(cookie != null)
             {
+                PhongTro oldMotel = db.PhongTro.FirstOrDefault(k => k.MaPT == id);  
                 if (!string.IsNullOrEmpty(motel.Base64Thumbnail))
                 {
                     string extension = Path.GetExtension(motel.HinhAnh);
@@ -122,6 +123,11 @@ namespace AndroidWebService.Controllers.Media
                         motel.HinhAnh = fileName;
                     }
                 }
+                else
+                {
+                    motel.HinhAnh = oldMotel.HinhAnh;   
+                } 
+                
                 try
                 {
                     db.Entry(motel).State = EntityState.Modified;
