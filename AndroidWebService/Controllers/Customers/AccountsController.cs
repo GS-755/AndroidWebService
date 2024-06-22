@@ -122,20 +122,22 @@ namespace AndroidWebService.Controllers.Customers
         [HttpPost]
         public IHttpActionResult Logout()
         {
-            // Lấy cookie đã đặt trước đó
-            CookieHeaderValue cookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
-            if (cookie != null)
+            // GET the current cookie 
+            CookieHeaderValue currentCookie = Request.Headers.GetCookies("cookie-header").FirstOrDefault();
+            if (currentCookie != null)
             {
-                // Xóa cookie bằng cách đặt Expires về quá khứ
+                // Set "Expires" to the past
+                CookieHeaderValue cookie = new CookieHeaderValue("cookie-header", string.Empty);
                 cookie.Expires = DateTimeOffset.Now.AddDays(-1);
-                // Tạo một response mới với cookie đã xóa
+                // Create new HttpResponse with new cookie 
                 HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
                 response.Headers.AddCookies(new[] { cookie });
+                response.ReasonPhrase = "Logged out successfully!";
 
                 return new ResponseMessageResult(response);
             }
 
-            // Nếu không tìm thấy cookie, trả về 200 OK
+            // If no cookie was found, return "404 Not Found"
             return NotFound();
         }
         // PUT: api/Accounts/5
@@ -155,7 +157,7 @@ namespace AndroidWebService.Controllers.Customers
                 try
                 {
                     CookieHeaderValue cookie = Request.Headers.
-                        GetCookies("cookie-header").FirstOrDefault();
+                        GetCookies("currentCookie-header").FirstOrDefault();
                     if (cookie != null)
                     {
                         if (!string.IsNullOrEmpty(account.Base64Avatar))
