@@ -154,27 +154,9 @@ FOR INSERT, UPDATE AS BEGIN
 END; 
 -- Prevent deleting Transaction informations 
 CREATE OR ALTER TRIGGER tg_deltransaction_r2 ON GiaoDich 
-FOR UPDATE, DELETE AS BEGIN 
-	DECLARE @maGd CHAR(8); 
-	SET @maGd = (
-		SELECT MaGD 
-		FROM deleted
-	); 
-	IF(LEN(@maGd) > 0) BEGIN
-		Rollback Transaction; 
-		Raiserror(N'KHÔNG ĐƯỢC PHÉP XOÁ giao dịch', 16, 1);
-	END; 
-	ELSE BEGIN 
-		DECLARE @maTTGD INT; 
-		SET @maTTGD = (
-			SELECT MaTTGD 
-			FROM inserted
-		); 
-		IF(@maTTGD = 1) BEGIN 
-			Rollback Transaction; 
-			Raiserror(N'KHÔNG ĐƯỢC PHÉP CHỈNH SỬA giao dịch đã thanh toán', 16, 1);
-		END;
-	END;
+FOR DELETE AS BEGIN 
+	Rollback Transaction; 
+	Raiserror(N'KHÔNG ĐƯỢC PHÉP xoá giao dịch', 16, 1);
 END;
 -- Prevent deleting User informations 
 CREATE OR ALTER TRIGGER tg_deluser_r3 ON NguoiDung 

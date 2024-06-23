@@ -63,7 +63,6 @@ namespace AndroidWebService.Controllers.Payments
                     vnpTransaction.AddRequestData("vnp_OrderType", "other");
                     vnpTransaction.AddRequestData("vnp_ReturnUrl", vnp_ReturnUrl);
                     vnpTransaction.AddRequestData("vnp_TxnRef", DateTime.Now.Ticks.ToString()); // Mã Website (Terminal ID)
-
                     //Add Params of 2.1.0 Version
                     string paymentUrl = vnpTransaction.CreateRequestUrl(vnp_Url, vnp_HashSecret);
 
@@ -81,16 +80,29 @@ namespace AndroidWebService.Controllers.Payments
             if (cookie != null)
             {
                 VNPayReturn vnPayReturn = new VNPayReturn();
-                vnPayReturn.ProcessResponses();
-                if (vnPayReturn != null)
+                bool actualResponse = vnPayReturn.ProcessResponses();
+                if (vnPayReturn != null && actualResponse == true)
                 {
                     GiaoDich transaction = await db.GiaoDich.FindAsync(transactionId.Trim());
                     if (transaction != null) 
                     {
+                        // Double check if the transaction status is successful
                         if(vnPayReturn.TransacStatus == (int)VNPayReturnStatus.Success)
                         {
                             transaction.MaTTGD = (short)TransactionStatus.Success;
-                            db.Entry(transaction.PhongTro).State = EntityState.Modified;
+                            // Assign new motel status after successful transaction 
+                            PhongTro motel = transaction.PhongTro;
+                            if(transaction.MaLoaiGD == (short)TransactionTypes.FullyPaid)
+                            {
+                                motel.MaTT = (short)MotelStatus.Rented;
+                            }
+                            else if(transaction.MaLoaiGD == (short)TransactionTypes.Deposit)
+                            {
+                                motel.MaTT = (short)MotelStatus.Deposited;
+                            }
+                            // Save new motel status to database 
+                            db.Entry(motel).State = EntityState.Modified;
+                            db.SaveChanges();
                         }
                         else
                         {
