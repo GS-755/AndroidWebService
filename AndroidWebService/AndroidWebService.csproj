@@ -258,6 +258,11 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Resources\Pictures\Motels\Locations\defaultHocMon.jpg" />
+    <Content Include="Resources\Pictures\Motels\Locations\defaultQuan10.jpg" />
+    <Content Include="Resources\Pictures\Motels\Locations\defaultQuan12.jpg" />
+    <Content Include="Resources\Pictures\Motels\Locations\defaultTanBinh.jpg" />
+    <Content Include="Resources\Pictures\Motels\Locations\defaultTanPhu.jpg" />
     <Content Include="Resources\Pictures\Users\defaultProfilePicture.png" />
     <Content Include="Resources\Query\DoAnAndroid.sql" />
     <Content Include="Scripts\modernizr-2.8.3.js" />

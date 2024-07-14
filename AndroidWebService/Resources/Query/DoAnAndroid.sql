@@ -46,15 +46,16 @@ CREATE TABLE NguoiDung (
 CREATE TABLE ViTri (
 	MaVT INT NOT NULL PRIMARY KEY,
 	Quan NVARCHAR(25) NOT NULL UNIQUE,
+	HinhAnh NVARCHAR(MAX) NOT NULL, 
 	KinhDo FLOAT,
 	ViDo FLOAT
 ); 
-INSERT INTO ViTri(MaVT, Quan) VALUES
-	(1, N'Quận 10'),
-	(2, N'Quận 12'), 
-	(3, N'Quận Tân Bình'), 
-	(4, N'Quận Tân Phú'), 
-	(5, N'Huyện Hóc Môn');
+INSERT INTO ViTri(MaVT, Quan, HinhAnh) VALUES
+	(1, N'Quận 10', N'defaultQuan10.jpg'),
+	(2, N'Quận 12', N'defaultQuan12.jpg'), 
+	(3, N'Quận Tân Bình', N'defaultTanBinh.jpg'), 
+	(4, N'Quận Tân Phú', N'defaultTanPhu.jpg'), 
+	(5, N'Huyện Hóc Môn', N'defaultHocMon.jpg');
 CREATE TABLE TTPhongTro (
   MaTT INT NOT NULL PRIMARY KEY,
   TenTT NVARCHAR(25) NOT NULL UNIQUE,
