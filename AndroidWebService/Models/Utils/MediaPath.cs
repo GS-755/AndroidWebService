@@ -4,6 +4,8 @@
 
     public class MediaPath
     {
+        public static readonly string
+                LOCATION_THUMBNAIL_PATH = ConfigParser.Parse("location_media_path");
         public static readonly string 
                 MOTEL_THUMBNAIL_PATH = ConfigParser.Parse("motel_thumbnail_path");
         public static readonly string

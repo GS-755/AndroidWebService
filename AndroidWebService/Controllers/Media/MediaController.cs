@@ -154,6 +154,64 @@ namespace AndroidWebService.Controllers.Media
                 );
             }
         }
+        // GET: /api/media/getlocationimage?locationId=5
+        [HttpGet]
+        public async Task<IHttpActionResult> GetLocationImage(int locationId)
+        {
+            try
+            {
+                HttpResponseMessage response = new HttpResponseMessage();
+                ViTri location = await db.ViTri.FindAsync(locationId);
+                if (location != null)
+                {
+                    // Retrive ImageFS from the file stored in the server 
+                    string rawFileName = location.HinhAnh.Trim();
+                    string extension = Path.GetExtension(rawFileName).Replace('.', ' ').Trim();
+
+                    // Try to parse FileStream
+                    (bool, FileStream) fileStreamTuple = this.GetMediaFileStream(
+                        MediaPath.LOCATION_THUMBNAIL_PATH, rawFileName
+                    );
+                    if (!fileStreamTuple.Item1)
+                    {
+                        return ResponseMessage(
+                            new HttpResponseMessage(HttpStatusCode.NotFound)
+                            {
+                                Content = new StringContent("The thumbnail image file in the server was not found!")
+                            }
+                        );
+                    }
+                    // Assign the avatar image to response
+                    response.StatusCode = HttpStatusCode.OK;
+                    response.Content = new StreamContent(fileStreamTuple.Item2);
+                    if (extension == "jpg")
+                    {
+                        response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
+                    }
+                    else
+                    {
+                        response.Content.Headers.ContentType = new MediaTypeHeaderValue($"image/{extension}");
+                    }
+                    response.Content.Headers.ContentLength = fileStreamTuple.Item2.Length;
+                }
+                else
+                {
+                    response.StatusCode = HttpStatusCode.NotFound;
+                    response.Content = new StringContent($"The location with locationId = {locationId} was not found!");
+                }
+
+                return ResponseMessage(response);
+            }
+            catch (Exception ex)
+            {
+                return ResponseMessage(
+                    new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        Content = new StringContent(ex.Message)
+                    }
+                );
+            }
+        }
 
         protected override void Dispose(bool disposing)
         {
