@@ -12,6 +12,7 @@ using System.Web.Http.Description;
 using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 
 namespace AndroidWebService.Controllers.Media
 {
@@ -29,7 +30,7 @@ namespace AndroidWebService.Controllers.Media
                 k => k.MaTT == Convert.ToInt32(MotelStatus.Available)
             ).ToList();
         }
-        // GET: api/Motels/5
+        // GET: api/Motels?5
         [ResponseType(typeof(PhongTro))]
         [HttpGet]
         public async Task<IHttpActionResult> Get(int id)
@@ -42,9 +43,9 @@ namespace AndroidWebService.Controllers.Media
 
             return Ok(motel);
         }
-        // GET: api/Locations/GetMotelByLocationId/5
+        // GET: api/Locations/GetByLocationId?locationId=5
         [HttpGet]
-        public async Task<List<PhongTro>> GetMotelByLocationId(int locationId)
+        public async Task<List<PhongTro>> GetByLocationId(int locationId)
         {
             List<PhongTro> motels = await db.PhongTro.ToListAsync();
             motels = motels.Where(
@@ -52,6 +53,70 @@ namespace AndroidWebService.Controllers.Media
                 && k.MaTT == Convert.ToInt32(MotelStatus.Available)
             ).ToList();
 
+            return motels;
+        }
+        // GET: api/Locations/GetByLocationId/5
+        [HttpGet]
+        public async Task<List<PhongTro>> SearchMotel(string keyword)
+        {
+            // Load motels to List<PhongTro> async 
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
+            try
+            {
+                // Process search task if keyword is not null
+                if(!string.IsNullOrEmpty(keyword))
+                {
+                    motels = motels.Where(
+                        k => k.TieuDe.ToLower().Trim().Contains(keyword.ToLower().Trim())
+                    ).ToList();
+                }
+            }
+            catch (Exception ex) 
+            {
+                Debug.WriteLine(ex.Message);    
+
+                return new List<PhongTro>();
+            }
+
+            // Return full motel list if keyword = null 
+            return motels;
+        }
+        // GET: api/Locations/FilterByPrice?minPrice=5&maxPrice=10
+        [HttpGet]
+        public async Task<List<PhongTro>> FilterByPrice(double minPrice, double maxPrice)
+        {
+            // Load motels to List<PhongTro> async 
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
+            try
+            {
+                if(minPrice <= 0 || maxPrice <= 0)
+                {
+                    // Do nothing :) 
+                }
+                else
+                {
+                    // Process filter by price task
+                    if (maxPrice < minPrice || maxPrice == 0)
+                    {
+                        motels = motels.Where(
+                            k => k.SoTien >= minPrice
+                        ).ToList();
+                    }
+
+                    motels = motels.Where(
+                        k => k.SoTien >= minPrice
+                        && k.SoTien <= maxPrice
+                    ).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+
+                return new List<PhongTro>();
+            }
+
+            // Return full motel list if keyword = null 
             return motels;
         }
 
