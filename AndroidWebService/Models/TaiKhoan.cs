@@ -9,13 +9,18 @@
 
 namespace AndroidWebService.Models
 {
+    using System.Linq;
     using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System;
+    using System.Diagnostics;
 
     public partial class TaiKhoan
     {
+        private NguoiDung user;
+
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public TaiKhoan()
         {
@@ -26,7 +31,7 @@ namespace AndroidWebService.Models
             this.PTYeuThich = new HashSet<PTYeuThich>();
             this.PhongTro = new HashSet<PhongTro>();
         }
-    
+        
         public string TenDangNhap { get; set; }
         public string MatKhau { get; set; }
         public string Email { get; set; }
@@ -35,8 +40,23 @@ namespace AndroidWebService.Models
         [NotMapped]
         public string Base64Avatar { get; set; }
         public int MaVaiTro { get; set; }
-        [NotMapped]
-        public NguoiDung User { get; set; }
+        public NguoiDung User
+        {
+            get
+            {
+                try
+                {
+                    this.user = this.GetUser();
+
+                    return this.user;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            set => this.user = value; 
+        }
     
         [SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         [JsonIgnore]
@@ -51,5 +71,24 @@ namespace AndroidWebService.Models
         [JsonIgnore]
         public virtual ICollection<PhongTro> PhongTro { get; set; }
         public virtual VaiTro VaiTro { get; set; }
+
+        private NguoiDung GetUser()
+        {
+            try
+            {
+                if (this.NguoiDung != null && this.NguoiDung.Count > 0) 
+                {
+                    return this.NguoiDung.ToList().FirstOrDefault(
+                        k => k.TenDangNhap.Trim() == this.TenDangNhap.Trim()
+                    );
+                }   
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            return null; 
+        }
     }
 }
