@@ -13,6 +13,8 @@ using AndroidWebService.Models.Utils;
 using AndroidWebService.Models.Enums;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
+using System.Web.Razor.Tokenizer.Symbols;
+using System.Threading;
 
 namespace AndroidWebService.Controllers.Media
 {
@@ -40,10 +42,14 @@ namespace AndroidWebService.Controllers.Media
             {
                 return NotFound();
             }
+            if(motel.MaTT != Convert.ToInt32(MotelStatus.Available))
+            {
+                return BadRequest();
+            }
 
             return Ok(motel);
         }
-        // GET: api/Locations/GetByLocationId?locationId=5
+        // GET: api/Motels/GetByLocationId?locationId=5
         [HttpGet]
         public async Task<List<PhongTro>> GetByLocationId(int locationId)
         {
@@ -55,7 +61,41 @@ namespace AndroidWebService.Controllers.Media
 
             return motels;
         }
-        // GET: api/Locations/GetByLocationId/5
+        // GET: api/Motels/GetNewestMotel
+        [HttpGet]
+        public async Task<List<PhongTro>> GetNewestMotel()
+        {
+            // Load motels to List<PhongTro> async & filter newest motel 
+            List<PhongTro> motels = await db.PhongTro.ToListAsync();
+            // Filter available motel(s) only
+            motels = motels.Where(
+                k => k.MaTT == Convert.ToInt32(MotelStatus.Available)
+            ).ToList();
+            // Process newest motel filtering
+            List<PhongTro> filteredMotels = new List<PhongTro>();
+            DateTime currentDate = DateTime.Now;
+            // Define count variable to stop the loop 
+            int count = 0;
+            foreach(PhongTro motel in motels)
+            {
+                TimeSpan difference = currentDate.Subtract(motel.NgayDang);
+                if(difference.Days <= 5)
+                {
+                    filteredMotels.Add(motel);
+                }
+
+                // Stop if the API stored enough newest motel(s)
+                count += 1;
+                if(count == PhongTro.MAX_NEWEST_MOTEL_NUM - 1)
+                {
+                    break;
+                }
+            }
+
+            // Return full motel list if keyword = null 
+            return filteredMotels;
+        }
+        // GET: api/Motels/GetByLocationId/5
         [HttpGet]
         public async Task<List<PhongTro>> SearchMotel(string keyword)
         {
@@ -68,6 +108,7 @@ namespace AndroidWebService.Controllers.Media
                 {
                     motels = motels.Where(
                         k => k.TieuDe.ToLower().Trim().Contains(keyword.ToLower().Trim())
+                        && k.MaTT == (int)MotelStatus.Available
                     ).ToList();
                 }
             }
@@ -87,6 +128,10 @@ namespace AndroidWebService.Controllers.Media
         {
             // Load motels to List<PhongTro> async 
             List<PhongTro> motels = await db.PhongTro.ToListAsync();
+            // Filter available motels 
+            motels = motels.Where(
+                k => k.MaTT == (int)MotelStatus.Available
+            ).ToList();
             try
             {
                 if(minPrice <= 0 || maxPrice <= 0)

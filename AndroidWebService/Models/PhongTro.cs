@@ -12,12 +12,17 @@ namespace AndroidWebService.Models
     using System;
     using Newtonsoft.Json;
     using System.Collections.Generic;
+    using AndroidWebService.Models.Utils;
     using AndroidWebService.Models.Enums;
     using System.Diagnostics.CodeAnalysis;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class PhongTro
     {
+        public static readonly int MAX_NEWEST_MOTEL_NUM = int.Parse(
+            ConfigParser.Parse("max_newest_motel_num")
+        );
+
         [SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PhongTro()
         {
